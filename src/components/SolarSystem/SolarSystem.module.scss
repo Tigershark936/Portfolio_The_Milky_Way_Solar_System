@@ -1,0 +1,33 @@
+// Variables SCSS pour le système solaire
+$space-dark: #0f0f23;
+$space-blue: #16213e;
+$space-purple: #1a1a2e;
+$text-light: #ffffff;
+
+.solarSystem {
+    height: 100vh;
+    width: 100vw;
+    background: radial-gradient(ellipse at center, $space-purple 0%, $space-blue 50%, $space-dark 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+// Styles pour les contrôles (qu'on ajoutera plus tard)
+.controls {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    color: $text-light;
+    font-family: 'Arial', sans-serif;
+}
+
+// Styles pour les informations des planètes (qu'on ajoutera plus tard)
+.planetInfo {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10;
+    color: $text-light;
+    font-family: 'Arial', sans-serif;
+}

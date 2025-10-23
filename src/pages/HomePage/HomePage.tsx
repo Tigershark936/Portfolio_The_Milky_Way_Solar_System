@@ -1,11 +1,11 @@
 import styles from './HomePage.module.scss';
+import SolarSystem from '../../components/SolarSystem/SolarSystem';
 
 function HomePage() {
   return (
     <div className={styles.homePage}>
       <div>
-        <h1 className={styles.title}>🚀 Portfolio Solaire</h1>
-        <p className={styles.subtitle}>Bienvenue dans l'espace !</p>
+        <SolarSystem />
       </div>
     </div>
   );

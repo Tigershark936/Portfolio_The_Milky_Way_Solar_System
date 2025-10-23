@@ -1,0 +1,42 @@
+// Variables SCSS pour les planètes
+$planet-glow: rgba(255, 255, 255, 0.3);
+$orbit-color: rgba(255, 255, 255, 0.2);
+
+.planet {
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: scale(1.2);
+    }
+}
+
+.planetName {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 0.8rem;
+    font-family: 'Arial', sans-serif;
+    text-shadow: 0 0 10px $planet-glow;
+    pointer-events: none;
+}
+
+.orbit {
+    position: absolute;
+    border: 1px solid $orbit-color;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+// Styles pour les lunes (qu'on ajoutera plus tard)
+.moon {
+    position: absolute;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.5);
+    }
+}
