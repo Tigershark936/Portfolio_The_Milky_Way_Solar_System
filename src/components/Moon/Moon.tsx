@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import * as THREE from 'three';
@@ -16,7 +16,28 @@ const Moon = ({ distance, size, color, speed, angle }: Props) => {
     const meshRef = useRef<THREE.Mesh>(null);
     const textRef = useRef<THREE.Group>(null);
     const [hovered, setHovered] = useState(false);
+    const [moonTexture, setMoonTexture] = useState<THREE.Texture | null>(null);
     const { camera } = useThree();
+
+    // Charger la texture de la lune
+    useEffect(() => {
+        const loader = new THREE.TextureLoader();
+        loader.load(
+            '/textures/moon.jpg',
+            (texture) => {
+                setMoonTexture(texture);
+            }
+        );
+    }, []);
+
+    // Mettre à jour le matériau quand la texture change
+    useEffect(() => {
+        if (meshRef.current && moonTexture) {
+            const material = meshRef.current.material as THREE.MeshStandardMaterial;
+            material.map = moonTexture;
+            material.needsUpdate = true;
+        }
+    }, [moonTexture]);
 
     useFrame((_, delta) => {
         if (groupRef.current) {
@@ -43,6 +64,7 @@ const Moon = ({ distance, size, color, speed, angle }: Props) => {
                 <sphereGeometry args={[size, 16, 16]} />
                 <meshStandardMaterial
                     color={color}
+                    map={moonTexture || undefined}
                     emissive={hovered ? 0x222222 : 0x444444}
                     metalness={0.2}
                     roughness={0.9}
