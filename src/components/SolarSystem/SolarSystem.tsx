@@ -1,8 +1,9 @@
 import { Canvas } from '@react-three/fiber';
-import { Stars } from '@react-three/drei';
 import styles from './SolarSystem.module.scss';
 import Sun from '../Sun/Sun';
 import Planet from '../Planet/Planet';
+import Nebula from '../Nebula/Nebula';
+import TwinklingStars from '../TwinklingStars/Stars';
 import type { Planet as PlanetType } from '../../types/Planet';
 
 // Planètes avec couleurs NASA officielles, distances bien espacées et tailles ajustées
@@ -24,7 +25,8 @@ const SolarSystem = () => {
             <Canvas camera={{ position: [0, 50, 130], fov: 60 }}>
                 <ambientLight intensity={0.1} />
                 <directionalLight position={[0, 0, 0]} intensity={1} />
-                <Stars radius={200} depth={60} count={5000} factor={6} saturation={0} fade />
+                <Nebula />
+                <TwinklingStars />
                 <Sun />
                 {planets.map((planet) => (
                     <Planet key={planet.name} planet={planet} />

@@ -30,7 +30,7 @@ const Moon = ({ distance, size, color, speed, angle }: Props) => {
         );
     }, []);
 
-    // Mettre à jour le matériau quand la texture change
+    // M.A.J du matériau de la lune quand la texture change
     useEffect(() => {
         if (meshRef.current && moonTexture) {
             const material = meshRef.current.material as THREE.MeshStandardMaterial;
