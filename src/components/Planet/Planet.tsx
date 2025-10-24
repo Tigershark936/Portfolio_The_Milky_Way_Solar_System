@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import * as THREE from 'three';
-import type { Planet as PlanetType} from '../../types/Planet';
+import type { Planet as PlanetType } from '../../types/Planet';
 
 type Props = {
     planet: PlanetType;
@@ -29,15 +29,15 @@ const Planet = ({ planet }: Props) => {
 
     return (
         <group ref={groupRef}>
-            <mesh 
-                ref={meshRef} 
+            <mesh
+                ref={meshRef}
                 position={[planet.distance, 0, 0]}
                 onPointerOver={() => setHovered(true)}
                 onPointerOut={() => setHovered(false)}
             >
                 <sphereGeometry args={[planet.size * 0.3, 32, 32]} />
-                <meshStandardMaterial 
-                    color={planet.color} 
+                <meshStandardMaterial
+                    color={planet.color}
                     emissive={hovered ? 0x222222 : 0x000000}
                 />
             </mesh>

@@ -1,29 +1,80 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
 const Sun = () => {
-  const meshRef = useRef<THREE.Mesh>(null);
+    const meshRef = useRef<THREE.Mesh>(null);
+    const glowRef = useRef<THREE.Mesh>(null);
+    const outerGlowRef = useRef<THREE.Mesh>(null);
+    const [sunTexture, setSunTexture] = useState<THREE.Texture | null>(null);
 
-  useFrame((_, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.1;
-    }
-  });
+    // Charger la texture de manière asynchrone
+    useEffect(() => {
+        const loader = new THREE.TextureLoader();
+        loader.load(
+            '/textures/sun.jpg',
+            (texture) => {
+                console.log('✅ Texture chargée avec succès !');
+                setSunTexture(texture);
+            },
+            undefined,
+            (error) => {
+                console.error('❌ Erreur de chargement de la texture:', error);
+            }
+        );
+    }, []);
 
-  return (
-    <group>
-      <pointLight position={[0, 0, 0]} intensity={2} color={0xffcc66} />
-      <mesh ref={meshRef} position={[0, 0, 0]}>
-        <sphereGeometry args={[2, 32, 32]} />
-        <meshStandardMaterial 
-          color={0xffcc66} 
-          emissive={0xff6600} 
-          emissiveIntensity={0.3}
-        />
-      </mesh>
-    </group>
-  );
+    // Mettre à jour le matériau quand la texture change
+    useEffect(() => {
+        if (meshRef.current && sunTexture) {
+            const material = meshRef.current.material as THREE.MeshBasicMaterial;
+            material.map = sunTexture;
+            material.needsUpdate = true;
+            console.log('🔄 Matériau mis à jour avec la texture !');
+        }
+    }, [sunTexture]);
+
+    useFrame((_, delta) => {
+        if (meshRef.current) {
+            // Rotation réaliste : 25 jours pour une rotation complète
+            // 360° / (25 jours * 24h * 60min * 60sec) = 0.000167°/sec
+            meshRef.current.rotation.y += delta * 0.000167; // Rotation réaliste sur l'axe Y
+            meshRef.current.rotation.x += delta * 0.0001; // Rotation réaliste sur l'axe X
+        }
+        if (glowRef.current) {
+            glowRef.current.rotation.y += delta * 0.0001; // Rotation du halo réaliste
+        }
+        if (outerGlowRef.current) {
+            outerGlowRef.current.rotation.y += delta * 0.00005; // Rotation du halo extérieur
+        }
+    });
+
+    return (
+        <group>
+            {/* Lumière principale du soleil - NASA style */}
+            <pointLight position={[0, 0, 0]} intensity={15.0} color={0xffffff} distance={2000} decay={0.5} />
+
+            {/* Halo du soleil - NASA style */}
+            <mesh ref={glowRef} position={[0, 0, 0]}>
+                <sphereGeometry args={[6, 32, 32]} />
+                <meshBasicMaterial
+                    color={0xff6600}
+                    transparent
+                    opacity={0.4}
+                    side={THREE.BackSide}
+                />
+            </mesh>
+
+            {/* Soleil principal avec texture*/}
+            <mesh ref={meshRef} position={[0, 0, 0]}>
+                <sphereGeometry args={[5, 64, 64]} />
+                <meshBasicMaterial
+                    color={new THREE.Color(1.2, 1.1, 0.9)}
+                    map={sunTexture || undefined}
+                />
+            </mesh>
+        </group>
+    );
 };
 
 export default Sun;
