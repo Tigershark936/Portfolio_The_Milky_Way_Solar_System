@@ -5,23 +5,23 @@ import Sun from '../Sun/Sun';
 import Planet from '../Planet/Planet';
 import type { Planet as PlanetType } from '../../types/Planet';
 
-// 🌌 Planètes avec couleurs NASA officielles mais distances visuelles
+// Planètes avec couleurs NASA officielles, distances bien espacées et tailles ajustées
 const planets: PlanetType[] = [
-    { name: 'Mercury', distance: 6, size: 0.38, color: '#8c7853', speed: 4.15, angle: 0 },
-    { name: 'Venus', distance: 9, size: 0.95, color: '#ffc649', speed: 1.62, angle: 0 },
-    { name: 'Earth', distance: 12, size: 1.0, color: '#6b93d6', speed: 1, angle: 0 },
-    { name: 'Mars', distance: 17, size: 0.53, color: '#cd5c5c', speed: 0.53, angle: 0 },
-    { name: 'Jupiter', distance: 22, size: 11.21, color: '#d8ca9d', speed: 0.084, angle: 0 },
-    { name: 'Saturn', distance: 27, size: 9.45, color: '#fad5a5', speed: 0.034, angle: 0 },
-    { name: 'Uranus', distance: 32, size: 4.01, color: '#4fd0e7', speed: 0.012, angle: 0 },
-    { name: 'Neptune', distance: 37, size: 3.88, color: '#4b70dd', speed: 0.006, angle: 0 },
-    { name: 'Pluto', distance: 42, size: 0.18, color: '#8c7853', speed: 0.01, angle: 0 },
+    { name: 'Mercury', distance: 16, size: 0.23, color: '#8c7853', speed: 4.15, angle: 0 }, // 0.38 * 0.6
+    { name: 'Venus', distance: 22, size: 0.57, color: '#ffc649', speed: 1.62, angle: 0 }, // 0.95 * 0.6
+    { name: 'Earth', distance: 31, size: 0.3, color: '#6b93d6', speed: 1, angle: 0 }, // 1.0 * 0.3
+    { name: 'Mars', distance: 40, size: 0.32, color: '#cd5c5c', speed: 0.53, angle: 0 }, // 0.53 * 0.6
+    { name: 'Jupiter', distance: 60, size: 8.97, color: '#d8ca9d', speed: 0.084, angle: 0 }, // 11.21 * 0.8
+    { name: 'Saturn', distance: 85, size: 6.62, color: '#fad5a5', speed: 0.034, angle: 0 }, // 9.45 * 0.7
+    { name: 'Uranus', distance: 110, size: 2.01, color: '#4fd0e7', speed: 0.012, angle: 0 }, // 4.01 * 0.5
+    { name: 'Neptune', distance: 135, size: 1.94, color: '#4b70dd', speed: 0.006, angle: 0 }, // 3.88 * 0.5
+    { name: 'Pluto', distance: 160, size: 0.14, color: '#8c7853', speed: 0.01, angle: 0 }, // 0.18 * 0.8
 ];
 
 const SolarSystem = () => {
     return (
         <div className={styles.solarSystem}>
-            <Canvas camera={{ position: [0, 20, 45], fov: 60 }}>
+            <Canvas camera={{ position: [0, 50, 130], fov: 60 }}>
                 <ambientLight intensity={0.1} />
                 <directionalLight position={[0, 0, 0]} intensity={1} />
                 <Stars radius={200} depth={60} count={5000} factor={6} saturation={0} fade />

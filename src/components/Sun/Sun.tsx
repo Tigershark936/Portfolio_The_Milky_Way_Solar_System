@@ -4,8 +4,6 @@ import * as THREE from 'three';
 
 const Sun = () => {
     const meshRef = useRef<THREE.Mesh>(null);
-    const glowRef = useRef<THREE.Mesh>(null);
-    const outerGlowRef = useRef<THREE.Mesh>(null);
     const [sunTexture, setSunTexture] = useState<THREE.Texture | null>(null);
 
     // Charger la texture de manière asynchrone
@@ -41,12 +39,6 @@ const Sun = () => {
             meshRef.current.rotation.y += delta * 0.000167; // Rotation réaliste sur l'axe Y
             meshRef.current.rotation.x += delta * 0.0001; // Rotation réaliste sur l'axe X
         }
-        if (glowRef.current) {
-            glowRef.current.rotation.y += delta * 0.0001; // Rotation du halo réaliste
-        }
-        if (outerGlowRef.current) {
-            outerGlowRef.current.rotation.y += delta * 0.00005; // Rotation du halo extérieur
-        }
     });
 
     return (
@@ -54,20 +46,10 @@ const Sun = () => {
             {/* Lumière principale du soleil - NASA style */}
             <pointLight position={[0, 0, 0]} intensity={15.0} color={0xffffff} distance={2000} decay={0.5} />
 
-            {/* Halo du soleil - NASA style */}
-            <mesh ref={glowRef} position={[0, 0, 0]}>
-                <sphereGeometry args={[6, 32, 32]} />
-                <meshBasicMaterial
-                    color={0xff6600}
-                    transparent
-                    opacity={0.4}
-                    side={THREE.BackSide}
-                />
-            </mesh>
 
-            {/* Soleil principal avec texture*/}
+            {/* Soleil principal avec texture */}
             <mesh ref={meshRef} position={[0, 0, 0]}>
-                <sphereGeometry args={[5, 64, 64]} />
+                <sphereGeometry args={[15, 64, 64]} />
                 <meshBasicMaterial
                     color={new THREE.Color(1.2, 1.1, 0.9)}
                     map={sunTexture || undefined}

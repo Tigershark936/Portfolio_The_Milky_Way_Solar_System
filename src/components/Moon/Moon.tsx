@@ -2,14 +2,16 @@ import { useRef, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import * as THREE from 'three';
-import type { Planet as PlanetType } from '../../types/Planet';
-import Moon from '../Moon/Moon.tsx';
 
 type Props = {
-    planet: PlanetType;
+    distance: number; // Distance from planet
+    size: number; // Moon size
+    color: string; // Moon color
+    speed: number; // Orbital speed
+    angle: number; // Current angle
 };
 
-const Planet = ({ planet }: Props) => {
+const Moon = ({ distance, size, color, speed, angle }: Props) => {
     const groupRef = useRef<THREE.Group>(null);
     const meshRef = useRef<THREE.Mesh>(null);
     const textRef = useRef<THREE.Group>(null);
@@ -18,8 +20,9 @@ const Planet = ({ planet }: Props) => {
 
     useFrame((_, delta) => {
         if (groupRef.current) {
-            groupRef.current.rotation.y += delta * planet.speed * 0.1;
+            groupRef.current.rotation.y += delta * speed;
         }
+
         if (meshRef.current) {
             meshRef.current.rotation.y += delta * 0.5;
         }
@@ -30,40 +33,32 @@ const Planet = ({ planet }: Props) => {
 
     return (
         <group ref={groupRef}>
+            {/* Moon */}
             <mesh
                 ref={meshRef}
-                position={[planet.distance, 0, 0]}
+                position={[distance, 0, 0]}
                 onPointerOver={() => setHovered(true)}
                 onPointerOut={() => setHovered(false)}
             >
-                <sphereGeometry args={[planet.size, 32, 32]} />
+                <sphereGeometry args={[size, 16, 16]} />
                 <meshStandardMaterial
-                    color={planet.color}
-                    emissive={hovered ? 0x222222 : 0x000000}
+                    color={color}
+                    emissive={hovered ? 0x222222 : 0x444444}
+                    metalness={0.2}
+                    roughness={0.9}
                 />
-
-                {/* Moon for Earth */}
-                {planet.name === 'Earth' && (
-                    <Moon
-                        distance={3}
-                        size={0.27 * 0.3}
-                        color="#c0c0c0"
-                        speed={0.3}
-                        angle={0}
-                    />
-                )}
             </mesh>
 
             {hovered && (
-                <group ref={textRef} position={[planet.distance, planet.size * 0.5 + 1, 0]}>
+                <group ref={textRef} position={[distance, size + 0.5, 0]}>
                     <Text
                         position={[0, 0, 0]}
-                        fontSize={0.5}
+                        fontSize={0.3}
                         color="white"
                         anchorX="center"
                         anchorY="middle"
                     >
-                        {planet.name}
+                        MOON
                     </Text>
                 </group>
             )}
@@ -71,4 +66,4 @@ const Planet = ({ planet }: Props) => {
     );
 };
 
-export default Planet;
+export default Moon;
