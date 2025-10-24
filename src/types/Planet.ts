@@ -7,4 +7,5 @@ export interface Planet {
     angle: number; // Angle actuel de la planète
     moons?: number; // Nombre de lunes 
     description?: string; // Description de la planète
+    type?: 'planet' | 'moon' | 'asteroid' | 'comet' | 'star'; // Type d'objet céleste
 }

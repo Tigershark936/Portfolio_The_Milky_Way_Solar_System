@@ -55,6 +55,8 @@ const Sun = () => {
                     map={sunTexture || undefined}
                 />
             </mesh>
+
+            {/* Label du soleil supprimé */}
         </group>
     );
 };

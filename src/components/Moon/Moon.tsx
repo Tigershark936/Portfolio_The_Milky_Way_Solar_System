@@ -1,23 +1,21 @@
 import { useRef, useState, useEffect } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
-import { Text } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import PlanetLabel from '../UI/PlanetLabel';
 
 type Props = {
     distance: number; // Distance from planet
     size: number; // Moon size
     color: string; // Moon color
     speed: number; // Orbital speed
-    angle: number; // Current angle
+    showName?: boolean; // Show moon name
 };
 
-const Moon = ({ distance, size, color, speed, angle }: Props) => {
+const Moon = ({ distance, size, color, speed, showName = false }: Props) => {
     const groupRef = useRef<THREE.Group>(null);
     const meshRef = useRef<THREE.Mesh>(null);
-    const textRef = useRef<THREE.Group>(null);
     const [hovered, setHovered] = useState(false);
     const [moonTexture, setMoonTexture] = useState<THREE.Texture | null>(null);
-    const { camera } = useThree();
 
     // Charger la texture de la lune
     useEffect(() => {
@@ -47,9 +45,6 @@ const Moon = ({ distance, size, color, speed, angle }: Props) => {
         if (meshRef.current) {
             meshRef.current.rotation.y += delta * 0.5;
         }
-        if (textRef.current && hovered) {
-            textRef.current.lookAt(camera.position);
-        }
     });
 
     return (
@@ -71,19 +66,7 @@ const Moon = ({ distance, size, color, speed, angle }: Props) => {
                 />
             </mesh>
 
-            {hovered && (
-                <group ref={textRef} position={[distance, size + 0.5, 0]}>
-                    <Text
-                        position={[0, 0, 0]}
-                        fontSize={0.3}
-                        color="white"
-                        anchorX="center"
-                        anchorY="middle"
-                    >
-                        MOON
-                    </Text>
-                </group>
-            )}
+            {/* Label de la lune supprimé */}
         </group>
     );
 };

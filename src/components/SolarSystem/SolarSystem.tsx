@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import styles from './SolarSystem.module.scss';
 import Sun from '../Sun/Sun';
 import Planet from '../Planet/Planet';
 import Nebula from '../Nebula/Nebula';
 import TwinklingStars from '../TwinklingStars/Stars';
+import Menu from '../UI/Menu';
 import type { Planet as PlanetType } from '../../types/Planet';
 
 // Planètes avec couleurs NASA officielles, distances bien espacées et tailles ajustées
@@ -20,8 +22,27 @@ const planets: PlanetType[] = [
 ];
 
 const SolarSystem = () => {
+    const [showPlanetNames, setShowPlanetNames] = useState(false); // Désactivé par défaut
+    const [showMoonNames, setShowMoonNames] = useState(false);
+
+    const handleTogglePlanetNames = () => {
+        setShowPlanetNames(!showPlanetNames);
+    };
+
+    const handleToggleMoonNames = () => {
+        setShowMoonNames(!showMoonNames);
+    };
+
+    // Labels de test supprimés - on garde seulement le menu
+
     return (
         <div className={styles.solarSystem}>
+            <Menu
+                showPlanetNames={showPlanetNames}
+                showMoonNames={showMoonNames}
+                onTogglePlanetNames={handleTogglePlanetNames}
+                onToggleMoonNames={handleToggleMoonNames}
+            />
             <Canvas camera={{ position: [0, 50, 130], fov: 60 }}>
                 <ambientLight intensity={0.1} />
                 <directionalLight position={[0, 0, 0]} intensity={1} />
@@ -29,7 +50,12 @@ const SolarSystem = () => {
                 <TwinklingStars />
                 <Sun />
                 {planets.map((planet) => (
-                    <Planet key={planet.name} planet={planet} />
+                    <Planet
+                        key={planet.name}
+                        planet={planet}
+                        showName={showPlanetNames}
+                        showMoonName={showMoonNames}
+                    />
                 ))}
             </Canvas>
         </div>

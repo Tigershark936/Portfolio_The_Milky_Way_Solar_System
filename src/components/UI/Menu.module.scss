@@ -1,0 +1,417 @@
+.menuContainer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.menuButton {
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(138, 43, 226, 0.4);
+    border-radius: 8px;
+    padding: 12px;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="16" cy="16" r="10" fill="none" stroke="%238A2BE2" stroke-width="2" filter="url(%23glow)"/><circle cx="16" cy="16" r="4" fill="%238A2BE2" filter="url(%23glow)"/><circle cx="16" cy="16" r="1" fill="%23FFFFFF"/></svg>'), auto;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+
+    // Animation de pulsation
+    &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(138, 43, 226, 0.2);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: all 0.6s ease;
+    }
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.8);
+        border-color: rgba(138, 43, 226, 0.6);
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(138, 43, 226, 0.4);
+
+        &::before {
+            width: 100px;
+            height: 100px;
+        }
+    }
+
+    // Style quand le menu est ouvert (croix visible)
+    &.open {
+        background: rgba(0, 0, 0, 0.7);
+        border-color: rgba(138, 43, 226, 0.6);
+        box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.8);
+            border-color: rgba(138, 43, 226, 0.8);
+            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.4);
+        }
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+
+    // Focus visible pour l'accessibilité
+    &:focus-visible {
+        outline: 2px solid #8A2BE2;
+        outline-offset: 2px;
+        box-shadow: 0 0 0 4px rgba(138, 43, 226, 0.3);
+    }
+}
+
+.hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 16px;
+    position: relative;
+
+    span {
+        width: 100%;
+        height: 2px;
+        background: white;
+        border-radius: 1px;
+        transition: all 0.3s ease;
+        transform-origin: center;
+        position: absolute;
+    }
+
+    span:nth-child(1) {
+        top: 2px;
+    }
+
+    span:nth-child(2) {
+        top: 7px;
+    }
+
+    span:nth-child(3) {
+        top: 12px;
+    }
+
+    // Animation quand le menu est ouvert
+    &.open {
+        span:nth-child(1) {
+            transform: rotate(45deg);
+            top: 7px;
+            background: #DC143C; // Crimson
+        }
+
+        span:nth-child(2) {
+            opacity: 0;
+        }
+
+        span:nth-child(3) {
+            transform: rotate(-45deg);
+            top: 7px;
+            background: #DC143C; // Crimson
+        }
+    }
+}
+
+.menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(138, 43, 226, 0.5);
+    border-radius: 12px;
+    padding: 0;
+    min-width: 250px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px rgba(138, 43, 226, 0.4);
+    animation: slideDown 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transform-origin: top right;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes titleGlow {
+    from {
+        text-shadow:
+            0 0 5px rgba(138, 43, 226, 0.8),
+            0 0 10px rgba(138, 43, 226, 0.6),
+            0 0 15px rgba(138, 43, 226, 0.4),
+            0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    to {
+        text-shadow:
+            0 0 8px rgba(138, 43, 226, 1),
+            0 0 16px rgba(138, 43, 226, 0.8),
+            0 0 24px rgba(138, 43, 226, 0.6),
+            0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+}
+
+.menuHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 20px;
+    border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+    background: rgba(0, 0, 0, 0.3);
+
+    h3 {
+        color: #E6E6FA;
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-shadow:
+            0 0 5px rgba(138, 43, 226, 0.8),
+            0 0 10px rgba(138, 43, 226, 0.6),
+            0 0 15px rgba(138, 43, 226, 0.4),
+            0 2px 4px rgba(0, 0, 0, 0.5);
+        white-space: nowrap;
+        animation: titleGlow 2s ease-in-out infinite alternate;
+    }
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+}
+
+.menuContent {
+    padding: 16px 20px;
+}
+
+.option {
+    margin-bottom: 16px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.toggleButton {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(138, 43, 226, 0.3);
+    border-radius: 8px;
+    color: #E6E6FA;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="16" cy="16" r="10" fill="none" stroke="%238A2BE2" stroke-width="2" filter="url(%23glow)"/><circle cx="16" cy="16" r="4" fill="%238A2BE2" filter="url(%23glow)"/><circle cx="16" cy="16" r="1" fill="%23FFFFFF"/></svg>'), auto;
+    transition: all 0.3s ease;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+
+    // Effet de balayage amélioré
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg,
+                transparent,
+                rgba(138, 43, 226, 0.1),
+                rgba(138, 43, 226, 0.4),
+                rgba(138, 43, 226, 0.1),
+                transparent);
+        transition: left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        z-index: 1;
+    }
+
+    // Effet de lueur supplémentaire
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg,
+                transparent,
+                rgba(138, 43, 226, 0.3),
+                rgba(138, 43, 226, 0.6),
+                rgba(138, 43, 226, 0.3),
+                transparent);
+        transition: left 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        z-index: 2;
+        filter: blur(2px);
+    }
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.5);
+        border-color: rgba(138, 43, 226, 0.5);
+        transform: translateY(-2px);
+        box-shadow:
+            0 6px 20px rgba(138, 43, 226, 0.4),
+            0 0 15px rgba(138, 43, 226, 0.3);
+        text-shadow: 0 0 8px rgba(138, 43, 226, 0.6);
+
+        &::before {
+            left: 100%;
+        }
+
+        &::after {
+            left: 100%;
+        }
+    }
+
+    // Focus visible pour l'accessibilité
+    &:focus-visible {
+        outline: 2px solid #8A2BE2;
+        outline-offset: 2px;
+        box-shadow:
+            0 0 0 4px rgba(138, 43, 226, 0.3),
+            0 4px 15px rgba(138, 43, 226, 0.4);
+    }
+
+    // Balayage bleu pour les planètes actives
+    &.active {
+        &::before {
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(65, 105, 225, 0.1),
+                    rgba(65, 105, 225, 0.4),
+                    rgba(65, 105, 225, 0.1),
+                    transparent);
+        }
+
+        &::after {
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(65, 105, 225, 0.3),
+                    rgba(65, 105, 225, 0.6),
+                    rgba(65, 105, 225, 0.3),
+                    transparent);
+        }
+    }
+
+    &.active {
+        background: rgba(0, 0, 0, 0.5);
+        border-color: #4169E1;
+        color: #4169E1;
+        text-shadow:
+            0 0 5px rgba(65, 105, 225, 0.8),
+            0 0 10px rgba(65, 105, 225, 0.6);
+        box-shadow:
+            0 4px 15px rgba(65, 105, 225, 0.3),
+            inset 0 0 10px rgba(65, 105, 225, 0.1);
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.6);
+            text-shadow:
+                0 0 8px rgba(65, 105, 225, 1),
+                0 0 16px rgba(65, 105, 225, 0.8);
+        }
+    }
+
+    // Style spécifique pour les boutons de lunes
+    &.moonButton {
+        &.active {
+            border-color: #FFD700;
+            color: #FFD700;
+            text-shadow:
+                0 0 5px rgba(255, 215, 0, 0.8),
+                0 0 10px rgba(255, 215, 0, 0.6);
+            box-shadow:
+                0 4px 15px rgba(255, 215, 0, 0.3),
+                inset 0 0 10px rgba(255, 215, 0, 0.1);
+
+            // Balayage doré pour les lunes actives
+            &::before {
+                background: linear-gradient(90deg,
+                        transparent,
+                        rgba(255, 215, 0, 0.1),
+                        rgba(255, 215, 0, 0.4),
+                        rgba(255, 215, 0, 0.1),
+                        transparent);
+            }
+
+            &::after {
+                background: linear-gradient(90deg,
+                        transparent,
+                        rgba(255, 215, 0, 0.3),
+                        rgba(255, 215, 0, 0.6),
+                        rgba(255, 215, 0, 0.3),
+                        transparent);
+            }
+
+            &:hover {
+                text-shadow:
+                    0 0 8px rgba(255, 215, 0, 1),
+                    0 0 16px rgba(255, 215, 0, 0.8);
+            }
+        }
+    }
+}
+
+.buttonIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 8px currentColor;
+    filter: drop-shadow(0 0 4px currentColor);
+
+    // Animation de pulsation pour les icônes actives
+    .toggleButton.active & {
+        animation: iconPulse 1.5s ease-in-out infinite;
+    }
+}
+
+@keyframes iconPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        text-shadow: 0 0 8px currentColor;
+    }
+
+    50% {
+        transform: scale(1.1);
+        text-shadow: 0 0 12px currentColor, 0 0 20px currentColor;
+    }
+}

@@ -1,23 +1,23 @@
 import { useRef, useState, useEffect } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
-import { Text } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import type { Planet as PlanetType } from '../../types/Planet';
 import Moon from '../Moon/Moon.tsx';
+// PlanetLabel supprimé
 
 type Props = {
     planet: PlanetType;
+    showName?: boolean;
+    showMoonName?: boolean;
 };
 
-const Planet = ({ planet }: Props) => {
+const Planet = ({ planet, showName = false, showMoonName = false }: Props) => {
     const groupRef = useRef<THREE.Group>(null);
     const meshRef = useRef<THREE.Mesh>(null);
-    const textRef = useRef<THREE.Group>(null);
     const ringsRef = useRef<THREE.Mesh>(null);
     const [hovered, setHovered] = useState(false);
     const [planetTexture, setPlanetTexture] = useState<THREE.Texture | null>(null);
     const [ringsTexture, setRingsTexture] = useState<THREE.Texture | null>(null);
-    const { camera } = useThree();
 
     // Charger la texture des planets
     useEffect(() => {
@@ -94,9 +94,6 @@ const Planet = ({ planet }: Props) => {
         if (ringsRef.current && planet.name === 'Saturn') {
             ringsRef.current.rotation.z += delta * 0.1;
         }
-        if (textRef.current && hovered) {
-            textRef.current.lookAt(camera.position);
-        }
     });
 
     return (
@@ -121,7 +118,7 @@ const Planet = ({ planet }: Props) => {
                         size={0.27 * 0.3}
                         color="#c0c0c0"
                         speed={0.3}
-                        angle={0}
+                        showName={showMoonName}
                     />
                 )}
             </mesh>
@@ -138,20 +135,6 @@ const Planet = ({ planet }: Props) => {
                         alphaMap={ringsTexture || undefined}
                     />
                 </mesh>
-            )}
-
-            {hovered && (
-                <group ref={textRef} position={[planet.distance, planet.size * 0.5 + 1, 0]}>
-                    <Text
-                        position={[0, 0, 0]}
-                        fontSize={0.5}
-                        color="white"
-                        anchorX="center"
-                        anchorY="middle"
-                    >
-                        {planet.name}
-                    </Text>
-                </group>
             )}
         </group>
     );
