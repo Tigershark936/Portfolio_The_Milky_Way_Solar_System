@@ -9,9 +9,10 @@ type Props = {
     color: string; // Moon color
     speed: number; // Orbital speed
     showName?: boolean; // Show moon name
+    animationSpeed?: number; // Animation speed multiplier
 };
 
-const Moon = ({ distance, size, color, speed, showName = false }: Props) => {
+const Moon = ({ distance, size, color, speed, showName = false, animationSpeed = 1 }: Props) => {
     const groupRef = useRef<THREE.Group>(null);
     const meshRef = useRef<THREE.Mesh>(null);
     const [hovered, setHovered] = useState(false);
@@ -39,11 +40,11 @@ const Moon = ({ distance, size, color, speed, showName = false }: Props) => {
 
     useFrame((_, delta) => {
         if (groupRef.current) {
-            groupRef.current.rotation.y += delta * speed;
+            groupRef.current.rotation.y += delta * speed * animationSpeed;
         }
 
         if (meshRef.current) {
-            meshRef.current.rotation.y += delta * 0.5;
+            meshRef.current.rotation.y += delta * 0.5 * animationSpeed;
         }
     });
 

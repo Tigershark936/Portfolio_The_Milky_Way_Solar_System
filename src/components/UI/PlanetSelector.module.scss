@@ -1,0 +1,375 @@
+.planetSelectorContainer {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+.selectorButton {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(138, 43, 226, 0.5);
+    border-radius: 10px; // Harmonisé avec les autres boutons
+    padding: 12px 24px;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="16" cy="16" r="10" fill="none" stroke="%238A2BE2" stroke-width="2" filter="url(%23glow)"/><circle cx="16" cy="16" r="4" fill="%238A2BE2" filter="url(%23glow)"/><circle cx="16" cy="16" r="1" fill="%23FFFFFF"/></svg>'), auto;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(15px);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(138, 43, 226, 0.3);
+
+    // Effet de balayage (comme les boutons de planètes)
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg,
+                transparent,
+                rgba(138, 43, 226, 0.1),
+                rgba(138, 43, 226, 0.4),
+                rgba(138, 43, 226, 0.1),
+                transparent);
+        transition: left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        z-index: 1;
+    }
+
+    // Effet de remplissage au clic (comme les boutons de planètes)
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        background: rgba(138, 43, 226, 0.2);
+        transition: width 0.3s ease;
+        z-index: 0;
+    }
+
+    &:active::after {
+        width: 100%;
+    }
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.9);
+        border-color: rgba(138, 43, 226, 0.7);
+        transform: translateY(-3px);
+        box-shadow:
+            0 6px 20px rgba(138, 43, 226, 0.4),
+            0 0 15px rgba(138, 43, 226, 0.3);
+        text-shadow: 0 0 8px rgba(138, 43, 226, 0.6);
+
+        &::before {
+            left: 100%;
+        }
+    }
+
+    &.open {
+        background: rgba(0, 0, 0, 0.9);
+        border-color: rgba(138, 43, 226, 0.7);
+        box-shadow: 0 4px 20px rgba(138, 43, 226, 0.4);
+    }
+
+    &:active {
+        // Pas de transformation pour éviter le mouvement
+    }
+
+    // Focus visible pour l'accessibilité
+    &:focus-visible {
+        outline: 2px solid #8A2BE2;
+        outline-offset: 2px;
+        box-shadow: 0 0 0 4px rgba(138, 43, 226, 0.3);
+    }
+}
+
+.selectorTitle {
+    color: #E6E6FA;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 0 8px rgba(138, 43, 226, 0.8);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.planetBar {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 10px;
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid rgba(138, 43, 226, 0.5);
+    border-radius: 12px;
+    padding: 22px 16px; // Ajoute 2px en haut et 4px sur les côtés pour l'effet neon
+    backdrop-filter: blur(20px);
+    box-shadow: 0 6px 24px rgba(138, 43, 226, 0.4);
+    animation: slideUp 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transform-origin: bottom center;
+    min-width: 500px;
+    max-width: 90vw;
+    white-space: nowrap;
+    overflow: visible;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px) scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+}
+
+.planetList {
+    display: flex;
+    gap: 8px;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: visible;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 10px 4px; // Ajoute un peu de padding sur les côtés pour l'effet neon
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.planetButton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 10px; // Réduit encore plus le padding
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(138, 43, 226, 0.3); // Réduit l'épaisseur de la bordure
+    border-radius: 8px; // Réduit le border-radius
+    color: #E6E6FA;
+    font-size: 10px; // Réduit la taille de police
+    font-weight: 600;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="16" cy="16" r="10" fill="none" stroke="%238A2BE2" stroke-width="2" filter="url(%23glow)"/><circle cx="16" cy="16" r="4" fill="%238A2BE2" filter="url(%23glow)"/><circle cx="16" cy="16" r="1" fill="%23FFFFFF"/></svg>'), auto;
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    min-width: 50px; // Réduit encore plus la largeur
+    min-height: 40px; // Réduit encore plus la hauteur
+    flex-shrink: 0;
+
+    // Effet de balayage
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg,
+                transparent,
+                rgba(138, 43, 226, 0.1),
+                rgba(138, 43, 226, 0.4),
+                rgba(138, 43, 226, 0.1),
+                transparent);
+        transition: left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        z-index: 1;
+    }
+
+    // Effet de remplissage au clic
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        background: rgba(138, 43, 226, 0.2);
+        transition: width 0.3s ease;
+        z-index: 0;
+    }
+
+    &:active::after {
+        width: 100%;
+    }
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.5);
+        border-color: var(--planet-color, rgba(138, 43, 226, 0.5));
+        transform: translateY(-3px);
+        box-shadow:
+            0 6px 20px var(--planet-color, rgba(138, 43, 226, 0.4)),
+            0 0 15px var(--planet-color, rgba(138, 43, 226, 0.3));
+        text-shadow: 0 0 8px var(--planet-color, rgba(138, 43, 226, 0.6));
+        color: var(--planet-color, #E6E6FA);
+
+        &::before {
+            left: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(var(--planet-color-rgb, 138, 43, 226), 0.1),
+                    rgba(var(--planet-color-rgb, 138, 43, 226), 0.4),
+                    rgba(var(--planet-color-rgb, 138, 43, 226), 0.1),
+                    transparent);
+        }
+    }
+
+    // Focus visible pour l'accessibilité
+    &:focus-visible {
+        outline: 2px solid #8A2BE2;
+        outline-offset: 2px;
+        box-shadow:
+            0 0 0 4px rgba(138, 43, 226, 0.5),
+            0 4px 15px rgba(138, 43, 226, 0.6);
+        border-color: rgba(138, 43, 226, 0.8);
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+    &.selected {
+        background: rgba(0, 0, 0, 0.6);
+        border-color: var(--planet-color, #4169E1);
+        color: var(--planet-color, #4169E1);
+        text-shadow:
+            0 0 5px var(--planet-color, #4169E1),
+            0 0 10px var(--planet-color, #4169E1);
+        box-shadow:
+            0 4px 15px var(--planet-color, #4169E1),
+            inset 0 0 10px var(--planet-color, #4169E1);
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.7);
+            text-shadow:
+                0 0 8px var(--planet-color, #4169E1),
+                0 0 16px var(--planet-color, #4169E1);
+        }
+
+        // Balayage coloré selon la planète
+        &::before {
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(var(--planet-color-rgb, 65, 105, 225), 0.1),
+                    rgba(var(--planet-color-rgb, 65, 105, 225), 0.4),
+                    rgba(var(--planet-color-rgb, 65, 105, 225), 0.1),
+                    transparent);
+        }
+    }
+
+    &.stopFollow {
+        border-color: rgba(220, 20, 60, 0.5); // Augmente l'opacité
+        color: #DC143C;
+
+        &:hover {
+            border-color: rgba(220, 20, 60, 0.8); // Augmente l'opacité
+            box-shadow:
+                0 6px 20px rgba(220, 20, 60, 0.6), // Augmente l'opacité
+                0 0 15px rgba(220, 20, 60, 0.5); // Augmente l'opacité
+            text-shadow: 0 0 8px rgba(220, 20, 60, 0.8); // Augmente l'opacité
+        }
+
+        &::before {
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(220, 20, 60, 0.2), // Augmente l'opacité
+                    rgba(220, 20, 60, 0.6), // Augmente l'opacité
+                    rgba(220, 20, 60, 0.2), // Augmente l'opacité
+                    transparent);
+        }
+
+        // Focus visible pour la croix
+        &:focus-visible {
+            outline: 2px solid #DC143C;
+            outline-offset: 2px;
+            box-shadow:
+                0 0 0 4px rgba(220, 20, 60, 0.5),
+                0 4px 15px rgba(220, 20, 60, 0.6);
+            border-color: rgba(220, 20, 60, 0.8);
+            background: rgba(0, 0, 0, 0.6);
+        }
+    }
+}
+
+.planetIcon {
+    font-size: var(--planet-size, 1.5rem);
+    margin-bottom: 6px;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 8px currentColor;
+    filter: drop-shadow(0 0 4px currentColor);
+
+    .planetButton.selected & {
+        animation: planetPulse 2s ease-in-out infinite;
+    }
+}
+
+@keyframes planetPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        text-shadow: 0 0 8px currentColor;
+    }
+
+    50% {
+        transform: scale(1.1);
+        text-shadow: 0 0 12px currentColor, 0 0 20px currentColor;
+    }
+}
+
+.planetName {
+    font-size: 9px; // Réduit encore plus la taille de police
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2px; // Réduit l'espacement des lettres
+    transition: all 0.3s ease;
+    text-align: center;
+    line-height: 1.1; // Réduit l'espacement des lignes
+}
+
+.stopIcon {
+    font-size: 14px; // Réduit encore plus la taille de l'icône
+    font-weight: bold;
+    color: #DC143C;
+    text-shadow: 0 0 6px rgba(220, 20, 60, 0.8); // Réduit l'effet de glow
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .planetButton:hover & {
+        transform: scale(1.05); // Réduit l'effet de scale
+        text-shadow: 0 0 8px rgba(220, 20, 60, 1); // Réduit l'effet de glow
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .planetBar {
+        min-width: 90vw;
+        padding: 10px;
+    }
+
+    .planetList {
+        gap: 8px;
+    }
+
+    .planetButton {
+        min-width: 50px; // Réduit encore plus sur mobile
+        min-height: 45px; // Réduit encore plus sur mobile
+        padding: 6px 10px; // Réduit le padding sur mobile
+    }
+
+    .planetIcon {
+        font-size: 1.2rem;
+    }
+
+    .planetName {
+        font-size: 10px;
+    }
+}

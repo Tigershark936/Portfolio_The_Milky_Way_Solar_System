@@ -1,16 +1,21 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
+import * as THREE from 'three';
 import styles from './SolarSystem.module.scss';
 import Sun from '../Sun/Sun';
 import Planet from '../Planet/Planet';
 import Nebula from '../Nebula/Nebula';
 import TwinklingStars from '../TwinklingStars/Stars';
 import Menu from '../UI/Menu';
+import CameraControls from '../UI/CameraControls';
+import PlanetSelector from '../UI/PlanetSelector';
+import PlanetFollower from '../UI/PlanetFollower';
 import type { Planet as PlanetType } from '../../types/Planet';
 
 // Planètes avec couleurs NASA officielles, distances bien espacées et tailles ajustées
 const planets: PlanetType[] = [
-    { name: 'Mercury', distance: 16, size: 0.23, color: '#8c7853', speed: 4.15, angle: 0 }, // 0.38 * 0.6
+    { name: 'Mercury', distance: 16, size: 0.23, color: '#B8860B', speed: 4.15, angle: 0 }, // Couleur plus visible (dark goldenrod)
     { name: 'Venus', distance: 22, size: 0.57, color: '#ffc649', speed: 1.62, angle: 0 }, // 0.95 * 0.6
     { name: 'Earth', distance: 31, size: 0.3, color: '#6b93d6', speed: 1, angle: 0 }, // 1.0 * 0.3
     { name: 'Mars', distance: 40, size: 0.32, color: '#cd5c5c', speed: 0.53, angle: 0 }, // 0.53 * 0.6
@@ -24,6 +29,10 @@ const planets: PlanetType[] = [
 const SolarSystem = () => {
     const [showPlanetNames, setShowPlanetNames] = useState(false); // Désactivé par défaut
     const [showMoonNames, setShowMoonNames] = useState(false);
+    const [animationSpeed, setAnimationSpeed] = useState(1);
+    const [cameraPosition, setCameraPosition] = useState({ x: 0, y: 60, z: 120 });
+    const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
+    const controlsRef = useRef<any>(null);
 
     const handleTogglePlanetNames = () => {
         setShowPlanetNames(!showPlanetNames);
@@ -32,6 +41,47 @@ const SolarSystem = () => {
     const handleToggleMoonNames = () => {
         setShowMoonNames(!showMoonNames);
     };
+
+    const handleSpeedChange = (speed: number) => {
+        setAnimationSpeed(speed);
+    };
+
+    const handleCameraReset = () => {
+        setCameraPosition({ x: 0, y: 60, z: 120 });
+        if (controlsRef.current) {
+            controlsRef.current.reset();
+        }
+    };
+
+    const handleCameraPreset = (preset: 'overview' | 'close' | 'far') => {
+        if (!controlsRef.current) return;
+
+        const camera = controlsRef.current.object;
+        const target = controlsRef.current.target;
+
+        switch (preset) {
+            case 'overview':
+                camera.position.set(0, 60, 120);
+                break;
+            case 'close':
+                camera.position.set(0, 40, 80);
+                break;
+            case 'far':
+                // Forcer la caméra à la distance maximale
+                const direction = new THREE.Vector3();
+                camera.getWorldDirection(direction);
+                direction.multiplyScalar(200); // Distance maximale
+                camera.position.copy(target).add(direction);
+                break;
+        }
+
+        controlsRef.current.update();
+    };
+
+    const handlePlanetSelect = (planetName: string | null) => {
+        setSelectedPlanet(planetName);
+    };
+
 
     // Labels de test supprimés - on garde seulement le menu
 
@@ -43,7 +93,32 @@ const SolarSystem = () => {
                 onTogglePlanetNames={handleTogglePlanetNames}
                 onToggleMoonNames={handleToggleMoonNames}
             />
-            <Canvas camera={{ position: [0, 50, 130], fov: 60 }}>
+            <CameraControls
+                onSpeedChange={handleSpeedChange}
+                onCameraReset={handleCameraReset}
+                onCameraPreset={handleCameraPreset}
+            />
+            <PlanetSelector
+                planets={planets}
+                onPlanetSelect={handlePlanetSelect}
+                selectedPlanet={selectedPlanet}
+            />
+            <Canvas camera={{ position: [cameraPosition.x, cameraPosition.y, cameraPosition.z], fov: 60 }}>
+                <OrbitControls
+                    ref={controlsRef}
+                    enablePan={true}
+                    enableZoom={true}
+                    enableRotate={true}
+                    minDistance={50}
+                    maxDistance={200}
+                    minPolarAngle={0}
+                    maxPolarAngle={Math.PI}
+                />
+                <PlanetFollower
+                    selectedPlanet={selectedPlanet}
+                    planets={planets}
+                    controlsRef={controlsRef}
+                />
                 <ambientLight intensity={0.1} />
                 <directionalLight position={[0, 0, 0]} intensity={1} />
                 <Nebula />
@@ -55,6 +130,7 @@ const SolarSystem = () => {
                         planet={planet}
                         showName={showPlanetNames}
                         showMoonName={showMoonNames}
+                        animationSpeed={animationSpeed}
                     />
                 ))}
             </Canvas>

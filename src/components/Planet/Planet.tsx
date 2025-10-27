@@ -9,9 +9,10 @@ type Props = {
     planet: PlanetType;
     showName?: boolean;
     showMoonName?: boolean;
+    animationSpeed?: number;
 };
 
-const Planet = ({ planet, showName = false, showMoonName = false }: Props) => {
+const Planet = ({ planet, showName = false, showMoonName = false, animationSpeed = 1 }: Props) => {
     const groupRef = useRef<THREE.Group>(null);
     const meshRef = useRef<THREE.Mesh>(null);
     const ringsRef = useRef<THREE.Mesh>(null);
@@ -85,14 +86,14 @@ const Planet = ({ planet, showName = false, showMoonName = false }: Props) => {
 
     useFrame((_, delta) => {
         if (groupRef.current) {
-            groupRef.current.rotation.y += delta * planet.speed * 0.1;
+            groupRef.current.rotation.y += delta * planet.speed * 0.1 * animationSpeed;
         }
         if (meshRef.current) {
-            meshRef.current.rotation.y += delta * 0.5;
+            meshRef.current.rotation.y += delta * 0.5 * animationSpeed;
         }
         // Rotation des anneaux de Saturne
         if (ringsRef.current && planet.name === 'Saturn') {
-            ringsRef.current.rotation.z += delta * 0.1;
+            ringsRef.current.rotation.z += delta * 0.1 * animationSpeed;
         }
     });
 
@@ -103,6 +104,7 @@ const Planet = ({ planet, showName = false, showMoonName = false }: Props) => {
                 position={[planet.distance, 0, 0]}
                 onPointerOver={() => setHovered(true)}
                 onPointerOut={() => setHovered(false)}
+                name={`planet-${planet.name}`}
             >
                 <sphereGeometry args={[planet.size, 32, 32]} />
                 <meshStandardMaterial
@@ -119,6 +121,7 @@ const Planet = ({ planet, showName = false, showMoonName = false }: Props) => {
                         color="#c0c0c0"
                         speed={0.3}
                         showName={showMoonName}
+                        animationSpeed={animationSpeed}
                     />
                 )}
             </mesh>

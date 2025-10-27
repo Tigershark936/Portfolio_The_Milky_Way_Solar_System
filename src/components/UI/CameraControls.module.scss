@@ -1,11 +1,11 @@
-.menuContainer {
+.cameraControlsContainer {
     position: fixed;
     top: 20px;
-    right: 20px;
+    left: 20px;
     z-index: 1000;
 }
 
-.menuButton {
+.cameraButton {
     background: rgba(0, 0, 0, 0.7);
     border: 2px solid rgba(138, 43, 226, 0.4);
     border-radius: 8px;
@@ -43,7 +43,7 @@
         }
     }
 
-    // Style quand le menu est ouvert (croix visible)
+    // Style quand le menu est ouvert
     &.open {
         background: rgba(0, 0, 0, 0.7);
         border-color: rgba(138, 43, 226, 0.6);
@@ -68,71 +68,35 @@
     }
 }
 
-.hamburger {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 20px;
-    height: 16px;
-    position: relative;
-
-    span {
-        width: 100%;
-        height: 2px;
-        background: white;
-        border-radius: 1px;
-        transition: all 0.3s ease;
-        transform-origin: center;
-        position: absolute;
-    }
-
-    span:nth-child(1) {
-        top: 2px;
-    }
-
-    span:nth-child(2) {
-        top: 7px;
-    }
-
-    span:nth-child(3) {
-        top: 12px;
-    }
-
-    // Animation quand le menu est ouvert
-    &.open {
-        span:nth-child(1) {
-            transform: rotate(45deg);
-            top: 7px;
-            background: #DC143C; // Crimson
-        }
-
-        span:nth-child(2) {
-            opacity: 0;
-        }
-
-        span:nth-child(3) {
-            transform: rotate(-45deg);
-            top: 7px;
-            background: #DC143C; // Crimson
-        }
-    }
+.cameraTitle {
+    color: #E6E6FA;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 0 8px rgba(138, 43, 226, 0.8);
+    transition: all 0.3s ease;
 }
 
-.menu {
+.cameraButton.open .cameraTitle {
+    color: #DC143C;
+    text-shadow: 0 0 8px rgba(220, 20, 60, 0.8);
+}
+
+.controls {
     position: absolute;
     top: 100%;
-    right: 0;
+    left: 0;
     margin-top: 10px;
     background: rgba(0, 0, 0, 0.8);
     border: 2px solid rgba(138, 43, 226, 0.5);
     border-radius: 12px;
     padding: 0;
-    min-width: 250px;
+    min-width: 280px;
     backdrop-filter: blur(15px);
     box-shadow: 0 8px 32px rgba(138, 43, 226, 0.4);
     animation: slideDown 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    transform-origin: top right;
+    transform-origin: top left;
 }
 
 @keyframes slideDown {
@@ -147,25 +111,7 @@
     }
 }
 
-@keyframes titleGlow {
-    from {
-        text-shadow:
-            0 0 5px rgba(138, 43, 226, 0.8),
-            0 0 10px rgba(138, 43, 226, 0.6),
-            0 0 15px rgba(138, 43, 226, 0.4),
-            0 2px 4px rgba(0, 0, 0, 0.5);
-    }
-
-    to {
-        text-shadow:
-            0 0 8px rgba(138, 43, 226, 1),
-            0 0 16px rgba(138, 43, 226, 0.8),
-            0 0 24px rgba(138, 43, 226, 0.6),
-            0 2px 4px rgba(0, 0, 0, 0.5);
-    }
-}
-
-.menuHeader {
+.controlsHeader {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -190,48 +136,68 @@
     }
 }
 
-.closeButton {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 0;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.3s ease;
+@keyframes titleGlow {
+    from {
+        text-shadow:
+            0 0 5px rgba(138, 43, 226, 0.8),
+            0 0 10px rgba(138, 43, 226, 0.6),
+            0 0 15px rgba(138, 43, 226, 0.4),
+            0 2px 4px rgba(0, 0, 0, 0.5);
+    }
 
-    &:hover {
-        background: rgba(255, 255, 255, 0.1);
+    to {
+        text-shadow:
+            0 0 8px rgba(138, 43, 226, 1),
+            0 0 16px rgba(138, 43, 226, 0.8),
+            0 0 24px rgba(138, 43, 226, 0.6),
+            0 2px 4px rgba(0, 0, 0, 0.5);
     }
 }
 
-.menuContent {
+.controlsContent {
     padding: 16px 20px;
 }
 
-.option {
-    margin-bottom: 16px;
+.controlGroup {
+    margin-bottom: 20px;
 
     &:last-child {
         margin-bottom: 0;
     }
 }
 
-.toggleButton {
+.controlLabel {
+    display: block;
+    color: #E6E6FA;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    text-shadow: 0 0 5px rgba(138, 43, 226, 0.6);
+}
+
+.speedControls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.presetControls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.speedButton,
+.presetButton,
+.resetButton {
     display: flex;
     align-items: center;
-    width: 100%;
-    padding: 12px 16px;
+    padding: 10px 14px;
     background: rgba(0, 0, 0, 0.3);
     border: 2px solid rgba(138, 43, 226, 0.3);
     border-radius: 8px;
     color: #E6E6FA;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="16" cy="16" r="10" fill="none" stroke="%238A2BE2" stroke-width="2" filter="url(%23glow)"/><circle cx="16" cy="16" r="4" fill="%238A2BE2" filter="url(%23glow)"/><circle cx="16" cy="16" r="1" fill="%23FFFFFF"/></svg>'), auto;
     transition: all 0.3s ease;
@@ -239,7 +205,7 @@
     position: relative;
     overflow: hidden;
 
-    // Effet de balayage amélioré
+    // Effet de balayage
     &::before {
         content: '';
         position: absolute;
@@ -257,7 +223,6 @@
         z-index: 1;
     }
 
-    // Effet de lueur supplémentaire
     &::after {
         content: '';
         position: absolute;
@@ -303,8 +268,25 @@
             0 4px 15px rgba(138, 43, 226, 0.4);
     }
 
-    // Balayage bleu pour les planètes actives
     &.active {
+        background: rgba(0, 0, 0, 0.5);
+        border-color: #4169E1;
+        color: #4169E1;
+        text-shadow:
+            0 0 5px rgba(65, 105, 225, 0.8),
+            0 0 10px rgba(65, 105, 225, 0.6);
+        box-shadow:
+            0 4px 15px rgba(65, 105, 225, 0.3),
+            inset 0 0 10px rgba(65, 105, 225, 0.1);
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.6);
+            text-shadow:
+                0 0 8px rgba(65, 105, 225, 1),
+                0 0 16px rgba(65, 105, 225, 0.8);
+        }
+
+        // Balayage bleu pour les boutons actifs
         &::before {
             background: linear-gradient(90deg,
                     transparent,
@@ -323,144 +305,39 @@
                     transparent);
         }
     }
-
-    &.active {
-        background: rgba(0, 0, 0, 0.5);
-        border-color: #4169E1;
-        color: #4169E1;
-        text-shadow:
-            0 0 5px rgba(65, 105, 225, 0.8),
-            0 0 10px rgba(65, 105, 225, 0.6);
-        box-shadow:
-            0 4px 15px rgba(65, 105, 225, 0.3),
-            inset 0 0 10px rgba(65, 105, 225, 0.1);
-
-        &:hover {
-            background: rgba(0, 0, 0, 0.6);
-            text-shadow:
-                0 0 8px rgba(65, 105, 225, 1),
-                0 0 16px rgba(65, 105, 225, 0.8);
-        }
-    }
-
-    // Style spécifique pour les boutons de lunes
-    &.moonButton {
-        &.active {
-            border-color: #FFD700;
-            color: #FFD700;
-            text-shadow:
-                0 0 5px rgba(255, 215, 0, 0.8),
-                0 0 10px rgba(255, 215, 0, 0.6);
-            box-shadow:
-                0 4px 15px rgba(255, 215, 0, 0.3),
-                inset 0 0 10px rgba(255, 215, 0, 0.1);
-
-            // Balayage doré pour les lunes actives
-            &::before {
-                background: linear-gradient(90deg,
-                        transparent,
-                        rgba(255, 215, 0, 0.1),
-                        rgba(255, 215, 0, 0.4),
-                        rgba(255, 215, 0, 0.1),
-                        transparent);
-            }
-
-            &::after {
-                background: linear-gradient(90deg,
-                        transparent,
-                        rgba(255, 215, 0, 0.3),
-                        rgba(255, 215, 0, 0.6),
-                        rgba(255, 215, 0, 0.3),
-                        transparent);
-            }
-
-            &:hover {
-                text-shadow:
-                    0 0 8px rgba(255, 215, 0, 1),
-                    0 0 16px rgba(255, 215, 0, 0.8);
-            }
-        }
-    }
 }
 
 .resetButton {
-    display: flex;
-    align-items: center;
     width: 100%;
-    padding: 12px 16px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 2px solid rgba(255, 215, 0, 0.3);
-    border-radius: 8px;
+    justify-content: center;
+    border-color: rgba(255, 215, 0, 0.3);
     color: #FFD700;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="16" cy="16" r="10" fill="none" stroke="%238A2BE2" stroke-width="2" filter="url(%23glow)"/><circle cx="16" cy="16" r="4" fill="%238A2BE2" filter="url(%23glow)"/><circle cx="16" cy="16" r="1" fill="%23FFFFFF"/></svg>'), auto;
-    transition: all 0.3s ease;
-    text-align: left;
-    position: relative;
-    overflow: hidden;
 
-    // Effet de balayage doré
+    &:hover {
+        border-color: rgba(255, 215, 0, 0.5);
+        box-shadow:
+            0 6px 20px rgba(255, 215, 0, 0.4),
+            0 0 15px rgba(255, 215, 0, 0.3);
+        text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+    }
+
+    // Balayage doré pour le reset
     &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
         background: linear-gradient(90deg,
                 transparent,
                 rgba(255, 215, 0, 0.1),
                 rgba(255, 215, 0, 0.4),
                 rgba(255, 215, 0, 0.1),
                 transparent);
-        transition: left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        z-index: 1;
     }
 
     &::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
         background: linear-gradient(90deg,
                 transparent,
                 rgba(255, 215, 0, 0.3),
                 rgba(255, 215, 0, 0.6),
                 rgba(255, 215, 0, 0.3),
                 transparent);
-        transition: left 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        z-index: 2;
-        filter: blur(2px);
-    }
-
-    &:hover {
-        background: rgba(0, 0, 0, 0.5);
-        border-color: rgba(255, 215, 0, 0.5);
-        transform: translateY(-2px);
-        box-shadow:
-            0 6px 20px rgba(255, 215, 0, 0.4),
-            0 0 15px rgba(255, 215, 0, 0.3);
-        text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
-
-        &::before {
-            left: 100%;
-        }
-
-        &::after {
-            left: 100%;
-        }
-    }
-
-    // Focus visible pour l'accessibilité
-    &:focus-visible {
-        outline: 2px solid #FFD700;
-        outline-offset: 2px;
-        box-shadow:
-            0 0 0 4px rgba(255, 215, 0, 0.3),
-            0 4px 15px rgba(255, 215, 0, 0.4);
     }
 }
 
@@ -478,7 +355,7 @@
     filter: drop-shadow(0 0 4px currentColor);
 
     // Animation de pulsation pour les icônes actives
-    .toggleButton.active & {
+    .speedButton.active & {
         animation: iconPulse 1.5s ease-in-out infinite;
     }
 }
