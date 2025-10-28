@@ -7,10 +7,14 @@ import Sun from '../Sun/Sun';
 import Planet from '../Planet/Planet';
 import Nebula from '../Nebula/Nebula';
 import TwinklingStars from '../TwinklingStars/Stars';
-import Menu from '../UI/Menu';
-import CameraControls from '../UI/CameraControls';
-import PlanetSelector from '../UI/PlanetSelector';
-import PlanetFollower from '../UI/PlanetFollower';
+import Menu from '../UI/Menu/Menu';
+import CameraControls from '../UI/Camera/CameraControls';
+import PlanetSelector from '../UI/Selectors/PlanetSelector';
+import PlanetFollower from '../UI/Camera/PlanetFollower';
+import LabelManager from '../UI/Labels/LabelManager';
+import ProjectsButton from '../UI/Project/ProjectsButton/ProjectsButton';
+import AboutButton from '../UI/About/AboutButton/AboutButton';
+import ContactButton from '../UI/Contact/ContactButton/ContactButton';
 import type { Planet as PlanetType } from '../../types/Planet';
 
 // Planètes avec couleurs NASA officielles, distances bien espacées et tailles ajustées
@@ -93,6 +97,9 @@ const SolarSystem = () => {
                 onTogglePlanetNames={handleTogglePlanetNames}
                 onToggleMoonNames={handleToggleMoonNames}
             />
+            <AboutButton />
+            <ContactButton />
+            <ProjectsButton />
             <CameraControls
                 onSpeedChange={handleSpeedChange}
                 onCameraReset={handleCameraReset}
@@ -119,6 +126,10 @@ const SolarSystem = () => {
                     planets={planets}
                     controlsRef={controlsRef}
                 />
+                <LabelManager
+                    showPlanetNames={showPlanetNames}
+                    showMoonNames={showMoonNames}
+                />
                 <ambientLight intensity={0.1} />
                 <directionalLight position={[0, 0, 0]} intensity={1} />
                 <Nebula />
@@ -128,8 +139,6 @@ const SolarSystem = () => {
                     <Planet
                         key={planet.name}
                         planet={planet}
-                        showName={showPlanetNames}
-                        showMoonName={showMoonNames}
                         animationSpeed={animationSpeed}
                     />
                 ))}

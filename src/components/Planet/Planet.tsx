@@ -3,22 +3,29 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import type { Planet as PlanetType } from '../../types/Planet';
 import Moon from '../Moon/Moon.tsx';
-// PlanetLabel supprimé
 
 type Props = {
     planet: PlanetType;
-    showName?: boolean;
-    showMoonName?: boolean;
     animationSpeed?: number;
 };
 
-const Planet = ({ planet, showName = false, showMoonName = false, animationSpeed = 1 }: Props) => {
+const Planet = ({ planet, animationSpeed = 1 }: Props) => {
     const groupRef = useRef<THREE.Group>(null);
     const meshRef = useRef<THREE.Mesh>(null);
     const ringsRef = useRef<THREE.Mesh>(null);
     const [hovered, setHovered] = useState(false);
     const [planetTexture, setPlanetTexture] = useState<THREE.Texture | null>(null);
     const [ringsTexture, setRingsTexture] = useState<THREE.Texture | null>(null);
+
+    // Gérer le curseur personnalisé au survol
+    useEffect(() => {
+        const canvas = document.querySelector('canvas');
+        if (hovered && canvas) {
+            canvas.style.cursor = 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 32 32\'><defs><filter id=\'glow\'><feGaussianBlur stdDeviation=\'3\' result=\'coloredBlur\'/><feMerge><feMergeNode in=\'coloredBlur\'/><feMergeNode in=\'SourceGraphic\'/></feMerge></filter></defs><circle cx=\'16\' cy=\'16\' r=\'10\' fill=\'none\' stroke=\'%234169E1\' stroke-width=\'2\' filter=\'url(%23glow)\'/><circle cx=\'16\' cy=\'16\' r=\'4\' fill=\'%234169E1\' filter=\'url(%23glow)\'/><circle cx=\'16\' cy=\'16\' r=\'1\' fill=\'%23FFFFFF\'/></svg>"), auto';
+        } else if (!hovered && canvas) {
+            canvas.style.cursor = 'default';
+        }
+    }, [hovered]);
 
     // Charger la texture des planets
     useEffect(() => {
@@ -120,7 +127,6 @@ const Planet = ({ planet, showName = false, showMoonName = false, animationSpeed
                         size={0.27 * 0.3}
                         color="#c0c0c0"
                         speed={0.3}
-                        showName={showMoonName}
                         animationSpeed={animationSpeed}
                     />
                 )}

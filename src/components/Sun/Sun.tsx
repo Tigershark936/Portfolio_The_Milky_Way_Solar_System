@@ -48,15 +48,13 @@ const Sun = () => {
 
 
             {/* Soleil principal avec texture */}
-            <mesh ref={meshRef} position={[0, 0, 0]}>
+            <mesh ref={meshRef} position={[0, 0, 0]} name="sun">
                 <sphereGeometry args={[15, 64, 64]} />
                 <meshBasicMaterial
                     color={new THREE.Color(1.2, 1.1, 0.9)}
                     map={sunTexture || undefined}
                 />
             </mesh>
-
-            {/* Label du soleil supprimé */}
         </group>
     );
 };

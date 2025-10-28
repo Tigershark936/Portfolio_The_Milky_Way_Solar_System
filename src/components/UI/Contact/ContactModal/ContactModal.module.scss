@@ -1,0 +1,467 @@
+﻿.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(3px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.modalContent {
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(138, 43, 226, 0.6);
+    border-radius: 15px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(138, 43, 226, 0.4);
+    animation: slideUp 0.3s ease;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="16" cy="16" r="10" fill="none" stroke="%238A2BE2" stroke-width="2" filter="url(%23glow)"/><circle cx="16" cy="16" r="4" fill="%238A2BE2" filter="url(%23glow)"/><circle cx="16" cy="16" r="1" fill="%23FFFFFF"/></svg>'), auto;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modalHeader {
+    background: rgba(0, 0, 0, 0.6);
+    border-bottom: 2px solid rgba(138, 43, 226, 0.5);
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 15px 15px 0 0;
+
+    h2 {
+        margin: 0;
+        font-family: 'Orbitron', monospace;
+        font-size: 24px;
+        font-weight: 700;
+        color: #E6E6FA;
+        text-shadow: 0 0 10px rgba(138, 43, 226, 0.8);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    color: #ff4444;
+    font-size: 32px;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="16" cy="16" r="10" fill="none" stroke="%238A2BE2" stroke-width="2" filter="url(%23glow)"/><circle cx="16" cy="16" r="4" fill="%238A2BE2" filter="url(%23glow)"/><circle cx="16" cy="16" r="1" fill="%23FFFFFF"/></svg>'), auto;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-weight: 300;
+    position: relative;
+    text-shadow: 0 0 10px rgba(255, 68, 68, 0.8);
+    z-index: 11;
+
+    &:hover {
+        transform: rotate(90deg) scale(1.2);
+        text-shadow:
+            0 0 15px rgba(255, 68, 68, 1),
+            0 0 25px rgba(255, 68, 68, 0.8);
+    }
+
+    &:active {
+        transform: rotate(90deg) scale(1.1);
+    }
+}
+
+.modalBody {
+    padding: 30px;
+}
+
+.contactInfo {
+    margin-bottom: 25px;
+
+    p {
+        font-size: 16px;
+        color: #E6E6FA;
+        text-align: center;
+    }
+}
+
+.contactForm {
+    margin-bottom: 30px;
+}
+
+.formGroup {
+    margin-bottom: 20px;
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-family: 'Orbitron', monospace;
+        font-size: 14px;
+        font-weight: 600;
+        color: #8A2BE2;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        padding: 12px 16px;
+        background: rgba(0, 0, 0, 0.4);
+        border: 2px solid rgba(138, 43, 226, 0.3);
+        border-radius: 8px;
+        color: #E6E6FA;
+        font-size: 15px;
+        font-family: inherit;
+        transition: all 0.3s ease;
+
+        &:focus {
+            outline: none;
+            border-color: rgba(138, 43, 226, 0.7);
+            background: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+        }
+
+        &::placeholder {
+            color: rgba(230, 230, 250, 0.4);
+        }
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+}
+
+.formError {
+    color: #ff4444;
+    font-size: 13px;
+    margin-top: 6px;
+    font-family: 'Orbitron', monospace;
+    animation: fadeIn 0.3s ease;
+    text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Style pour les champs en erreur
+.formGroup:has(.formError) {
+
+    input,
+    textarea {
+        border-color: rgba(255, 68, 68, 0.6) !important;
+        animation: shake 0.4s ease;
+    }
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+.submitButton {
+    width: 100%;
+    padding: 14px 24px;
+    background: rgba(138, 43, 226, 0.2);
+    border: 2px solid rgba(138, 43, 226, 0.5);
+    border-radius: 10px;
+    color: #E6E6FA;
+    font-family: 'Orbitron', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg,
+                transparent,
+                rgba(138, 43, 226, 0.3),
+                rgba(138, 43, 226, 0.6),
+                rgba(138, 43, 226, 0.3),
+                transparent);
+        transition: left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        z-index: 1;
+    }
+
+    &:hover {
+        background: rgba(138, 43, 226, 0.3);
+        border-color: rgba(138, 43, 226, 0.7);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(138, 43, 226, 0.4);
+
+        &::before {
+            left: 100%;
+        }
+
+        .icon {
+            transform: rotate(15deg);
+        }
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    .icon {
+        position: relative;
+        z-index: 10;
+        transition: transform 0.3s ease;
+    }
+
+    span {
+        position: relative;
+        z-index: 10;
+    }
+}
+
+.socialLinks {
+    text-align: center;
+
+    p {
+        font-size: 14px;
+        color: rgba(230, 230, 250, 0.7);
+        margin-bottom: 15px;
+    }
+}
+
+.links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.socialLink {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(138, 43, 226, 0.2);
+    border: 2px solid rgba(138, 43, 226, 0.5);
+    border-radius: 8px;
+    color: #E6E6FA;
+    text-decoration: none;
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: rgba(138, 43, 226, 0.3);
+        border-color: rgba(138, 43, 226, 0.7);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+    }
+
+    .icon {
+        font-size: 18px;
+    }
+}
+
+// Responsive
+@media (max-width: 768px) {
+    .modalContent {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .modalHeader {
+        padding: 15px 20px;
+
+        h2 {
+            font-size: 18px;
+        }
+    }
+
+    .closeButton {
+        font-size: 28px;
+        width: 30px;
+        height: 30px;
+    }
+
+    .modalBody {
+        padding: 20px;
+    }
+
+    .formGroup {
+        label {
+            font-size: 12px;
+        }
+
+        input,
+        textarea {
+            font-size: 14px;
+        }
+    }
+
+    .submitButton {
+        font-size: 14px;
+        padding: 12px 20px;
+    }
+
+    .links {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .socialLink {
+        justify-content: center;
+        font-size: 12px;
+    }
+}
+
+// Modal de succÃ¨s
+.successOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    animation: fadeIn 0.3s ease;
+}
+
+.successModal {
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(76, 175, 80, 0.6);
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(76, 175, 80, 0.3);
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.successIcon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    background: rgba(76, 175, 80, 0.2);
+    border: 3px solid rgba(76, 175, 80, 0.6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 50px;
+    color: #4CAF50;
+    animation: checkMark 0.6s ease;
+    text-shadow: 0 0 20px rgba(76, 175, 80, 0.8);
+}
+
+@keyframes checkMark {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.successModal h2 {
+    font-family: 'Orbitron', monospace;
+    color: #E6E6FA;
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 20px rgba(138, 43, 226, 0.8);
+}
+
+.successModal p {
+    color: #C0C0C0;
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+}

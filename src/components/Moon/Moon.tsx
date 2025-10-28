@@ -1,18 +1,16 @@
 import { useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import PlanetLabel from '../UI/PlanetLabel';
 
 type Props = {
     distance: number; // Distance from planet
     size: number; // Moon size
     color: string; // Moon color
     speed: number; // Orbital speed
-    showName?: boolean; // Show moon name
     animationSpeed?: number; // Animation speed multiplier
 };
 
-const Moon = ({ distance, size, color, speed, showName = false, animationSpeed = 1 }: Props) => {
+const Moon = ({ distance, size, color, speed, animationSpeed = 1 }: Props) => {
     const groupRef = useRef<THREE.Group>(null);
     const meshRef = useRef<THREE.Mesh>(null);
     const [hovered, setHovered] = useState(false);
@@ -54,6 +52,7 @@ const Moon = ({ distance, size, color, speed, showName = false, animationSpeed =
             <mesh
                 ref={meshRef}
                 position={[distance, 0, 0]}
+                name="earth-moon"
                 onPointerOver={() => setHovered(true)}
                 onPointerOut={() => setHovered(false)}
             >
@@ -66,8 +65,6 @@ const Moon = ({ distance, size, color, speed, showName = false, animationSpeed =
                     roughness={0.9}
                 />
             </mesh>
-
-            {/* Label de la lune supprimé */}
         </group>
     );
 };
