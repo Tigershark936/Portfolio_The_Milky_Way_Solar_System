@@ -4,11 +4,13 @@ import styles from './Menu.module.scss';
 type MenuProps = {
     showPlanetNames: boolean;
     showMoonNames: boolean;
+    showOrbits: boolean;
     onTogglePlanetNames: () => void;
     onToggleMoonNames: () => void;
+    onToggleOrbits: () => void;
 };
 
-const Menu = ({ showPlanetNames, showMoonNames, onTogglePlanetNames, onToggleMoonNames }: MenuProps) => {
+const Menu = ({ showPlanetNames, showMoonNames, showOrbits, onTogglePlanetNames, onToggleMoonNames, onToggleOrbits }: MenuProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const planetButtonRef = useRef<HTMLButtonElement>(null);
@@ -96,6 +98,21 @@ const Menu = ({ showPlanetNames, showMoonNames, onTogglePlanetNames, onToggleMoo
                                     {showMoonNames ? '◉' : '○'}
                                 </span>
                                 Noms des lunes
+                            </button>
+                        </div>
+
+                        <div className={styles.option}>
+                            <button
+                                className={`${styles.toggleButton} ${styles.orbitButton} ${showOrbits ? styles.active : ''}`}
+                                onClick={onToggleOrbits}
+                                role="menuitem"
+                                aria-pressed={showOrbits}
+                                tabIndex={0}
+                            >
+                                <span className={styles.buttonIcon} style={{ color: showOrbits ? '#FF6B35' : '#8A2BE2' }}>
+                                    {showOrbits ? '◉' : '○'}
+                                </span>
+                                Orbites
                             </button>
                         </div>
                     </div>

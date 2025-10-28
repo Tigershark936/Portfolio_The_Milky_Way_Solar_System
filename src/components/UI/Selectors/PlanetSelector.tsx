@@ -12,6 +12,22 @@ const PlanetSelector = ({ planets, onPlanetSelect, selectedPlanet }: PlanetSelec
     const selectorRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
 
+    // Fonction de traduction des noms de planètes en français
+    const translatePlanetName = (planetName: string): string => {
+        const translations: { [key: string]: string } = {
+            'Mercury': 'Mercure',
+            'Venus': 'Vénus',
+            'Earth': 'Terre',
+            'Mars': 'Mars',
+            'Jupiter': 'Jupiter',
+            'Saturn': 'Saturne',
+            'Uranus': 'Uranus',
+            'Neptune': 'Neptune',
+            'Pluto': 'Pluton'
+        };
+        return translations[planetName] || planetName;
+    };
+
     // Gestion des événements clavier
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -62,7 +78,7 @@ const PlanetSelector = ({ planets, onPlanetSelect, selectedPlanet }: PlanetSelec
                 aria-label="Sélectionner une planète"
             >
                 <span className={styles.selectorTitle}>
-                    {selectedPlanet ? `Suivre: ${selectedPlanet}` : 'Sélectionner planète'}
+                    {selectedPlanet ? `Suivre: ${translatePlanetName(selectedPlanet)}` : 'Sélectionner planète'}
                 </span>
             </button>
 
@@ -84,7 +100,7 @@ const PlanetSelector = ({ planets, onPlanetSelect, selectedPlanet }: PlanetSelec
                                     '--planet-size': `${Math.max(planet.size * 2, 0.5)}rem`
                                 } as React.CSSProperties}
                             >
-                                <span className={styles.planetName}>{planet.name}</span>
+                                <span className={styles.planetName}>{translatePlanetName(planet.name)}</span>
                             </button>
                         ))}
 

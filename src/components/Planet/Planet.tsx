@@ -7,9 +7,11 @@ import Moon from '../Moon/Moon.tsx';
 type Props = {
     planet: PlanetType;
     animationSpeed?: number;
+    onClick?: () => void;
+    onMoonClick?: (moonName: string) => void; // Added moon click handler
 };
 
-const Planet = ({ planet, animationSpeed = 1 }: Props) => {
+const Planet = ({ planet, animationSpeed = 1, onClick, onMoonClick }: Props) => {
     const groupRef = useRef<THREE.Group>(null);
     const meshRef = useRef<THREE.Mesh>(null);
     const ringsRef = useRef<THREE.Mesh>(null);
@@ -33,23 +35,23 @@ const Planet = ({ planet, animationSpeed = 1 }: Props) => {
         let texturePath = '';
 
         if (planet.name === 'Earth') {
-            texturePath = '/textures/earth.jpg';
+            texturePath = '/textures/planets/earth.jpg';
         } else if (planet.name === 'Jupiter') {
-            texturePath = '/textures/jupiter.jpg';
+            texturePath = '/textures/planets/jupiter.jpg';
         } else if (planet.name === 'Mars') {
-            texturePath = '/textures/mars.jpg';
+            texturePath = '/textures/planets/mars.jpg';
         } else if (planet.name === 'Saturn') {
-            texturePath = '/textures/saturn.jpg';
+            texturePath = '/textures/planets/saturn.jpg';
         } else if (planet.name === 'Uranus') {
-            texturePath = '/textures/uranus.jpg';
+            texturePath = '/textures/planets/uranus.jpg';
         } else if (planet.name === 'Neptune') {
-            texturePath = '/textures/neptune.jpg';
+            texturePath = '/textures/planets/neptune.jpg';
         } else if (planet.name === 'Venus') {
-            texturePath = '/textures/venus.jpg';
+            texturePath = '/textures/planets/venus.jpg';
         } else if (planet.name === 'Mercury') {
-            texturePath = '/textures/mercury.jpg';
+            texturePath = '/textures/planets/mercury.jpg';
         } else if (planet.name === 'Pluto') {
-            texturePath = '/textures/pluton.jpg';
+            texturePath = '/textures/planets/pluton.jpg';
         }
 
         if (texturePath) {
@@ -75,7 +77,7 @@ const Planet = ({ planet, animationSpeed = 1 }: Props) => {
         if (planet.name === 'Saturn') {
             const loader = new THREE.TextureLoader();
             loader.load(
-                '/textures/saturn-ring.jpg',
+                '/textures/planets/saturn-ring.jpg',
                 (texture) => {
                     setRingsTexture(texture);
                 }
@@ -111,6 +113,7 @@ const Planet = ({ planet, animationSpeed = 1 }: Props) => {
                 position={[planet.distance, 0, 0]}
                 onPointerOver={() => setHovered(true)}
                 onPointerOut={() => setHovered(false)}
+                onClick={onClick}
                 name={`planet-${planet.name}`}
             >
                 <sphereGeometry args={[planet.size, 32, 32]} />
@@ -120,7 +123,7 @@ const Planet = ({ planet, animationSpeed = 1 }: Props) => {
                     emissive={hovered ? 0x222222 : 0x000000}
                 />
 
-                {/* Moon for Earth */}
+                {/* Moons */}
                 {planet.name === 'Earth' && (
                     <Moon
                         distance={3}
@@ -128,7 +131,233 @@ const Planet = ({ planet, animationSpeed = 1 }: Props) => {
                         color="#c0c0c0"
                         speed={0.3}
                         animationSpeed={animationSpeed}
+                        name="Lune"
+                        onClick={() => onMoonClick?.('Lune')}
                     />
+                )}
+                {/* Mars Moons */}
+                {planet.name === 'Mars' && (
+                    <>
+                        <Moon
+                            distance={2}
+                            size={0.05}
+                            color="#8B7355"
+                            speed={0.32}
+                            animationSpeed={animationSpeed}
+                            name="Phobos"
+                            onClick={() => onMoonClick?.('Phobos')}
+                        />
+                        <Moon
+                            distance={2.8}
+                            size={0.04}
+                            color="#8B7355"
+                            speed={0.08}
+                            animationSpeed={animationSpeed}
+                            name="Deimos"
+                            onClick={() => onMoonClick?.('Deimos')}
+                        />
+                    </>
+                )}
+                {/* Jupiter Moons */}
+                {planet.name === 'Jupiter' && (
+                    <>
+                        <Moon
+                            distance={12}
+                            size={0.12}
+                            color="#FFFF00"
+                            speed={0.56}
+                            animationSpeed={animationSpeed}
+                            name="Io"
+                            onClick={() => onMoonClick?.('Io')}
+                        />
+                        <Moon
+                            distance={15}
+                            size={0.11}
+                            color="#87CEEB"
+                            speed={0.28}
+                            animationSpeed={animationSpeed}
+                            name="Europa"
+                            onClick={() => onMoonClick?.('Europa')}
+                        />
+                        <Moon
+                            distance={18}
+                            size={0.16}
+                            color="#D3D3D3"
+                            speed={0.14}
+                            animationSpeed={animationSpeed}
+                            name="Ganymede"
+                            onClick={() => onMoonClick?.('Ganymede')}
+                        />
+                        <Moon
+                            distance={22}
+                            size={0.15}
+                            color="#8B8B8B"
+                            speed={0.06}
+                            animationSpeed={animationSpeed}
+                            name="Callisto"
+                            onClick={() => onMoonClick?.('Callisto')}
+                        />
+                    </>
+                )}
+                {/* Saturn Moons */}
+                {planet.name === 'Saturn' && (
+                    <>
+                        <Moon
+                            distance={7.5}
+                            size={0.18}
+                            color="#8B8B8B"
+                            speed={0.94}
+                            animationSpeed={animationSpeed}
+                            name="Mimas"
+                            onClick={() => onMoonClick?.('Mimas')}
+                        />
+                        <Moon
+                            distance={9}
+                            size={0.18}
+                            color="#FFFFFF"
+                            speed={0.73}
+                            animationSpeed={animationSpeed}
+                            name="Enceladus"
+                            onClick={() => onMoonClick?.('Enceladus')}
+                        />
+                        <Moon
+                            distance={11}
+                            size={0.20}
+                            color="#A0A0A0"
+                            speed={0.41}
+                            animationSpeed={animationSpeed}
+                            name="Tethys"
+                            onClick={() => onMoonClick?.('Tethys')}
+                        />
+                        <Moon
+                            distance={13}
+                            size={0.22}
+                            color="#D3D3D3"
+                            speed={0.26}
+                            animationSpeed={animationSpeed}
+                            name="Dione"
+                            onClick={() => onMoonClick?.('Dione')}
+                        />
+                        <Moon
+                            distance={15}
+                            size={0.24}
+                            color="#E0E0E0"
+                            speed={0.16}
+                            animationSpeed={animationSpeed}
+                            name="Rhea"
+                            onClick={() => onMoonClick?.('Rhea')}
+                        />
+                        <Moon
+                            distance={17}
+                            size={0.35}
+                            color="#FF8C00"
+                            speed={0.063}
+                            animationSpeed={animationSpeed}
+                            name="Titan"
+                            onClick={() => onMoonClick?.('Titan')}
+                        />
+                        <Moon
+                            distance={20}
+                            size={0.14}
+                            color="#9C7A4F"
+                            speed={0.95}
+                            animationSpeed={animationSpeed}
+                            name="Hyperion"
+                            onClick={() => onMoonClick?.('Hyperion')}
+                        />
+                        <Moon
+                            distance={22}
+                            size={0.20}
+                            color="#4A4A4A"
+                            speed={0.08}
+                            animationSpeed={animationSpeed}
+                            name="Lapetus"
+                            onClick={() => onMoonClick?.('Lapetus')}
+                        />
+                        <Moon
+                            distance={26}
+                            size={0.15}
+                            color="#2C2C2C"
+                            speed={0.35}
+                            animationSpeed={animationSpeed}
+                            name="Phoebe"
+                            onClick={() => onMoonClick?.('Phoebe')}
+                        />
+                    </>
+                )}
+                {/* Uranus Moon */}
+                {planet.name === 'Uranus' && (
+                    <Moon
+                        distance={1.5}
+                        size={0.06}
+                        color="#B0E0E6"
+                        speed={0.67}
+                        animationSpeed={animationSpeed}
+                        name="Miranda"
+                        onClick={() => onMoonClick?.('Miranda')}
+                    />
+                )}
+                {/* Neptune Moon */}
+                {planet.name === 'Neptune' && (
+                    <Moon
+                        distance={3.5}
+                        size={0.10}
+                        color="#ADD8E6"
+                        speed={0.17}
+                        animationSpeed={animationSpeed}
+                        name="Triton"
+                        onClick={() => onMoonClick?.('Triton')}
+                    />
+                )}
+                {/* Pluto Moons */}
+                {planet.name === 'Pluto' && (
+                    <>
+                        <Moon
+                            distance={1.5}
+                            size={0.15}
+                            color="#B0C4DE"
+                            speed={0.16}
+                            animationSpeed={animationSpeed}
+                            name="Charon"
+                            onClick={() => onMoonClick?.('Charon')}
+                        />
+                        <Moon
+                            distance={3.0}
+                            size={0.06}
+                            color="#8B7355"
+                            speed={0.12}
+                            animationSpeed={animationSpeed}
+                            name="Styx"
+                            onClick={() => onMoonClick?.('Styx')}
+                        />
+                        <Moon
+                            distance={4.2}
+                            size={0.08}
+                            color="#9370DB"
+                            speed={0.08}
+                            animationSpeed={animationSpeed}
+                            name="Nix"
+                            onClick={() => onMoonClick?.('Nix')}
+                        />
+                        <Moon
+                            distance={5.5}
+                            size={0.07}
+                            color="#2F2F2F"
+                            speed={0.06}
+                            animationSpeed={animationSpeed}
+                            name="Kerberos"
+                            onClick={() => onMoonClick?.('Kerberos')}
+                        />
+                        <Moon
+                            distance={7.0}
+                            size={0.10}
+                            color="#8B6914"
+                            speed={0.04}
+                            animationSpeed={animationSpeed}
+                            name="Hydra"
+                            onClick={() => onMoonClick?.('Hydra')}
+                        />
+                    </>
                 )}
             </mesh>
 

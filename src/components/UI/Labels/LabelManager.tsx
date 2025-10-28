@@ -96,10 +96,26 @@ const LabelManager = ({ showPlanetNames, showMoonNames }: LabelManagerProps) => 
                         const labelDiv = document.createElement('div');
                         labelDiv.className = isMoon ? 'moon-label' : 'planet-label';
 
-                        // Extraire le nom correct
+                        // Extraire le nom correct et traduire
                         let displayName = name.replace('planet-', '');
+
                         if (isMoon) {
-                            displayName = 'Moon'; // Toujours afficher "Moon" pour les lunes
+                            // Pour les lunes, extraire le nom spécifique après "moon-"
+                            displayName = name.replace('moon-', '');
+                        } else {
+                            // Traduction des noms de planètes en français
+                            const planetNamesFR: { [key: string]: string } = {
+                                'Mercury': 'Mercure',
+                                'Venus': 'Vénus',
+                                'Earth': 'Terre',
+                                'Mars': 'Mars',
+                                'Jupiter': 'Jupiter',
+                                'Saturn': 'Saturne',
+                                'Uranus': 'Uranus',
+                                'Neptune': 'Neptune',
+                                'Pluto': 'Pluton'
+                            };
+                            displayName = planetNamesFR[displayName] || displayName;
                         }
 
                         labelDiv.textContent = displayName;

@@ -381,6 +381,45 @@
             }
         }
     }
+
+    // Style spécifique pour le bouton des orbites
+    &.orbitButton {
+        &.active {
+            border-color: #FF6B35;
+            color: #FF6B35;
+            text-shadow:
+                0 0 5px rgba(255, 107, 53, 0.8),
+                0 0 10px rgba(255, 107, 53, 0.6);
+            box-shadow:
+                0 4px 15px rgba(255, 107, 53, 0.3),
+                inset 0 0 10px rgba(255, 107, 53, 0.1);
+
+            // Balayage orange pour les orbites actives
+            &::before {
+                background: linear-gradient(90deg,
+                        transparent,
+                        rgba(255, 107, 53, 0.1),
+                        rgba(255, 107, 53, 0.4),
+                        rgba(255, 107, 53, 0.1),
+                        transparent);
+            }
+
+            &::after {
+                background: linear-gradient(90deg,
+                        transparent,
+                        rgba(255, 107, 53, 0.3),
+                        rgba(255, 107, 53, 0.6),
+                        rgba(255, 107, 53, 0.3),
+                        transparent);
+            }
+
+            &:hover {
+                text-shadow:
+                    0 0 8px rgba(255, 107, 53, 1),
+                    0 0 16px rgba(255, 107, 53, 0.8);
+            }
+        }
+    }
 }
 
 .resetButton {

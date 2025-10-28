@@ -1,0 +1,385 @@
+.modalOverlay {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 400px;
+    height: auto;
+    max-height: 80vh;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.modalContent {
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(138, 43, 226, 0.6);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow:
+        0 8px 32px rgba(138, 43, 226, 0.4),
+        0 0 40px rgba(138, 43, 226, 0.3);
+    animation: slideUpFromBottom 0.3s ease;
+    pointer-events: auto;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="16" cy="16" r="10" fill="none" stroke="%238A2BE2" stroke-width="2" filter="url(%23glow)"/><circle cx="16" cy="16" r="4" fill="%238A2BE2" filter="url(%23glow)"/><circle cx="16" cy="16" r="1" fill="%23FFFFFF"/></svg>'), auto;
+}
+
+@keyframes slideUpFromBottom {
+    from {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modalHeader {
+    background: rgba(0, 0, 0, 0.6);
+    border-bottom: 2px solid rgba(138, 43, 226, 0.5);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 15px 15px 0 0;
+    backdrop-filter: blur(10px);
+
+    h2 {
+        margin: 0;
+        font-family: 'Orbitron', monospace;
+        font-size: 18px;
+        font-weight: 700;
+        color: #E6E6FA;
+        text-shadow: 0 0 10px rgba(138, 43, 226, 0.8);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    color: #ff4444;
+    font-size: 24px;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="16" cy="16" r="10" fill="none" stroke="%238A2BE2" stroke-width="2" filter="url(%23glow)"/><circle cx="16" cy="16" r="4" fill="%238A2BE2" filter="url(%23glow)"/><circle cx="16" cy="16" r="1" fill="%23FFFFFF"/></svg>'), auto;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-weight: 300;
+    text-shadow: 0 0 10px rgba(255, 68, 68, 0.8);
+
+    &:hover {
+        transform: rotate(90deg) scale(1.2);
+        text-shadow:
+            0 0 15px rgba(255, 68, 68, 1),
+            0 0 25px rgba(255, 68, 68, 0.8);
+    }
+
+    &:active {
+        transform: rotate(90deg) scale(1.1);
+    }
+}
+
+.modalBody {
+    padding: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.planetInfo {
+    margin-bottom: 20px;
+}
+
+.infoRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(138, 43, 226, 0.2);
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.label {
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    color: #8A2BE2;
+    text-shadow: 0 0 5px rgba(138, 43, 226, 0.6);
+}
+
+.value {
+    font-size: 14px;
+    color: #E6E6FA;
+    font-weight: 500;
+}
+
+.compositionValue {
+    font-size: 14px;
+    color: #E6E6FA;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .compositionItem {
+        padding: 4px 0;
+        text-align: right;
+    }
+}
+
+.badge {
+    background: rgba(138, 43, 226, 0.2);
+    border: 1px solid rgba(138, 43, 226, 0.5);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 12px;
+    color: #8A2BE2;
+    font-family: 'Orbitron', monospace;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.description {
+    margin-bottom: 20px;
+
+    h3 {
+        font-family: 'Orbitron', monospace;
+        font-size: 16px;
+        font-weight: 700;
+        color: #8A2BE2;
+        margin-bottom: 10px;
+        text-shadow: 0 0 8px rgba(138, 43, 226, 0.6);
+    }
+
+    p {
+        font-size: 14px;
+        line-height: 1.8;
+        color: #E6E6FA;
+        margin: 0 0 12px 0;
+        text-align: left;
+    }
+
+    p:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.discoverySection {
+    margin-bottom: 25px;
+    padding: 18px 20px;
+    background: rgba(138, 43, 226, 0.12);
+    border-left: 4px solid rgba(138, 43, 226, 0.6);
+    border-radius: 6px;
+
+    h3 {
+        font-family: 'Orbitron', monospace;
+        font-size: 16px;
+        font-weight: 700;
+        color: #8A2BE2;
+        margin-bottom: 12px;
+        text-shadow: 0 0 8px rgba(138, 43, 226, 0.6);
+    }
+
+    p {
+        font-size: 14px;
+        line-height: 1.8;
+        color: #E6E6FA;
+        margin: 0 0 12px 0;
+        text-align: left;
+    }
+
+    p:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.distanceExplanation {
+    margin: 15px 0;
+    padding: 12px 15px;
+    background: rgba(138, 43, 226, 0.1);
+    border-left: 3px solid rgba(138, 43, 226, 0.6);
+    border-radius: 5px;
+
+    p {
+        font-size: 12px;
+        color: rgba(230, 230, 250, 0.8);
+        line-height: 1.5;
+        margin: 0;
+
+        strong {
+            color: #8A2BE2;
+            font-weight: 600;
+        }
+    }
+}
+
+.moonsSection {
+    h3 {
+        font-family: 'Orbitron', monospace;
+        font-size: 16px;
+        font-weight: 700;
+        color: #8A2BE2;
+        margin-bottom: 15px;
+        text-shadow: 0 0 8px rgba(138, 43, 226, 0.6);
+    }
+}
+
+.moonsExplanation {
+    font-size: 12px;
+    color: rgba(230, 230, 250, 0.7);
+    font-style: italic;
+    margin-bottom: 15px;
+    padding: 8px 12px;
+    background: rgba(138, 43, 226, 0.1);
+    border-left: 3px solid rgba(138, 43, 226, 0.5);
+    border-radius: 4px;
+    line-height: 1.4;
+}
+
+.moonsList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.moonItem {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    border-radius: 8px;
+    padding: 12px;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: rgba(138, 43, 226, 0.1);
+        border-color: rgba(138, 43, 226, 0.6);
+        transform: translateY(-2px);
+    }
+}
+
+.moonHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.moonName {
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    color: #E6E6FA;
+}
+
+.followButton {
+    background: rgba(138, 43, 226, 0.2);
+    border: 1px solid rgba(138, 43, 226, 0.5);
+    border-radius: 6px;
+    padding: 4px 8px;
+    color: #8A2BE2;
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="16" cy="16" r="10" fill="none" stroke="%238A2BE2" stroke-width="2" filter="url(%23glow)"/><circle cx="16" cy="16" r="4" fill="%238A2BE2" filter="url(%23glow)"/><circle cx="16" cy="16" r="1" fill="%23FFFFFF"/></svg>'), auto;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    text-align: center;
+    user-select: none;
+
+    &:hover {
+        background: rgba(138, 43, 226, 0.4);
+        border-color: rgba(138, 43, 226, 0.8);
+        color: #E6E6FA;
+        transform: scale(1.05);
+        box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+}
+
+.moonInfo {
+    font-size: 12px;
+    color: rgba(230, 230, 250, 0.8);
+    line-height: 1.4;
+
+    // Mise en évidence de l'unité de mesure
+    .unitIndicator {
+        color: #8A2BE2;
+        font-weight: 600;
+        text-shadow: 0 0 5px rgba(138, 43, 226, 0.5);
+    }
+}
+
+// Scrollbar personnalisée
+.modalBody::-webkit-scrollbar {
+    width: 4px;
+}
+
+.modalBody::-webkit-scrollbar-track {
+    background: rgba(138, 43, 226, 0.1);
+    border-radius: 2px;
+}
+
+.modalBody::-webkit-scrollbar-thumb {
+    background: rgba(138, 43, 226, 0.5);
+    border-radius: 2px;
+
+    &:hover {
+        background: rgba(138, 43, 226, 0.7);
+    }
+}
+
+// Responsive
+@media (max-width: 768px) {
+    .modalOverlay {
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        width: auto;
+    }
+
+    .modalContent {
+        width: 100%;
+    }
+
+    .modalHeader {
+        padding: 12px 15px;
+
+        h2 {
+            font-size: 16px;
+        }
+    }
+
+    .closeButton {
+        font-size: 20px;
+        width: 25px;
+        height: 25px;
+    }
+
+    .modalBody {
+        padding: 15px;
+    }
+
+    .infoRow {
+        padding: 6px 0;
+    }
+
+    .label,
+    .value {
+        font-size: 13px;
+    }
+
+    .description p {
+        font-size: 13px;
+    }
+}
