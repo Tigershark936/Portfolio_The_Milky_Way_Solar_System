@@ -88,9 +88,10 @@
 .selectorTitle {
     color: #E6E6FA;
     font-size: 14px;
-    font-weight: 700;
+    font-family: 'NASA', monospace;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     text-shadow: 0 0 8px rgba(138, 43, 226, 0.8);
     transition: all 0.3s ease;
     white-space: nowrap;
@@ -105,7 +106,7 @@
     background: rgba(0, 0, 0, 0.9);
     border: 2px solid rgba(138, 43, 226, 0.5);
     border-radius: 12px;
-    padding: 22px 16px; // Ajoute 2px en haut et 4px sur les côtés pour l'effet neon
+    padding: 12px 16px;
     backdrop-filter: blur(20px);
     box-shadow: 0 6px 24px rgba(138, 43, 226, 0.4);
     animation: slideUp 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -138,7 +139,7 @@
     overflow-y: visible;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    padding: 10px 4px; // Ajoute un peu de padding sur les côtés pour l'effet neon
+    padding: 4px 4px;
 
     &::-webkit-scrollbar {
         display: none;
@@ -150,20 +151,22 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 6px 10px; // Réduit encore plus le padding
+    padding: 8px 12px;
     background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(138, 43, 226, 0.3); // Réduit l'épaisseur de la bordure
-    border-radius: 8px; // Réduit le border-radius
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    border-radius: 8px;
     color: #E6E6FA;
-    font-size: 10px; // Réduit la taille de police
-    font-weight: 600;
+    font-size: 13px;
+    font-family: 'NASA', monospace;
+    font-weight: 400;
+    letter-spacing: 0.8px;
     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="16" cy="16" r="10" fill="none" stroke="%238A2BE2" stroke-width="2" filter="url(%23glow)"/><circle cx="16" cy="16" r="4" fill="%238A2BE2" filter="url(%23glow)"/><circle cx="16" cy="16" r="1" fill="%23FFFFFF"/></svg>'), auto;
     transition: all 0.3s ease;
     text-align: center;
     position: relative;
     overflow: hidden;
-    min-width: 50px; // Réduit encore plus la largeur
-    min-height: 40px; // Réduit encore plus la hauteur
+    min-width: 60px;
+    min-height: 50px;
     flex-shrink: 0;
 
     // Effet de balayage
@@ -323,18 +326,22 @@
 }
 
 .planetName {
-    font-size: 9px; // Réduit encore plus la taille de police
-    font-weight: 600;
+    font-size: 13px;
+    font-family: 'NASA', monospace;
+    font-weight: 400;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    letter-spacing: 0.2px; // Réduit l'espacement des lettres
     transition: all 0.3s ease;
     text-align: center;
-    line-height: 1.1; // Réduit l'espacement des lignes
+    line-height: 1.3;
+    white-space: nowrap;
 }
 
 .stopIcon {
     font-size: 14px; // Réduit encore plus la taille de l'icône
-    font-weight: bold;
+    font-family: 'NASA', monospace;
+    font-weight: 400;
+    letter-spacing: 1px;
     color: #DC143C;
     text-shadow: 0 0 6px rgba(220, 20, 60, 0.8); // Réduit l'effet de glow
     transition: all 0.3s ease;
@@ -370,6 +377,6 @@
     }
 
     .planetName {
-        font-size: 10px;
+        font-size: 12px;
     }
 }

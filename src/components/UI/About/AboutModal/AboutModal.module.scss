@@ -69,9 +69,10 @@
 
     h2 {
         margin: 0;
-        font-family: 'Orbitron', monospace;
+        font-family: 'NASA', monospace;
         font-size: 24px;
-        font-weight: 700;
+        font-weight: 500;
+        letter-spacing: 2px;
         color: #E6E6FA;
         text-shadow: 0 0 10px rgba(138, 43, 226, 0.8);
         text-transform: uppercase;
@@ -91,7 +92,9 @@
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    font-weight: 300;
+    font-weight: 400;
+    font-family: 'NASA', monospace;
+    letter-spacing: 1px;
     position: relative;
     text-shadow: 0 0 10px rgba(255, 68, 68, 0.8);
     z-index: 11;
@@ -122,19 +125,23 @@
     }
 
     h3 {
-        font-family: 'Orbitron', monospace;
+        font-family: 'NASA', monospace;
         font-size: 20px;
-        font-weight: 700;
+        font-weight: 500;
+        letter-spacing: 1.5px;
         color: #8A2BE2;
         margin-bottom: 15px;
         text-shadow: 0 0 10px rgba(138, 43, 226, 0.6);
     }
 
     p {
-        font-size: 16px;
-        line-height: 1.6;
+        font-size: 14px;
+        font-family: 'NASA', monospace;
+        line-height: 1.7;
+        letter-spacing: 0.8px;
         color: #E6E6FA;
         margin: 0 0 15px 0;
+        font-weight: 400;
 
         &:last-child {
             margin-bottom: 0;
@@ -156,8 +163,9 @@
     padding: 8px 16px;
     font-size: 14px;
     color: #E6E6FA;
-    font-family: 'Orbitron', monospace;
-    font-weight: 600;
+    font-family: 'NASA', monospace;
+    font-weight: 400;
+    letter-spacing: 0.8px;
     transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
@@ -383,9 +391,12 @@
         padding: 10px 0;
         padding-left: 25px;
         position: relative;
-        font-size: 16px;
+        font-size: 14px;
+        font-family: 'NASA', monospace;
+        font-weight: 400;
+        letter-spacing: 0.8px;
         color: #E6E6FA;
-        line-height: 1.6;
+        line-height: 1.7;
 
         &::before {
             content: '→';
@@ -393,6 +404,7 @@
             left: 0;
             color: #8A2BE2;
             font-weight: bold;
+            font-family: 'NASA', monospace;
         }
     }
 }

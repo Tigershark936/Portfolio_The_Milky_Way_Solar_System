@@ -30,7 +30,8 @@
     max-width: 600px;
     width: 90%;
     max-height: 80vh;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
     position: relative;
     box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.5),
@@ -64,12 +65,13 @@
     backdrop-filter: blur(10px);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     border-radius: 15px 15px 0 0;
+    flex-shrink: 0;
 
     h2 {
         margin: 0;
-        font-family: 'Orbitron', monospace;
+        font-family: 'NASA', monospace;
         font-size: 24px;
-        font-weight: 700;
+        font-weight: 500;
         color: #E6E6FA;
         text-shadow: 0 0 10px rgba(138, 43, 226, 0.8);
         text-transform: uppercase;
@@ -89,7 +91,9 @@
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    font-weight: 300;
+    font-family: 'NASA', monospace;
+    font-weight: 400;
+    letter-spacing: 1px;
     position: relative;
     text-shadow: 0 0 10px rgba(255, 68, 68, 0.8);
     z-index: 11;
@@ -108,13 +112,38 @@
 
 .modalBody {
     padding: 30px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+// Scrollbar personnalisée
+.modalBody::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modalBody::-webkit-scrollbar-track {
+    background: rgba(138, 43, 226, 0.1);
+    border-radius: 3px;
+}
+
+.modalBody::-webkit-scrollbar-thumb {
+    background: rgba(138, 43, 226, 0.5);
+    border-radius: 3px;
+
+    &:hover {
+        background: rgba(138, 43, 226, 0.7);
+    }
 }
 
 .contactInfo {
     margin-bottom: 25px;
 
     p {
-        font-size: 16px;
+        font-size: 14px;
+        font-family: 'NASA', monospace;
+        font-weight: 400;
+        letter-spacing: 0.8px;
+        line-height: 1.7;
         color: #E6E6FA;
         text-align: center;
     }
@@ -130,12 +159,12 @@
     label {
         display: block;
         margin-bottom: 8px;
-        font-family: 'Orbitron', monospace;
+        font-family: 'NASA', monospace;
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 500;
+        letter-spacing: 1.5px;
         color: #8A2BE2;
         text-transform: uppercase;
-        letter-spacing: 1px;
     }
 
     input,
@@ -146,8 +175,10 @@
         border: 2px solid rgba(138, 43, 226, 0.3);
         border-radius: 8px;
         color: #E6E6FA;
-        font-size: 15px;
-        font-family: inherit;
+        font-size: 14px;
+        font-family: 'NASA', monospace;
+        font-weight: 400;
+        letter-spacing: 0.8px;
         transition: all 0.3s ease;
 
         &:focus {
@@ -158,6 +189,9 @@
         }
 
         &::placeholder {
+            font-family: 'NASA', monospace;
+            font-weight: 400;
+            letter-spacing: 0.8px;
             color: rgba(230, 230, 250, 0.4);
         }
     }
@@ -171,8 +205,10 @@
 .formError {
     color: #ff4444;
     font-size: 13px;
+    font-family: 'NASA', monospace;
+    font-weight: 400;
+    letter-spacing: 0.8px;
     margin-top: 6px;
-    font-family: 'Orbitron', monospace;
     animation: fadeIn 0.3s ease;
     text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
 }
@@ -222,11 +258,11 @@
     border: 2px solid rgba(138, 43, 226, 0.5);
     border-radius: 10px;
     color: #E6E6FA;
-    font-family: 'Orbitron', monospace;
+    font-family: 'NASA', monospace;
     font-size: 16px;
-    font-weight: 700;
-    text-transform: uppercase;
+    font-weight: 400;
     letter-spacing: 1px;
+    text-transform: uppercase;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -289,6 +325,10 @@
 
     p {
         font-size: 14px;
+        font-family: 'NASA', monospace;
+        font-weight: 400;
+        letter-spacing: 0.8px;
+        line-height: 1.7;
         color: rgba(230, 230, 250, 0.7);
         margin-bottom: 15px;
     }
@@ -310,9 +350,10 @@
     border-radius: 8px;
     color: #E6E6FA;
     text-decoration: none;
-    font-family: 'Orbitron', monospace;
+    font-family: 'NASA', monospace;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 400;
+    letter-spacing: 0.8px;
     transition: all 0.3s ease;
 
     &:hover {
@@ -450,9 +491,10 @@
 }
 
 .successModal h2 {
-    font-family: 'Orbitron', monospace;
+    font-family: 'NASA', monospace;
     color: #E6E6FA;
     font-size: 24px;
+    font-weight: 500;
     margin-bottom: 10px;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -461,7 +503,10 @@
 
 .successModal p {
     color: #C0C0C0;
-    font-size: 16px;
-    line-height: 1.6;
+    font-size: 14px;
+    font-family: 'NASA', monospace;
+    font-weight: 400;
+    letter-spacing: 0.8px;
+    line-height: 1.7;
     margin: 0;
 }

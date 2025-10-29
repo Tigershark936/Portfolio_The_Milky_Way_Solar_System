@@ -46,13 +46,13 @@
 
     h2 {
         margin: 0;
-        font-family: 'Orbitron', monospace;
+        font-family: 'NASA', monospace;
         font-size: 18px;
-        font-weight: 700;
+        font-weight: 500;
         color: #E6E6FA;
         text-shadow: 0 0 10px rgba(138, 43, 226, 0.8);
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 2px;
     }
 }
 
@@ -68,7 +68,9 @@
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    font-weight: 300;
+    font-family: 'NASA', monospace;
+    font-weight: 400;
+    letter-spacing: 1px;
     text-shadow: 0 0 10px rgba(255, 68, 68, 0.8);
 
     &:hover {
@@ -106,23 +108,28 @@
 }
 
 .label {
-    font-family: 'Orbitron', monospace;
+    font-family: 'NASA', monospace;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
+    letter-spacing: 1px;
     color: #8A2BE2;
     text-shadow: 0 0 5px rgba(138, 43, 226, 0.6);
 }
 
 .value {
     font-size: 14px;
+    font-family: 'NASA', monospace;
+    font-weight: 400;
+    letter-spacing: 0.8px;
     color: #E6E6FA;
-    font-weight: 500;
 }
 
 .compositionValue {
     font-size: 14px;
+    font-family: 'NASA', monospace;
+    font-weight: 400;
+    letter-spacing: 0.8px;
     color: #E6E6FA;
-    font-weight: 500;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -139,20 +146,21 @@
     border-radius: 6px;
     padding: 4px 8px;
     font-size: 12px;
+    font-family: 'NASA', monospace;
+    font-weight: 500;
+    letter-spacing: 1px;
     color: #8A2BE2;
-    font-family: 'Orbitron', monospace;
-    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 .description {
     margin-bottom: 20px;
 
     h3 {
-        font-family: 'Orbitron', monospace;
+        font-family: 'NASA', monospace;
         font-size: 16px;
-        font-weight: 700;
+        font-weight: 500;
+        letter-spacing: 1.5px;
         color: #8A2BE2;
         margin-bottom: 10px;
         text-shadow: 0 0 8px rgba(138, 43, 226, 0.6);
@@ -160,7 +168,10 @@
 
     p {
         font-size: 14px;
-        line-height: 1.8;
+        font-family: 'NASA', monospace;
+        font-weight: 400;
+        letter-spacing: 0.8px;
+        line-height: 1.7;
         color: #E6E6FA;
         margin: 0 0 12px 0;
         text-align: left;
@@ -179,9 +190,10 @@
     border-radius: 6px;
 
     h3 {
-        font-family: 'Orbitron', monospace;
+        font-family: 'NASA', monospace;
         font-size: 16px;
-        font-weight: 700;
+        font-weight: 500;
+        letter-spacing: 1.5px;
         color: #8A2BE2;
         margin-bottom: 12px;
         text-shadow: 0 0 8px rgba(138, 43, 226, 0.6);
@@ -189,6 +201,9 @@
 
     p {
         font-size: 14px;
+        font-family: 'NASA', monospace;
+        font-weight: 400;
+        letter-spacing: 0.8px;
         line-height: 1.8;
         color: #E6E6FA;
         margin: 0 0 12px 0;
@@ -209,22 +224,28 @@
 
     p {
         font-size: 12px;
+        font-family: 'NASA', monospace;
+        font-weight: 400;
+        letter-spacing: 0.7px;
+        line-height: 1.6;
         color: rgba(230, 230, 250, 0.8);
-        line-height: 1.5;
         margin: 0;
 
         strong {
+            font-family: 'NASA', monospace;
             color: #8A2BE2;
-            font-weight: 600;
+            font-weight: 500;
+            letter-spacing: 1px;
         }
     }
 }
 
 .moonsSection {
     h3 {
-        font-family: 'Orbitron', monospace;
+        font-family: 'NASA', monospace;
         font-size: 16px;
-        font-weight: 700;
+        font-weight: 500;
+        letter-spacing: 1.5px;
         color: #8A2BE2;
         margin-bottom: 15px;
         text-shadow: 0 0 8px rgba(138, 43, 226, 0.6);
@@ -233,14 +254,16 @@
 
 .moonsExplanation {
     font-size: 12px;
+    font-family: 'NASA', monospace;
+    font-weight: 400;
+    letter-spacing: 0.8px;
+    line-height: 1.6;
     color: rgba(230, 230, 250, 0.7);
-    font-style: italic;
     margin-bottom: 15px;
     padding: 8px 12px;
     background: rgba(138, 43, 226, 0.1);
     border-left: 3px solid rgba(138, 43, 226, 0.5);
     border-radius: 4px;
-    line-height: 1.4;
 }
 
 .moonsList {
@@ -255,6 +278,7 @@
     border-radius: 8px;
     padding: 12px;
     transition: all 0.3s ease;
+    position: relative;
 
     &:hover {
         background: rgba(138, 43, 226, 0.1);
@@ -268,12 +292,15 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 5px;
+    position: relative;
+    z-index: 1;
 }
 
 .moonName {
-    font-family: 'Orbitron', monospace;
+    font-family: 'NASA', monospace;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
+    letter-spacing: 1px;
     color: #E6E6FA;
 }
 
@@ -283,16 +310,29 @@
     border-radius: 6px;
     padding: 4px 8px;
     color: #8A2BE2;
-    font-family: 'Orbitron', monospace;
+    font-family: 'NASA', monospace;
     font-size: 11px;
-    font-weight: 600;
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="16" cy="16" r="10" fill="none" stroke="%238A2BE2" stroke-width="2" filter="url(%23glow)"/><circle cx="16" cy="16" r="4" fill="%238A2BE2" filter="url(%23glow)"/><circle cx="16" cy="16" r="1" fill="%23FFFFFF"/></svg>'), auto;
+    font-weight: 400;
+    letter-spacing: 1px;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="16" cy="16" r="10" fill="none" stroke="%238A2BE2" stroke-width="2" filter="url(%23glow)"/><circle cx="16" cy="16" r="4" fill="%238A2BE2" filter="url(%23glow)"/><circle cx="16" cy="16" r="1" fill="%23FFFFFF"/></svg>') 16 16, auto;
     transition: all 0.3s ease;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
     display: inline-block;
     text-align: center;
     user-select: none;
+    position: relative;
+    z-index: 10;
+    pointer-events: auto;
+    min-height: 24px;
+    min-width: 60px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+
+    // Assurer que le curseur fonctionne sur tout le bouton
+    * {
+        cursor: inherit;
+        pointer-events: none;
+    }
 
     &:hover {
         background: rgba(138, 43, 226, 0.4);
@@ -309,13 +349,20 @@
 
 .moonInfo {
     font-size: 12px;
+    font-family: 'NASA', monospace;
+    font-weight: 400;
+    letter-spacing: 0.7px;
+    line-height: 1.6;
     color: rgba(230, 230, 250, 0.8);
-    line-height: 1.4;
+    position: relative;
+    z-index: 0;
 
     // Mise en évidence de l'unité de mesure
     .unitIndicator {
+        font-family: 'NASA', monospace;
         color: #8A2BE2;
-        font-weight: 600;
+        font-weight: 500;
+        letter-spacing: 1px;
         text-shadow: 0 0 5px rgba(138, 43, 226, 0.5);
     }
 }

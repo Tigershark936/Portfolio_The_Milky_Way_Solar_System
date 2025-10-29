@@ -22,7 +22,7 @@ type ProjectsModalProps = {
 // Fonction pour personnaliser les titres des projets
 const getDisplayName = (repoName: string): string => {
     const customTitles: { [key: string]: string } = {
-        'modal-library': 'Modal Library HRNET',
+        'modal-library': 'Modal Library',
         'SportSee_Developpez_un_tableau_de_bord_d-analytics_avec_React': 'SportSee',
         'WealthHealth_Faites_passer_une_librairie_jQuery_vers_React': 'Wealth Health',
         'ArgentBank_Utilisez_une_API_pour_un_compte_utilisateur_bancaire_avec_React': 'Argent Bank',
