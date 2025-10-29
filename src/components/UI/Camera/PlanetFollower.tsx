@@ -13,7 +13,6 @@ const PlanetFollower = ({ selectedPlanet, planets, controlsRef }: PlanetFollower
     const lastPlanetPosition = useRef(new THREE.Vector3());
     const followOffset = useRef(new THREE.Vector3());
     const userCameraOffset = useRef(new THREE.Vector3());
-    const planetAngle = useRef(0);
     const { scene } = useThree();
 
     useEffect(() => {
@@ -75,7 +74,7 @@ const PlanetFollower = ({ selectedPlanet, planets, controlsRef }: PlanetFollower
         }
     }, [selectedPlanet, planets, scene, controlsRef]);
 
-    useFrame((_, delta) => {
+    useFrame(() => {
         if (!isFollowing.current || !selectedPlanet || !controlsRef.current) return;
 
         const planet = planets.find(p => p.name === selectedPlanet);

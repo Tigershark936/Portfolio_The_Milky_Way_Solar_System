@@ -1,20 +1,29 @@
 import { useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { getTexture } from '../../utils/texturePreloader';
 
 const Nebula = () => {
     const meshRef = useRef<THREE.Mesh>(null);
     const [nebulaTexture, setNebulaTexture] = useState<THREE.Texture | null>(null);
 
-    // Charge la texture de la nébuleuse
+    // Charge la texture de la nébuleuse (depuis le cache ou en la chargeant)
     useEffect(() => {
-        const loader = new THREE.TextureLoader();
-        loader.load(
-            '/textures/nebula.jpg',
-            (texture) => {
-                setNebulaTexture(texture);
-            }
-        );
+        const texturePath = '/textures/nebula.jpg';
+        const cachedTexture = getTexture(texturePath);
+        
+        if (cachedTexture) {
+            setNebulaTexture(cachedTexture);
+        } else {
+            // Si pas dans le cache, charger normalement
+            const loader = new THREE.TextureLoader();
+            loader.load(
+                texturePath,
+                (texture) => {
+                    setNebulaTexture(texture);
+                }
+            );
+        }
     }, []);
 
     // M.A.J du matériau de la nébuleuse quand la texture change

@@ -13,7 +13,6 @@ const MoonFollower = ({ selectedMoon, moons, controlsRef }: MoonFollowerProps) =
     const lastMoonPosition = useRef(new THREE.Vector3());
     const followOffset = useRef(new THREE.Vector3());
     const userCameraOffset = useRef(new THREE.Vector3());
-    const moonAngle = useRef(0);
     const { scene } = useThree();
 
     useEffect(() => {

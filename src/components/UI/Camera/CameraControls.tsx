@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { useThree } from '@react-three/fiber';
 import styles from './CameraControls.module.scss';
 
 type CameraControlsProps = {
@@ -9,13 +8,11 @@ type CameraControlsProps = {
     activeCameraPreset: 'overview' | 'close' | 'far' | 'top' | null;
 };
 
-const CameraControls = ({ onSpeedChange, onCameraReset, onCameraPreset, activeCameraPreset }: CameraControlsProps) => {
+const CameraControls = ({ onSpeedChange, onCameraReset: _onCameraReset, onCameraPreset, activeCameraPreset }: CameraControlsProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [speed, setSpeed] = useState(1);
-    const [cameraPosition, setCameraPosition] = useState({ x: 0, y: 50, z: 130 });
     const controlsRef = useRef<HTMLDivElement>(null);
     const speedRef = useRef<HTMLButtonElement>(null);
-    const resetRef = useRef<HTMLButtonElement>(null);
     const presetRef = useRef<HTMLButtonElement>(null);
 
     // Gestion des événements clavier
@@ -53,10 +50,7 @@ const CameraControls = ({ onSpeedChange, onCameraReset, onCameraPreset, activeCa
         onSpeedChange(newSpeed);
     };
 
-    const handleCameraReset = () => {
-        setCameraPosition({ x: 0, y: 50, z: 130 });
-        onCameraReset();
-    };
+    // handleCameraReset géré directement via onCameraReset
 
     const handlePresetChange = (preset: 'overview' | 'close' | 'far' | 'top') => {
         onCameraPreset(preset);

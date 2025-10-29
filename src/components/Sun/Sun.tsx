@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { getTexture } from '../../utils/texturePreloader';
 
 type SunProps = {
     onClick?: () => void;
@@ -24,19 +25,27 @@ const Sun = ({ onClick, animationSpeed = 1, onPointerOver, onPointerOut }: SunPr
         }
     }, [hovered]);
 
-    // Charger la texture de manière asynchrone
+    // Charger la texture (depuis le cache ou en la chargeant)
     useEffect(() => {
-        const loader = new THREE.TextureLoader();
-        loader.load(
-            '/textures/sun.jpg',
-            (texture) => {
-                setSunTexture(texture);
-            },
-            undefined,
-            (error) => {
-                console.error('❌ Erreur de chargement de la texture:', error);
-            }
-        );
+        const texturePath = '/textures/sun.jpg';
+        const cachedTexture = getTexture(texturePath);
+        
+        if (cachedTexture) {
+            setSunTexture(cachedTexture);
+        } else {
+            // Si pas dans le cache, charger normalement
+            const loader = new THREE.TextureLoader();
+            loader.load(
+                texturePath,
+                (texture) => {
+                    setSunTexture(texture);
+                },
+                undefined,
+                (error) => {
+                    console.error('❌ Erreur de chargement de la texture:', error);
+                }
+            );
+        }
     }, []);
 
     // Mettre à jour le matériau quand la texture change

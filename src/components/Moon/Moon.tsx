@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { getTexture } from '../../utils/texturePreloader';
 
 type Props = {
     distance: number; // Distance from planet
@@ -98,20 +99,35 @@ const Moon = ({ distance, size, color, speed, animationSpeed = 1, name = 'Moon',
                 texturePath = '/textures/moons/moon.jpg';
         }
 
-        loader.load(
-            texturePath,
-            (texture) => {
-                setMoonTexture(texture);
-            },
-            undefined,
-            () => {
-                console.warn(`Texture non trouvée pour ${name}: ${texturePath}, utilisation de la texture par défaut`);
-                // Charger la texture par défaut en cas d'erreur
-                loader.load('/textures/moons/moon.jpg', (defaultTexture) => {
-                    setMoonTexture(defaultTexture);
-                });
+        if (texturePath) {
+            // Vérifier d'abord le cache
+            const cachedTexture = getTexture(texturePath);
+            
+            if (cachedTexture) {
+                setMoonTexture(cachedTexture);
+            } else {
+                // Si pas dans le cache, charger normalement
+                loader.load(
+                    texturePath,
+                    (texture) => {
+                        setMoonTexture(texture);
+                    },
+                    undefined,
+                    () => {
+                        console.warn(`Texture non trouvée pour ${name}: ${texturePath}, utilisation de la texture par défaut`);
+                        // Charger la texture par défaut en cas d'erreur (depuis le cache si possible)
+                        const defaultCached = getTexture('/textures/moons/moon.jpg');
+                        if (defaultCached) {
+                            setMoonTexture(defaultCached);
+                        } else {
+                            loader.load('/textures/moons/moon.jpg', (defaultTexture) => {
+                                setMoonTexture(defaultTexture);
+                            });
+                        }
+                    }
+                );
             }
-        );
+        }
     }, [name]);
 
     // M.A.J du matériau de la lune quand la texture change

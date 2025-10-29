@@ -1,8 +1,9 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useLayoutEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import type { Planet as PlanetType } from '../../types/Planet';
 import Moon from '../Moon/Moon.tsx';
+import { getTexture } from '../../utils/texturePreloader';
 
 type Props = {
     planet: PlanetType;
@@ -29,9 +30,8 @@ const Planet = ({ planet, animationSpeed = 1, onClick, onMoonClick }: Props) => 
         }
     }, [hovered]);
 
-    // Charger la texture des planets
+    // Charger la texture des planets (depuis le cache ou en la chargeant)
     useEffect(() => {
-        const loader = new THREE.TextureLoader();
         let texturePath = '';
 
         if (planet.name === 'Earth') {
@@ -55,12 +55,20 @@ const Planet = ({ planet, animationSpeed = 1, onClick, onMoonClick }: Props) => 
         }
 
         if (texturePath) {
-            loader.load(
-                texturePath,
-                (texture) => {
-                    setPlanetTexture(texture);
-                }
-            );
+            const cachedTexture = getTexture(texturePath);
+
+            if (cachedTexture) {
+                setPlanetTexture(cachedTexture);
+            } else {
+                // Si pas dans le cache, charger normalement
+                const loader = new THREE.TextureLoader();
+                loader.load(
+                    texturePath,
+                    (texture) => {
+                        setPlanetTexture(texture);
+                    }
+                );
+            }
         }
     }, [planet.name]);
 
@@ -93,7 +101,22 @@ const Planet = ({ planet, animationSpeed = 1, onClick, onMoonClick }: Props) => 
         }
     }, [ringsTexture, planet.name]);
 
+    // Initialiser les rotations synchronisées avant le premier rendu pour éviter le délai
+    useLayoutEffect(() => {
+        if (groupRef.current && meshRef.current) {
+            // Définir des angles initiaux aléatoires pour plus de variété visuelle
+            const initialAngle = Math.random() * Math.PI * 2;
+            groupRef.current.rotation.y = initialAngle;
+            meshRef.current.rotation.y = initialAngle * 0.5;
+
+            if (ringsRef.current && planet.name === 'Saturn') {
+                ringsRef.current.rotation.z = initialAngle * 0.2;
+            }
+        }
+    }, [planet.name]);
+
     useFrame((_, delta) => {
+        // Animation immédiate sans conditions pour éviter tout délai
         if (groupRef.current) {
             groupRef.current.rotation.y += delta * planet.speed * 0.1 * animationSpeed;
         }

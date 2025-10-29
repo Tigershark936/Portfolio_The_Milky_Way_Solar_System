@@ -24,6 +24,7 @@ const Orbit = ({ radius, color = '#ffffff' }: OrbitProps) => {
     }, [radius]);
 
     return (
+        // @ts-ignore - React Three Fiber line component
         <line geometry={new THREE.BufferGeometry().setFromPoints(points)}>
             <lineBasicMaterial
                 attach="material"

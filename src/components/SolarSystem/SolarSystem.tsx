@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import * as THREE from 'three';
 import styles from './SolarSystem.module.scss';
 import Sun from '../Sun/Sun';
 import Planet from '../Planet/Planet';
@@ -344,7 +343,11 @@ const SolarSystem = () => {
                 onPlanetSelect={handlePlanetSelect}
                 selectedPlanet={selectedPlanet}
             />
-            <Canvas camera={{ position: [cameraPosition.x, cameraPosition.y, cameraPosition.z], fov: 60 }}>
+            <Canvas
+                camera={{ position: [cameraPosition.x, cameraPosition.y, cameraPosition.z], fov: 60 }}
+                frameloop="always"
+                dpr={[1, 2]}
+            >
                 <OrbitControls
                     ref={controlsRef}
                     enablePan={true}

@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import styles from './LoadingPage.module.scss';
 import Nebula from '../../components/Nebula/Nebula';
 import TwinklingStars from '../../components/TwinklingStars/Stars';
+import { preloadCriticalTextures, preloadTextures } from '../../utils/texturePreloader';
 
 type LoadingPageProps = {
     onComplete?: () => void;
@@ -19,6 +20,26 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
     const [showAuthorCursor, setShowAuthorCursor] = useState(false);
     const [isTypingComplete, setIsTypingComplete] = useState(false);
     const [startAuthorTyping, setStartAuthorTyping] = useState(false);
+
+    const [criticalTexturesLoaded, setCriticalTexturesLoaded] = useState(false);
+
+    // Précharger les textures critiques (nébuleuse, soleil) en premier pour affichage immédiat
+    useEffect(() => {
+        // Charger les textures critiques d'abord (nébuleuse et soleil)
+        preloadCriticalTextures()
+            .then(() => {
+                setCriticalTexturesLoaded(true);
+            })
+            .catch((error) => {
+                console.warn('Erreur lors du préchargement des textures critiques:', error);
+                setCriticalTexturesLoaded(true); // Continuer même en cas d'erreur
+            });
+
+        // En parallèle, continuer à charger toutes les autres textures en arrière-plan
+        preloadTextures().catch((error) => {
+            console.warn('Erreur lors du préchargement des textures:', error);
+        });
+    }, []);
 
     // Animation de frappe au clavier pour le titre
     useEffect(() => {
@@ -95,18 +116,15 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
         };
     }, [startAuthorTyping]);
 
-    // Appeler onComplete après la fin du typing + délai
+    // Appeler onComplete après la fin du typing ET quand les textures critiques sont chargées
     useEffect(() => {
-        if (isTypingComplete) {
-            const timer = setTimeout(() => {
-                if (onComplete) {
-                    onComplete();
-                }
-            }, 2000);
-
-            return () => clearTimeout(timer);
+        if (isTypingComplete && criticalTexturesLoaded) {
+            // Pas de délai supplémentaire - passer directement à la HomePage
+            if (onComplete) {
+                onComplete();
+            }
         }
-    }, [isTypingComplete, onComplete]);
+    }, [isTypingComplete, criticalTexturesLoaded, onComplete]);
 
     return (
         <div className={styles.loadingContainer}>
