@@ -35,7 +35,7 @@ const Nebula = () => {
 
     return (
         <mesh ref={meshRef}>
-            <sphereGeometry args={[200, 64, 64]} />
+            <sphereGeometry args={[500, 64, 64]} />
             <meshBasicMaterial
                 map={nebulaTexture || undefined}
                 side={THREE.BackSide}

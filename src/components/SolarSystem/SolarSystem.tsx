@@ -38,11 +38,13 @@ const SolarSystem = () => {
     const [showMoonNames, setShowMoonNames] = useState(false);
     const [showOrbits, setShowOrbits] = useState(false);
     const [animationSpeed, setAnimationSpeed] = useState(1);
-    const [cameraPosition, setCameraPosition] = useState({ x: 0, y: 60, z: 120 });
+    const [cameraPosition, setCameraPosition] = useState({ x: 0, y: 63.16, z: 126.32 });
+    const [activeCameraPreset, setActiveCameraPreset] = useState<'overview' | 'close' | 'far' | 'top' | null>('overview');
     const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
     const [isPlanetInfoModalOpen, setIsPlanetInfoModalOpen] = useState(false);
     const [selectedPlanetData, setSelectedPlanetData] = useState<any>(null);
     const [selectedMoon, setSelectedMoon] = useState<string | null>(null);
+    const [isSunHovered, setIsSunHovered] = useState(false);
     const controlsRef = useRef<any>(null);
 
     const handleTogglePlanetNames = () => {
@@ -62,36 +64,69 @@ const SolarSystem = () => {
     };
 
     const handleCameraReset = () => {
-        setCameraPosition({ x: 0, y: 60, z: 120 });
+        setCameraPosition({ x: 0, y: 63.16, z: 126.32 });
         if (controlsRef.current) {
             controlsRef.current.reset();
         }
     };
 
-    const handleCameraPreset = (preset: 'overview' | 'close' | 'far') => {
+    // Données du Soleil
+    const sunDetails = {
+        name: 'Sun',
+        type: 'star',
+        size: 15,
+        dist: 0,
+        speed: 0,
+        info: 'Le Soleil est l\'étoile au centre de notre Système solaire, une gigantesque sphère de plasma composée principalement d\'hydrogène et d\'hélium.\n\nIl produit son énergie par fusion nucléaire dans son cœur, transformant l\'hydrogène en hélium et libérant une quantité colossale de lumière et de chaleur.\n\nAvec un diamètre d\'environ 1,4 million de kilomètres, il concentre 99,86 % de la masse totale du Système solaire.\n\nSa surface visible, la photosphère, atteint près de 5 500 °C, tandis que son noyau dépasse les 15 millions de degrés Celsius.\n\nLe Soleil influence l\'ensemble des planètes par sa gravité, son rayonnement et son vent solaire, jouant un rôle essentiel dans la stabilité du Système solaire et rendant la vie possible sur Terre.',
+        discoveryYear: 'Antiquité',
+        composition: '74,9% hydrogène (H), 23,8% hélium (He), 1,3% éléments lourds',
+        temperature: 'Surface : ~5 500 °C | Cœur : ~15 000 000 °C'
+    };
+
+    const handleSunClick = () => {
+        // Ouvrir la modal avec les informations du Soleil
+        setSelectedPlanetData(sunDetails);
+        setIsPlanetInfoModalOpen(true);
+        // Remettre la caméra à la position de base
+        if (controlsRef.current) {
+            const camera = controlsRef.current.object;
+            camera.position.set(0, 63.16, 126.32);
+            controlsRef.current.target.set(0, 0, 0);
+            controlsRef.current.update();
+            setCameraPosition({ x: 0, y: 63.16, z: 126.32 });
+        }
+        // Remettre le preset à overview
+        setActiveCameraPreset('overview');
+        // Désélectionner toute planète/lune
+        setSelectedPlanet(null);
+        setSelectedMoon(null);
+    };
+
+    const handleCameraPreset = (preset: 'overview' | 'close' | 'far' | 'top') => {
         if (!controlsRef.current) return;
 
         const camera = controlsRef.current.object;
-        const target = controlsRef.current.target;
 
         switch (preset) {
             case 'overview':
-                camera.position.set(0, 60, 120);
+                camera.position.set(0, 63.16, 126.32);
                 break;
             case 'close':
                 camera.position.set(0, 40, 80);
                 break;
             case 'far':
-                // Forcer la caméra à la distance maximale
-                const direction = new THREE.Vector3();
-                camera.getWorldDirection(direction);
-                direction.multiplyScalar(200); // Distance maximale
-                camera.position.copy(target).add(direction);
+                camera.position.set(0, 147.58, 295.16);
+                break;
+            case 'top':
+                camera.position.set(0, 330, 0);
                 break;
         }
 
+        setActiveCameraPreset(preset);
+        controlsRef.current.target.set(0, 0, 0);
         controlsRef.current.update();
     };
+
 
     const handlePlanetSelect = (planetName: string | null) => {
         setSelectedPlanet(planetName);
@@ -101,7 +136,7 @@ const SolarSystem = () => {
         if (planetName) {
             handlePlanetClick(planetName);
         } else {
-            // Si on désélectionne, fermer la modal
+            // Si on désélectionne, fermer la modal et remettre la caméra en vue libre
             handleClosePlanetInfoModal();
         }
     };
@@ -115,7 +150,7 @@ const SolarSystem = () => {
             size: 0.23,
             dist: 16, // Distance visuelle pour la scène 3D (équivalent à ~0.53 UA pour le calcul)
             speed: 4.15,
-            info: 'Mercure est la planète la plus proche du Soleil et aussi la plus petite du Système solaire. Sa surface grêlée de cratères rappelle celle de la Lune, témoin d\'un passé de bombardements intenses. Privée d\'atmosphère réelle, elle ne retient ni chaleur ni protection contre les rayonnements solaires : les températures varient brutalement, passant d\'environ -180°C la nuit à +430°C le jour. Sa rotation lente (un jour mercurien dure près de 59 jours terrestres) et son orbite rapide (elle tourne autour du Soleil en seulement 88 jours) en font un monde de contrastes extrêmes. Mercure ne possède ni lunes ni anneaux.',
+            info: 'Mercure est la planète la plus proche du Soleil et aussi la plus petite du Système solaire.\n\nSa surface grêlée de cratères rappelle celle de la Lune, témoin d\'un passé de bombardements intenses.\n\nPrivée d\'atmosphère réelle, elle ne retient ni chaleur ni protection contre les rayonnements solaires : les températures varient brutalement, passant d\'environ -180°C la nuit à +430°C le jour.\n\nSa rotation lente (un jour mercurien dure près de 59 jours terrestres) et son orbite rapide (elle tourne autour du Soleil en seulement 88 jours) en font un monde de contrastes extrêmes.\n\nMercure ne possède ni lunes ni anneaux.',
             discoveryYear: 'Antiquité',
             composition: 'Sodium (traces), Potassium (traces), Argon (traces)',
             temperature: '-180°C à +430°C',
@@ -128,7 +163,7 @@ const SolarSystem = () => {
             size: 0.57,
             dist: 22,
             speed: 1.62,
-            info: 'Vénus est la deuxième planète la plus proche du Soleil et la plus chaude du Système solaire, avec des températures atteignant environ 462°C en surface. Son atmosphère dense et toxique, composée à plus de 96% de dioxyde de carbone, emprisonne la chaleur par un effet de serre extrême. Recouverte d\'épais nuages d\'acide sulfurique, Vénus reflète fortement la lumière du Soleil, ce qui la rend très brillante dans le ciel, souvent appelée « l\'étoile du berger ». Sa rotation rétrograde (elle tourne dans le sens inverse des autres planètes) et son jour plus long que son année en font un monde à la fois fascinant et hostile.',
+            info: 'Vénus est la deuxième planète la plus proche du Soleil et la plus chaude du Système solaire, avec des températures atteignant environ 462°C en surface.\n\nSon atmosphère dense et toxique, composée à plus de 96% de dioxyde de carbone, emprisonne la chaleur par un effet de serre extrême.\n\nRecouverte d\'épais nuages d\'acide sulfurique, Vénus reflète fortement la lumière du Soleil, ce qui la rend très brillante dans le ciel, souvent appelée « l\'étoile du berger ».\n\nSa rotation rétrograde (elle tourne dans le sens inverse des autres planètes) et son jour plus long que son année en font un monde à la fois fascinant et hostile.',
             discoveryYear: 'Antiquité',
             composition: '96% CO₂ (dioxyde de carbone), 3% N₂ (azote), 0,2% SO₂ (dioxyde de soufre)',
             temperature: '462°C (moyenne)',
@@ -141,7 +176,7 @@ const SolarSystem = () => {
             size: 0.6,
             dist: 30,
             speed: 1,
-            info: 'La Terre est la troisième planète à partir du Soleil et la seule connue à abriter la vie. Environ 71% de sa surface est recouverte d\'océans, tandis que le reste forme les continents et les calottes polaires. Elle possède une atmosphère riche en azote et en oxygène, qui régule la température, protège des rayonnements solaires et rend la vie possible. La Terre tourne sur elle-même en 24 heures et effectue sa révolution autour du Soleil en 365 jours. Elle est accompagnée d\'un unique satellite naturel, la Lune, qui influence les marées et stabilise son axe de rotation.',
+            info: 'La Terre est la troisième planète à partir du Soleil et la seule connue à abriter la vie.\n\nEnviron 71% de sa surface est recouverte d\'océans, tandis que le reste forme les continents et les calottes polaires.\n\nElle possède une atmosphère riche en azote et en oxygène, qui régule la température, protège des rayonnements solaires et rend la vie possible.\n\nLa Terre tourne sur elle-même en 24 heures et effectue sa révolution autour du Soleil en 365 jours.\n\nElle est accompagnée d\'un unique satellite naturel, la Lune, qui influence les marées et stabilise son axe de rotation.',
             discoveryYear: 'N/A',
             composition: '78% N₂ (azote), 21% O₂ (oxygène), 0,9% Ar (argon)',
             temperature: '15°C (moyenne)',
@@ -156,7 +191,7 @@ const SolarSystem = () => {
             size: 0.32,
             dist: 45,
             speed: 0.53,
-            info: 'Surnommée la planète rouge à cause de la rouille (oxyde de fer) qui colore sa surface, Mars est la quatrième planète du Système solaire. Elle abrite le plus grand volcan connu, Olympus Mons, haut de près de 22 km, et le plus vaste canyon, Valles Marineris, long d\'environ 4 000 km. Son atmosphère, très fine et froide, est composée majoritairement de dioxyde de carbone. Les calottes de glace à ses pôles et les traces d\'anciens lits de rivières suggèrent qu\'elle a jadis abrité de l\'eau liquide, nourrissant l\'espoir d\'une vie passée.',
+            info: 'Surnommée la planète rouge à cause de la rouille (oxyde de fer) qui colore sa surface, Mars est la quatrième planète du Système solaire.\n\nElle abrite le plus grand volcan connu, Olympus Mons, haut de près de 22 km, et le plus vaste canyon, Valles Marineris, long d\'environ 4 000 km.\n\nSon atmosphère, très fine et froide, est composée majoritairement de dioxyde de carbone.\n\nLes calottes de glace à ses pôles et les traces d\'anciens lits de rivières suggèrent qu\'elle a jadis abrité de l\'eau liquide, nourrissant l\'espoir d\'une vie passée.',
             discoveryYear: 'Antiquité',
             composition: '95% CO₂ (dioxyde de carbone), 2,6% N₂ (azote), 1,6% Ar (argon)',
             temperature: '-65°C (moyenne)',
@@ -172,7 +207,7 @@ const SolarSystem = () => {
             size: 1.2,
             dist: 75,
             speed: 0.084,
-            info: 'Jupiter est la cinquième planète du Système solaire et la plus grande planète du Système solaire, une géante gazeuse principalement composée d\'hydrogène et d\'hélium. Sa caractéristique la plus célèbre est la Grande Tache Rouge, une immense tempête qui fait rage depuis des siècles et dont la taille dépasse celle de la Terre. Jupiter possède un système d\'anneaux fins et au moins 95 lunes connues, dont les quatre principales — Io, Europe, Ganymède et Callisto — furent découvertes par Galilée en 1610. Son champ magnétique est le plus puissant du Système solaire, et sa taille colossale influence l\'orbite de nombreuses autres planètes et astéroïdes.',
+            info: 'Jupiter est la cinquième planète du Système solaire et la plus grande planète du Système solaire, une géante gazeuse principalement composée d\'hydrogène et d\'hélium.\n\nSa caractéristique la plus célèbre est la Grande Tache Rouge, une immense tempête qui fait rage depuis des siècles et dont la taille dépasse celle de la Terre.\n\nJupiter possède un système d\'anneaux fins et au moins 95 lunes connues, dont les quatre principales, Io, Europe, Ganymède et Callisto, furent découvertes par Galilée en 1610.\n\nSon champ magnétique est le plus puissant du Système solaire, et sa taille colossale influence l\'orbite de nombreuses autres planètes et astéroïdes.',
             discoveryYear: 'Antiquité',
             composition: '89% H₂ (hydrogène), 10% He (hélium), 0,3% CH₄ (méthane)',
             temperature: '-110°C (atmosphère)',
@@ -190,7 +225,7 @@ const SolarSystem = () => {
             size: 1.02,
             dist: 95,
             speed: 0.034,
-            info: 'Saturne est la sixième planète à partir du Soleil et la deuxième plus grande du Système solaire, après Jupiter. Elle est célèbre pour son magnifique système d\'anneaux, composés de milliards de particules de glace et de roche, visibles même depuis la Terre avec un petit télescope. Composée principalement d\'hydrogène et d\'hélium, Saturne est si peu dense qu\'elle flotterait dans l\'eau si un océan assez grand existait. Elle possède 146 satellites naturels connus, dont une vingtaine de lunes majeures — comme Titan, Rhéa, Encelade et Lapetus — et plus de 120 petits satellites irréguliers capturés par sa gravité. Certaines de ces lunes, notamment Encelade et Titan, intriguent les scientifiques pour leur potentiel d\'abriter la vie.',
+            info: 'Saturne est la sixième planète à partir du Soleil et la deuxième plus grande du Système solaire, après Jupiter.\n\nElle est célèbre pour son magnifique système d\'anneaux, composés de milliards de particules de glace et de roche, visibles même depuis la Terre avec un petit télescope.\n\nComposée principalement d\'hydrogène et d\'hélium, Saturne est si peu dense qu\'elle flotterait dans l\'eau si un océan assez grand existait.\n\nElle possède 146 satellites naturels connus, dont une vingtaine de lunes majeures, comme Titan, Rhéa, Encelade et Lapetus, et plus de 120 petits satellites irréguliers capturés par sa gravité.\n\nCertaines de ces lunes, notamment Encelade et Titan, intriguent les scientifiques pour leur potentiel d\'abriter la vie.',
             discoveryYear: 'Antiquité',
             composition: '96% H₂ (hydrogène), 3% He (hélium), 0,4% CH₄ (méthane)',
             temperature: '-140°C (atmosphère)',
@@ -243,7 +278,7 @@ const SolarSystem = () => {
             size: 0.14,
             dist: 160,
             speed: 0.01,
-            info: 'Ancienne neuvième planète du Système solaire, Pluton est aujourd\'hui classée parmi les planètes naines.\n\nSituée dans la ceinture de Kuiper, elle suit une orbite très elliptique et inclinée, ce qui fait qu\'à certaines périodes, elle passe plus près du Soleil que Neptune.\n\nSa surface glacée est composée principalement de glace d\'azote, de méthane et de monoxyde de carbone, et présente une grande plaine d\'azote en forme de cœur, appelée Tombaugh Regio.\n\nPluton forme un système binaire avec sa lune principale, Charon, presque aussi grande qu\'elle : les deux astres tournent autour d\'un centre de gravité commun, situé en dehors de Pluton.\n\nElle possède aussi quatre autres petites lunes — Styx, Nix, Kerberos et Hydra — et reste un monde glacial mais complexe, où la mission New Horizons (NASA, 2015) a révélé une géologie surprenamment active.',
+            info: 'Ancienne neuvième planète du Système solaire, Pluton est aujourd\'hui classée parmi les planètes naines.\n\nSituée dans la ceinture de Kuiper, elle suit une orbite très elliptique et inclinée, ce qui fait qu\'à certaines périodes, elle passe plus près du Soleil que Neptune.\n\nSa surface glacée est composée principalement de glace d\'azote, de méthane et de monoxyde de carbone, et présente une grande plaine d\'azote en forme de cœur, appelée Tombaugh Regio.\n\nPluton forme un système binaire avec sa lune principale, Charon, presque aussi grande qu\'elle : les deux astres tournent autour d\'un centre de gravité commun, situé en dehors de Pluton.\n\nElle possède aussi quatre autres petites lunes, Styx, Nix, Kerberos et Hydra, et reste un monde glacial mais complexe, où la mission New Horizons (NASA, 2015) a révélé une géologie surprenamment active.',
             discoveryYear: '1930',
             composition: 'Glace d\'azote (N₂), Méthane (CH₄), Monoxyde de carbone (CO)',
             temperature: '-230°C',
@@ -262,18 +297,24 @@ const SolarSystem = () => {
         if (planetData) {
             setSelectedPlanetData(planetData);
             setIsPlanetInfoModalOpen(true);
+            // Sélectionner la planète pour activer le suivi de caméra
+            setSelectedPlanet(planetName);
+            // Réinitialiser le preset car la caméra suit maintenant la planète
+            setActiveCameraPreset(null);
         }
     };
 
     const handleClosePlanetInfoModal = () => {
         setIsPlanetInfoModalOpen(false);
         setSelectedPlanetData(null);
-        setSelectedPlanet(null); // Désélectionner la planète dans le sélecteur
+        // Ne pas désélectionner la planète pour que la caméra continue de la suivre
     };
 
     const handleMoonClick = (moonName: string) => {
         setSelectedMoon(moonName);
         setSelectedPlanet(null); // Désélectionner la planète quand on sélectionne une lune
+        // Réinitialiser le preset car la caméra suit maintenant la lune
+        setActiveCameraPreset(null);
         // Fermer la modal de la planète
         handleClosePlanetInfoModal();
     };
@@ -294,10 +335,12 @@ const SolarSystem = () => {
             <AboutButton />
             <ContactButton />
             <ProjectsButton />
+
             <CameraControls
                 onSpeedChange={handleSpeedChange}
                 onCameraReset={handleCameraReset}
                 onCameraPreset={handleCameraPreset}
+                activeCameraPreset={activeCameraPreset}
             />
             <PlanetSelector
                 planets={planets}
@@ -310,8 +353,8 @@ const SolarSystem = () => {
                     enablePan={true}
                     enableZoom={true}
                     enableRotate={true}
-                    minDistance={50}
-                    maxDistance={200}
+                    minDistance={30}
+                    maxDistance={330}
                     minPolarAngle={0}
                     maxPolarAngle={Math.PI}
                 />
@@ -352,12 +395,18 @@ const SolarSystem = () => {
                 <LabelManager
                     showPlanetNames={showPlanetNames}
                     showMoonNames={showMoonNames}
+                    isSunHovered={isSunHovered}
                 />
                 <ambientLight intensity={0.1} />
                 <directionalLight position={[0, 0, 0]} intensity={1} />
                 <Nebula />
                 <TwinklingStars />
-                <Sun />
+                <Sun
+                    onClick={handleSunClick}
+                    animationSpeed={animationSpeed}
+                    onPointerOver={() => setIsSunHovered(true)}
+                    onPointerOut={() => setIsSunHovered(false)}
+                />
                 {showOrbits && planets.map((planet) => (
                     <Orbit key={`orbit-${planet.name}`} radius={planet.distance} color="#ffffff" />
                 ))}

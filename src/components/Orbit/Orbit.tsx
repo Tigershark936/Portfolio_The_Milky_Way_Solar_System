@@ -9,7 +9,7 @@ type OrbitProps = {
 const Orbit = ({ radius, color = '#ffffff' }: OrbitProps) => {
     const points = useMemo(() => {
         const pts: THREE.Vector3[] = [];
-        const segments = 128;
+        const segments = 256; // Plus de segments pour des cercles plus lisses
 
         for (let i = 0; i <= segments; i++) {
             const angle = (i / segments) * Math.PI * 2;
@@ -29,8 +29,8 @@ const Orbit = ({ radius, color = '#ffffff' }: OrbitProps) => {
                 attach="material"
                 color={color}
                 transparent
-                opacity={0.15}
-                linewidth={1}
+                opacity={0.2}
+                linewidth={2}
             />
         </line>
     );

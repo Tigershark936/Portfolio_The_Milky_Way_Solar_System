@@ -5,12 +5,14 @@ import * as THREE from 'three';
 type LabelManagerProps = {
     showPlanetNames: boolean;
     showMoonNames: boolean;
+    isSunHovered: boolean;
 };
 
-const LabelManager = ({ showPlanetNames, showMoonNames }: LabelManagerProps) => {
+const LabelManager = ({ showPlanetNames, showMoonNames, isSunHovered }: LabelManagerProps) => {
     const { camera, scene } = useThree();
     const planetLabelsRef = useRef<Map<string, HTMLDivElement>>(new Map());
     const moonLabelsRef = useRef<Map<string, HTMLDivElement>>(new Map());
+    const sunLabelRef = useRef<HTMLDivElement | null>(null);
     const labelsInitialized = useRef(false);
     const hoveredPlanetsRef = useRef<Set<string>>(new Set());
 
@@ -31,7 +33,7 @@ const LabelManager = ({ showPlanetNames, showMoonNames }: LabelManagerProps) => 
                 raycaster.setFromCamera(mouse, camera);
                 const allObjects: THREE.Object3D[] = [];
                 scene.traverse(child => {
-                    if (child instanceof THREE.Mesh && child.name && child.name !== 'sun' && child.name !== 'orbitalRing') {
+                    if (child instanceof THREE.Mesh && child.name && child.name !== 'orbitalRing') {
                         allObjects.push(child);
                     }
                 });
@@ -41,7 +43,7 @@ const LabelManager = ({ showPlanetNames, showMoonNames }: LabelManagerProps) => 
                 // Réinitialiser les planètes survolées
                 hoveredPlanetsRef.current.clear();
 
-                // Ajouter les planètes intersectées
+                // Ajouter les planètes intersectées (le soleil est géré par les événements React Three Fiber)
                 intersects.forEach(intersect => {
                     const obj = intersect.object as THREE.Mesh;
                     if (obj.name && obj.name !== 'sun') {
@@ -65,6 +67,9 @@ const LabelManager = ({ showPlanetNames, showMoonNames }: LabelManagerProps) => 
                         label.parentNode.removeChild(label);
                     }
                 });
+                if (sunLabelRef.current && sunLabelRef.current.parentNode) {
+                    sunLabelRef.current.parentNode.removeChild(sunLabelRef.current);
+                }
             };
         }
     }, [camera, scene]);
@@ -159,6 +164,57 @@ const LabelManager = ({ showPlanetNames, showMoonNames }: LabelManagerProps) => 
                 }
             });
         });
+
+        // Gestion du label du Soleil (uniquement au survol)
+        // Recherche récursive du soleil dans toute la scène
+        const findSun = (obj: THREE.Object3D): THREE.Mesh | null => {
+            if (obj instanceof THREE.Mesh && obj.name === 'sun') {
+                return obj;
+            }
+            for (const child of obj.children) {
+                const found = findSun(child);
+                if (found) return found;
+            }
+            return null;
+        };
+
+        const sunMesh = findSun(scene);
+
+        if (sunMesh) {
+            // Créer le label s'il n'existe pas encore
+            if (!sunLabelRef.current) {
+                const labelDiv = document.createElement('div');
+                labelDiv.className = 'sun-label';
+                labelDiv.textContent = 'SOLEIL';
+                labelDiv.id = 'label-sun';
+                labelDiv.style.display = 'none';
+                document.body.appendChild(labelDiv);
+                sunLabelRef.current = labelDiv;
+            }
+
+            // Afficher uniquement au survol
+            if (isSunHovered && sunLabelRef.current) {
+                const vector = new THREE.Vector3();
+                sunMesh.getWorldPosition(vector);
+                vector.project(camera);
+
+                const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+                const y = (vector.y * -0.5 + 0.5) * window.innerHeight;
+
+                // Centrer horizontalement et placer au-dessus
+                sunLabelRef.current.style.left = x + 'px';
+                sunLabelRef.current.style.top = y + 'px';
+                sunLabelRef.current.style.transform = 'translate(-50%, calc(-100% - 10px))';
+
+                if (vector.z > 1) {
+                    sunLabelRef.current.style.display = 'none';
+                } else {
+                    sunLabelRef.current.style.display = 'block';
+                }
+            } else if (sunLabelRef.current) {
+                sunLabelRef.current.style.display = 'none';
+            }
+        }
     });
 
     return null;

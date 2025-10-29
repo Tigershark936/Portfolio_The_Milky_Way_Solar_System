@@ -5,10 +5,11 @@ import styles from './CameraControls.module.scss';
 type CameraControlsProps = {
     onSpeedChange: (speed: number) => void;
     onCameraReset: () => void;
-    onCameraPreset: (preset: 'overview' | 'close' | 'far') => void;
+    onCameraPreset: (preset: 'overview' | 'close' | 'far' | 'top') => void;
+    activeCameraPreset: 'overview' | 'close' | 'far' | 'top' | null;
 };
 
-const CameraControls = ({ onSpeedChange, onCameraReset, onCameraPreset }: CameraControlsProps) => {
+const CameraControls = ({ onSpeedChange, onCameraReset, onCameraPreset, activeCameraPreset }: CameraControlsProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [speed, setSpeed] = useState(1);
     const [cameraPosition, setCameraPosition] = useState({ x: 0, y: 50, z: 130 });
@@ -57,7 +58,7 @@ const CameraControls = ({ onSpeedChange, onCameraReset, onCameraPreset }: Camera
         onCameraReset();
     };
 
-    const handlePresetChange = (preset: 'overview' | 'close' | 'far') => {
+    const handlePresetChange = (preset: 'overview' | 'close' | 'far' | 'top') => {
         onCameraPreset(preset);
     };
 
@@ -67,16 +68,16 @@ const CameraControls = ({ onSpeedChange, onCameraReset, onCameraPreset }: Camera
             <button
                 className={`${styles.cameraButton} ${isOpen ? styles.open : ''}`}
                 onClick={() => setIsOpen(!isOpen)}
-                aria-label="Contrôles de la caméra"
+                aria-label="Options"
             >
-                <span className={styles.cameraTitle}>CAMÉRA</span>
+                <span className={styles.cameraTitle}>OPTIONS</span>
             </button>
 
             {/* Menu de contrôles */}
             {isOpen && (
-                <div ref={controlsRef} className={styles.controls} role="menu" aria-label="Contrôles de la caméra">
+                <div ref={controlsRef} className={styles.controls} role="menu" aria-label="Options">
                     <div className={styles.controlsHeader}>
-                        <h3>Contrôles de la caméra</h3>
+                        <h3>Explore l'univers</h3>
                     </div>
 
                     <div className={styles.controlsContent}>
@@ -86,37 +87,37 @@ const CameraControls = ({ onSpeedChange, onCameraReset, onCameraPreset }: Camera
                             <div className={styles.speedControls}>
                                 <button
                                     ref={speedRef}
-                                    className={`${styles.speedButton} ${speed === 0.1 ? styles.active : ''}`}
+                                    className={`${styles.speedButton} ${styles.speedSlow} ${speed === 0.1 ? styles.active : ''}`}
                                     onClick={() => handleSpeedChange(0.1)}
                                     role="menuitem"
                                     aria-pressed={speed === 0.1}
                                     tabIndex={0}
                                 >
-                                    <span className={styles.buttonIcon} style={{ color: speed === 0.1 ? '#4169E1' : '#8A2BE2' }}>
+                                    <span className={styles.buttonIcon} style={{ color: speed === 0.1 ? '#FF4444' : '#8A2BE2' }}>
                                         {speed === 0.1 ? '◉' : '○'}
                                     </span>
                                     Lente
                                 </button>
                                 <button
-                                    className={`${styles.speedButton} ${speed === 1 ? styles.active : ''}`}
+                                    className={`${styles.speedButton} ${styles.speedNormal} ${speed === 1 ? styles.active : ''}`}
                                     onClick={() => handleSpeedChange(1)}
                                     role="menuitem"
                                     aria-pressed={speed === 1}
                                     tabIndex={0}
                                 >
-                                    <span className={styles.buttonIcon} style={{ color: speed === 1 ? '#4169E1' : '#8A2BE2' }}>
+                                    <span className={styles.buttonIcon} style={{ color: speed === 1 ? '#FFA500' : '#8A2BE2' }}>
                                         {speed === 1 ? '◉' : '○'}
                                     </span>
                                     Normale
                                 </button>
                                 <button
-                                    className={`${styles.speedButton} ${speed === 5 ? styles.active : ''}`}
+                                    className={`${styles.speedButton} ${styles.speedFast} ${speed === 5 ? styles.active : ''}`}
                                     onClick={() => handleSpeedChange(5)}
                                     role="menuitem"
                                     aria-pressed={speed === 5}
                                     tabIndex={0}
                                 >
-                                    <span className={styles.buttonIcon} style={{ color: speed === 5 ? '#4169E1' : '#8A2BE2' }}>
+                                    <span className={styles.buttonIcon} style={{ color: speed === 5 ? '#00FF00' : '#8A2BE2' }}>
                                         {speed === 5 ? '◉' : '○'}
                                     </span>
                                     Rapide
@@ -129,57 +130,54 @@ const CameraControls = ({ onSpeedChange, onCameraReset, onCameraPreset }: Camera
                             <label className={styles.controlLabel}>Vue de la caméra</label>
                             <div className={styles.presetControls}>
                                 <button
-                                    ref={presetRef}
-                                    className={`${styles.presetButton} ${styles.overviewButton}`}
-                                    onClick={() => handlePresetChange('overview')}
-                                    role="menuitem"
-                                    tabIndex={0}
-                                >
-                                    <span className={styles.buttonIcon} style={{ color: '#8A2BE2' }}>
-                                        🌌
-                                    </span>
-                                    Vue d'ensemble
-                                </button>
-                                <button
-                                    className={`${styles.presetButton} ${styles.closeButton}`}
+                                    className={`${styles.presetButton} ${styles.closeButton} ${activeCameraPreset === 'close' ? styles.active : ''}`}
                                     onClick={() => handlePresetChange('close')}
                                     role="menuitem"
                                     tabIndex={0}
                                 >
-                                    <span className={styles.buttonIcon} style={{ color: '#8A2BE2' }}>
-                                        🔍
+                                    <span className={styles.buttonIcon} style={{ color: activeCameraPreset === 'close' ? '#00BFFF' : '#8A2BE2' }}>
+                                        {activeCameraPreset === 'close' ? '◉' : '○'}
                                     </span>
                                     Vue rapprochée
                                 </button>
                                 <button
-                                    className={`${styles.presetButton} ${styles.farButton}`}
+                                    ref={presetRef}
+                                    className={`${styles.presetButton} ${styles.overviewButton} ${activeCameraPreset === 'overview' ? styles.active : ''}`}
+                                    onClick={() => handlePresetChange('overview')}
+                                    role="menuitem"
+                                    tabIndex={0}
+                                >
+                                    <span className={styles.buttonIcon} style={{ color: activeCameraPreset === 'overview' ? '#FFD700' : '#8A2BE2' }}>
+                                        {activeCameraPreset === 'overview' ? '◉' : '○'}
+                                    </span>
+                                    Vue d'ensemble
+                                </button>
+                                <button
+                                    className={`${styles.presetButton} ${styles.farButton} ${activeCameraPreset === 'far' ? styles.active : ''}`}
                                     onClick={() => handlePresetChange('far')}
                                     role="menuitem"
                                     tabIndex={0}
                                 >
-                                    <span className={styles.buttonIcon} style={{ color: '#8A2BE2' }}>
-                                        🚀
+                                    <span className={styles.buttonIcon} style={{ color: activeCameraPreset === 'far' ? '#FF6347' : '#8A2BE2' }}>
+                                        {activeCameraPreset === 'far' ? '◉' : '○'}
                                     </span>
                                     Vue éloignée
+                                </button>
+                                <button
+                                    className={`${styles.presetButton} ${styles.topButton} ${activeCameraPreset === 'top' ? styles.active : ''}`}
+                                    onClick={() => handlePresetChange('top')}
+                                    role="menuitem"
+                                    tabIndex={0}
+                                >
+                                    <span className={styles.buttonIcon} style={{ color: activeCameraPreset === 'top' ? '#00FF7F' : '#8A2BE2' }}>
+                                        {activeCameraPreset === 'top' ? '◉' : '○'}
+                                    </span>
+                                    Vue de haut (360°)
                                 </button>
                             </div>
                         </div>
 
-                        {/* Reset caméra */}
-                        <div className={styles.controlGroup}>
-                            <button
-                                ref={resetRef}
-                                className={styles.resetButton}
-                                onClick={handleCameraReset}
-                                role="menuitem"
-                                tabIndex={0}
-                            >
-                                <span className={styles.buttonIcon} style={{ color: '#FFD700' }}>
-                                    🔄
-                                </span>
-                                Reset caméra
-                            </button>
-                        </div>
+                        {/** Reset caméra supprimé (doublon avec Vue d'ensemble) **/}
 
                     </div>
                 </div>

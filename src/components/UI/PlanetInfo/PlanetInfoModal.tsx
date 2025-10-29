@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import styles from './PlanetInfoModal.module.scss';
 
 interface PlanetInfoModalProps {
@@ -27,9 +27,19 @@ interface PlanetInfoModalProps {
 }
 
 const PlanetInfoModal = ({ isOpen, onClose, onMoonFollow, planetData }: PlanetInfoModalProps) => {
+    const modalBodyRef = useRef<HTMLDivElement>(null);
+
+    // Remettre le scroll en haut quand la modal s'ouvre ou quand la planète change
+    useEffect(() => {
+        if (isOpen && modalBodyRef.current) {
+            modalBodyRef.current.scrollTop = 0;
+        }
+    }, [isOpen, planetData?.name]);
+
     // Fonction de traduction des noms de planètes en français
     const translatePlanetName = (planetName: string): string => {
         const translations: { [key: string]: string } = {
+            'Sun': 'Soleil',
             'Mercury': 'Mercure',
             'Venus': 'Vénus',
             'Earth': 'Terre',
@@ -121,6 +131,7 @@ const PlanetInfoModal = ({ isOpen, onClose, onMoonFollow, planetData }: PlanetIn
 
     // Type labels
     const typeLabels = {
+        'star': 'ÉTOILE',
         'planet': 'PLANÈTE',
         'dwarf': 'PLANÈTE NAINE',
         'asteroid': 'ASTÉROÏDE',
@@ -137,7 +148,7 @@ const PlanetInfoModal = ({ isOpen, onClose, onMoonFollow, planetData }: PlanetIn
                     </button>
                 </div>
 
-                <div className={styles.modalBody}>
+                <div className={styles.modalBody} ref={modalBodyRef}>
                     <div className={styles.planetInfo}>
                         <div className={styles.infoRow}>
                             <span className={styles.label}>Type:</span>
@@ -155,46 +166,62 @@ const PlanetInfoModal = ({ isOpen, onClose, onMoonFollow, planetData }: PlanetIn
 
                         <div className={styles.infoRow}>
                             <span className={styles.label}>Taille:</span>
-                            <span className={styles.value}>{planetData.size}x Terre</span>
+                            <span className={styles.value}>
+                                {planetData.name === 'Sun'
+                                    ? `${planetData.size} unités (rayon ~109x Terre)`
+                                    : `${planetData.size}x Terre`}
+                            </span>
                         </div>
 
-                        <div className={styles.distanceExplanation}>
-                            <p>
-                                <strong>Calcul des distances :</strong> 1 UA (Unité Astronomique) = 149.6 millions de km
-                                (distance moyenne Terre-Soleil). Les distances affichées sont proportionnelles pour la visualisation.
-                            </p>
-                        </div>
-
-                        <div className={styles.infoRow}>
-                            <span className={styles.label}>Distance du Soleil:</span>
-                            <div className={styles.compositionValue}>
-                                <span className={styles.compositionItem}>{(planetData.dist / 30).toFixed(2)} UA</span>
-                                <span className={styles.compositionItem}>(~{((planetData.dist / 30) * 149.6).toFixed(1)}M km)</span>
-                            </div>
-                        </div>
-
-                        {planetData.name !== 'Earth' && (
-                            <div className={styles.infoRow}>
-                                <span className={styles.label}>Distance de la Terre:</span>
-                                <div className={styles.compositionValue}>
-                                    {getDistanceFromEarth(planetData.dist).split(', ').map((item, index) => (
-                                        <span key={index} className={styles.compositionItem}>{item}</span>
-                                    ))}
+                        {planetData.name !== 'Sun' && (
+                            <>
+                                <div className={styles.distanceExplanation}>
+                                    <p>
+                                        <strong>Calcul des distances :</strong> 1 UA (Unité Astronomique) = 149.6 millions de km
+                                        (distance moyenne Terre-Soleil). Les distances affichées sont proportionnelles pour la visualisation.
+                                    </p>
                                 </div>
-                            </div>
-                        )}
 
-                        <div className={styles.infoRow}>
-                            <span className={styles.label}>Période orbitale:</span>
-                            <div className={styles.compositionValue}>
-                                <span className={styles.compositionItem}>{orbitalPeriod}</span>
-                            </div>
-                        </div>
+                                <div className={styles.infoRow}>
+                                    <span className={styles.label}>Distance du Soleil:</span>
+                                    <div className={styles.compositionValue}>
+                                        <span className={styles.compositionItem}>{(planetData.dist / 30).toFixed(2)} UA</span>
+                                        <span className={styles.compositionItem}>(~{((planetData.dist / 30) * 149.6).toFixed(1)}M km)</span>
+                                    </div>
+                                </div>
+
+                                {planetData.name !== 'Earth' && (
+                                    <div className={styles.infoRow}>
+                                        <span className={styles.label}>Distance de la Terre:</span>
+                                        <div className={styles.compositionValue}>
+                                            {getDistanceFromEarth(planetData.dist).split(', ').map((item, index) => (
+                                                <span key={index} className={styles.compositionItem}>{item}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className={styles.infoRow}>
+                                    <span className={styles.label}>Période orbitale:</span>
+                                    <div className={styles.compositionValue}>
+                                        <span className={styles.compositionItem}>{orbitalPeriod}</span>
+                                    </div>
+                                </div>
+                            </>
+                        )}
 
                         {planetData.temperature && (
                             <div className={styles.infoRow}>
                                 <span className={styles.label}>Température:</span>
-                                <span className={styles.value}>{planetData.temperature}</span>
+                                {planetData.name === 'Sun' && planetData.temperature.includes('|') ? (
+                                    <div className={styles.compositionValue}>
+                                        {planetData.temperature.split(' | ').map((item, index) => (
+                                            <span key={index} className={styles.compositionItem}>{item}</span>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <span className={styles.value}>{planetData.temperature}</span>
+                                )}
                             </div>
                         )}
 
@@ -266,7 +293,7 @@ const PlanetInfoModal = ({ isOpen, onClose, onMoonFollow, planetData }: PlanetIn
                             <h3>Historique de la découverte</h3>
                             <p>Visible à l'œil nu, Jupiter est connue depuis la plus haute Antiquité et observée par les civilisations babylonienne, grecque et romaine.</p>
                             <p>Son éclat et sa lente progression dans le ciel lui ont valu d'être associée au roi des dieux, d'où son nom : Jupiter, l'équivalent romain de Zeus chez les Grecs.</p>
-                            <p>En 1610, Galilée fut le premier à l'observer au télescope et à découvrir ses quatre plus grandes lunes — Io, Europe, Ganymède et Callisto — appelées aujourd'hui lunes galiléennes.</p>
+                            <p>En 1610, Galilée fut le premier à l'observer au télescope et à découvrir ses quatre plus grandes lunes, Io, Europe, Ganymède et Callisto, appelées aujourd'hui lunes galiléennes.</p>
                             <p>Cette découverte marqua un tournant majeur : elle démontra que tous les astres ne tournent pas autour de la Terre, soutenant ainsi la théorie héliocentrique de Copernic.</p>
                         </div>
                     )}
@@ -285,7 +312,7 @@ const PlanetInfoModal = ({ isOpen, onClose, onMoonFollow, planetData }: PlanetIn
                         <div className={styles.discoverySection}>
                             <h3>Historique de la découverte</h3>
                             <p>Uranus fut découverte le 13 mars 1781 par l'astronome britannique William Herschel, alors qu'il observait le ciel depuis son jardin à Bath, en Angleterre.</p>
-                            <p>Il pensait d'abord avoir trouvé une comète, mais les calculs d'orbite montrèrent qu'il s'agissait en réalité d'une nouvelle planète — la première jamais découverte à l'aide d'un télescope.</p>
+                            <p>Il pensait d'abord avoir trouvé une comète, mais les calculs d'orbite montrèrent qu'il s'agissait en réalité d'une nouvelle planète, la première jamais découverte à l'aide d'un télescope.</p>
                             <p>Cette découverte historique repoussa les frontières connues du Système solaire, qui ne comptait jusque-là que six planètes.</p>
                             <p>Herschel proposa de la nommer "Georgium Sidus" (l'étoile de George) en hommage au roi George III, mais les astronomes adoptèrent finalement le nom d'Uranus, le dieu grec du ciel, pour rester fidèle à la tradition mythologique.</p>
                         </div>
@@ -307,6 +334,17 @@ const PlanetInfoModal = ({ isOpen, onClose, onMoonFollow, planetData }: PlanetIn
                             <p>Longtemps considérée comme la neuvième planète du Système solaire, Pluton a été reclassée en planète naine le 24 août 2006 par l'Union astronomique internationale (UAI).</p>
                             <p>Cette décision s'appuie sur le fait qu'elle n'a pas "nettoyé" son orbite des autres objets de la ceinture de Kuiper, contrairement aux planètes principales.</p>
                             <p>Son nom, Pluton, a été proposé par une jeune Anglaise de 11 ans, Venetia Burney, en référence au dieu romain des Enfers, symbole du froid et de l'obscurité.</p>
+                        </div>
+                    )}
+
+                    {planetData.name === 'Sun' && (
+                        <div className={styles.discoverySection}>
+                            <h3>Historique de la découverte</h3>
+                            <p>Le Soleil est connu depuis l'aube de l'humanité, étant l'astre le plus visible et le plus vital de notre ciel.</p>
+                            <p>Toutes les civilisations anciennes, Égyptiens, Babyloniens, Grecs et Romains, l'observaient et le vénéraient, conscients de son rôle essentiel dans la vie sur Terre.</p>
+                            <p>Les Grecs l'appelaient Hélios, les Romains Sol, et les Égyptiens Râ, chacun lui attribuant une place centrale dans sa cosmologie et sa mythologie.</p>
+                            <p>La compréhension scientifique du Soleil débuta au XVIIᵉ siècle avec Galilée, qui observa pour la première fois les taches solaires au télescope.</p>
+                            <p>Depuis, les progrès de l'astronomie et des missions spatiales, comme SOHO, Solar Orbiter ou la Parker Solar Probe, ont permis d'étudier en détail sa structure, son activité et son influence sur tout le Système solaire.</p>
                         </div>
                     )}
 
