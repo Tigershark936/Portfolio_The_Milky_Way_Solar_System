@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import styles from './SolarSystem.module.scss';
@@ -18,18 +18,43 @@ import ContactButton from '../UI/Contact/ContactButton/ContactButton';
 import PlanetInfoModal from '../UI/PlanetInfo/PlanetInfoModal';
 import MoonFollower from '../UI/Camera/MoonFollower';
 import type { Planet as PlanetType } from '../../types/Planet';
+import { useFetchPlanetPositions } from '../../hooks/useFetchPlanetPositions';
 
 // Planètes avec couleurs NASA officielles, distances bien espacées et tailles ajustées
-const planets: PlanetType[] = [
-    { name: 'Mercury', distance: 16, size: 0.23, color: '#B8860B', speed: 4.15, angle: 0 }, // Couleur plus visible (dark goldenrod)
-    { name: 'Venus', distance: 22, size: 0.57, color: '#ffc649', speed: 1.62, angle: 0 }, // 0.95 * 0.6
-    { name: 'Earth', distance: 31, size: 0.3, color: '#6b93d6', speed: 1, angle: 0 }, // 1.0 * 0.3
-    { name: 'Mars', distance: 40, size: 0.32, color: '#cd5c5c', speed: 0.53, angle: 0 }, // 0.53 * 0.6
-    { name: 'Jupiter', distance: 60, size: 8.97, color: '#d8ca9d', speed: 0.084, angle: 0 }, // 11.21 * 0.8
-    { name: 'Saturn', distance: 85, size: 6.62, color: '#fad5a5', speed: 0.034, angle: 0 }, // 9.45 * 0.7
-    { name: 'Uranus', distance: 110, size: 2.01, color: '#4fd0e7', speed: 0.012, angle: 0 }, // 4.01 * 0.5
-    { name: 'Neptune', distance: 135, size: 1.94, color: '#4b70dd', speed: 0.006, angle: 0 }, // 3.88 * 0.5
-    { name: 'Pluto', distance: 160, size: 0.14, color: '#8c7853', speed: 0.01, angle: 0 }, // 0.18 * 0.8
+// Les distances sont ajustées pour la visualisation, mais les angles seront mis à jour avec les positions réelles
+// Les vitesses sont basées sur les périodes orbitales réelles (en jours terrestres)
+// Périodes orbitales réelles (en jours) : Mercure:88, Vénus:225, Terre:365.25, Mars:687, 
+// Jupiter:4331, Saturne:10747, Uranus:30589, Neptune:59800, Pluton:90520
+// 
+// Pour les vitesses en temps réel :
+// - Vitesse angulaire = 2π / (période_en_jours * 24 * 3600) radians par seconde réelle
+// - Mais pour l'animation, on ajuste avec un facteur d'échelle de temps pour que ce soit visible
+// - En mode normal (animationSpeed = 1), la Terre prend 365 jours RÉELS pour un tour complet
+const ORBITAL_PERIODS_DAYS: Record<string, number> = {
+    'Mercury': 88,
+    'Venus': 225,
+    'Earth': 365.25,
+    'Mars': 687,
+    'Jupiter': 4331,
+    'Saturn': 10747,
+    'Uranus': 30589,
+    'Neptune': 59800,
+    'Pluto': 90520,
+};
+
+// Facteur de conversion : radians par seconde réelle pour chaque planète
+// Pour qu'une planète fasse un tour complet en sa période réelle
+
+const basePlanets: PlanetType[] = [
+    { name: 'Mercury', distance: 16, size: 0.23, color: '#B8860B', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Mercury, angle: 0 },
+    { name: 'Venus', distance: 22, size: 0.57, color: '#ffc649', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Venus, angle: 0 },
+    { name: 'Earth', distance: 31, size: 0.3, color: '#6b93d6', speed: 1, angle: 0 }, // Référence : 365.25 jours réels pour un tour
+    { name: 'Mars', distance: 40, size: 0.32, color: '#cd5c5c', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Mars, angle: 0 },
+    { name: 'Jupiter', distance: 60, size: 8.97, color: '#d8ca9d', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Jupiter, angle: 0 },
+    { name: 'Saturn', distance: 85, size: 6.62, color: '#fad5a5', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Saturn, angle: 0 },
+    { name: 'Uranus', distance: 110, size: 2.01, color: '#4fd0e7', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Uranus, angle: 0 },
+    { name: 'Neptune', distance: 135, size: 1.94, color: '#4b70dd', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Neptune, angle: 0 },
+    { name: 'Pluto', distance: 160, size: 0.14, color: '#8c7853', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Pluto, angle: 0 },
 ];
 
 const SolarSystem = () => {
@@ -44,7 +69,49 @@ const SolarSystem = () => {
     const [selectedPlanetData, setSelectedPlanetData] = useState<any>(null);
     const [selectedMoon, setSelectedMoon] = useState<string | null>(null);
     const [isSunHovered, setIsSunHovered] = useState(false);
+    const [hoveredPlanets, setHoveredPlanets] = useState<Set<string>>(new Set()); // État pour les planètes survolées
     const controlsRef = useRef<any>(null);
+    const [planets, setPlanets] = useState<PlanetType[]>(basePlanets);
+
+    // Hook pour charger les positions réelles des planètes depuis l'API
+    const { loadRealPositions } = useFetchPlanetPositions(planets);
+
+    // Fonction pour charger les positions réelles des planètes depuis l'API
+    // Cette fonction force un repositionnement immédiat et fluide à la position exacte de l'orbite
+    const handleLoadRealPositions = async () => {
+        try {
+            // Utiliser startTransition pour rendre la mise à jour non-bloquante
+            const realPositions = await loadRealPositions();
+
+            // Mettre à jour les angles des planètes avec leurs positions réelles
+            // Batch update pour un seul re-render optimisé
+            setPlanets(prevPlanets => {
+                const updatedPlanets = prevPlanets.map(planet => {
+                    const realPosition = realPositions.find(p => p.name === planet.name);
+                    if (realPosition) {
+                        // Créer un nouvel objet pour forcer la mise à jour, même si l'angle est proche
+                        // Cela garantit que toutes les planètes se repositionnent
+                        return {
+                            ...planet,
+                            angle: realPosition.angle
+                        };
+                    }
+                    return planet;
+                });
+
+                return updatedPlanets;
+            });
+        } catch (error) {
+            console.warn('⚠️ Erreur lors du chargement des positions réelles:', error);
+            // Garder les positions par défaut en cas d'erreur
+        }
+    };
+
+    // Charger les positions réelles des planètes au montage
+    useEffect(() => {
+        handleLoadRealPositions();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleTogglePlanetNames = () => {
         setShowPlanetNames(!showPlanetNames);
@@ -337,6 +404,7 @@ const SolarSystem = () => {
                 onCameraReset={handleCameraReset}
                 onCameraPreset={handleCameraPreset}
                 activeCameraPreset={activeCameraPreset}
+                onResetPlanetPositions={handleLoadRealPositions}
             />
             <PlanetSelector
                 planets={planets}
@@ -396,6 +464,7 @@ const SolarSystem = () => {
                     showPlanetNames={showPlanetNames}
                     showMoonNames={showMoonNames}
                     isSunHovered={isSunHovered}
+                    hoveredPlanets={hoveredPlanets}
                 />
                 <ambientLight intensity={0.1} />
                 <directionalLight position={[0, 0, 0]} intensity={1} />
@@ -417,6 +486,12 @@ const SolarSystem = () => {
                         animationSpeed={animationSpeed}
                         onClick={() => handlePlanetClick(planet.name)}
                         onMoonClick={handleMoonClick}
+                        onPointerOver={() => setHoveredPlanets(prev => new Set(prev).add(planet.name))}
+                        onPointerOut={() => setHoveredPlanets(prev => {
+                            const newSet = new Set(prev);
+                            newSet.delete(planet.name);
+                            return newSet;
+                        })}
                     />
                 ))}
             </Canvas>

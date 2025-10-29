@@ -85,7 +85,7 @@ const TwinklingStars = () => {
 
     return (
         <group ref={groupRef}>
-            <points>
+            <points raycast={null}>
                 <bufferGeometry attach="geometry" {...geometry} />
                 <pointsMaterial
                     size={0.2}

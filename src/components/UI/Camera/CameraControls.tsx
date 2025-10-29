@@ -6,9 +6,10 @@ type CameraControlsProps = {
     onCameraReset: () => void;
     onCameraPreset: (preset: 'overview' | 'close' | 'far' | 'top') => void;
     activeCameraPreset: 'overview' | 'close' | 'far' | 'top' | null;
+    onResetPlanetPositions: () => void;
 };
 
-const CameraControls = ({ onSpeedChange, onCameraReset: _onCameraReset, onCameraPreset, activeCameraPreset }: CameraControlsProps) => {
+const CameraControls = ({ onSpeedChange, onCameraReset: _onCameraReset, onCameraPreset, activeCameraPreset, onResetPlanetPositions }: CameraControlsProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [speed, setSpeed] = useState(1);
     const controlsRef = useRef<HTMLDivElement>(null);
@@ -81,42 +82,60 @@ const CameraControls = ({ onSpeedChange, onCameraReset: _onCameraReset, onCamera
                             <div className={styles.speedControls}>
                                 <button
                                     ref={speedRef}
-                                    className={`${styles.speedButton} ${styles.speedSlow} ${speed === 0.1 ? styles.active : ''}`}
-                                    onClick={() => handleSpeedChange(0.1)}
-                                    role="menuitem"
-                                    aria-pressed={speed === 0.1}
-                                    tabIndex={0}
-                                >
-                                    <span className={styles.buttonIcon} style={{ color: speed === 0.1 ? '#FF4444' : '#8A2BE2' }}>
-                                        {speed === 0.1 ? '◉' : '○'}
-                                    </span>
-                                    Lente
-                                </button>
-                                <button
                                     className={`${styles.speedButton} ${styles.speedNormal} ${speed === 1 ? styles.active : ''}`}
                                     onClick={() => handleSpeedChange(1)}
                                     role="menuitem"
                                     aria-pressed={speed === 1}
                                     tabIndex={0}
                                 >
-                                    <span className={styles.buttonIcon} style={{ color: speed === 1 ? '#FFA500' : '#8A2BE2' }}>
+                                    <span className={styles.buttonIcon}>
                                         {speed === 1 ? '◉' : '○'}
                                     </span>
-                                    Normale
+                                    Normal
                                 </button>
                                 <button
-                                    className={`${styles.speedButton} ${styles.speedFast} ${speed === 5 ? styles.active : ''}`}
-                                    onClick={() => handleSpeedChange(5)}
+                                    className={`${styles.speedButton} ${styles.speedFast} ${speed === 100000 ? styles.active : ''}`}
+                                    onClick={() => handleSpeedChange(100000)}
                                     role="menuitem"
-                                    aria-pressed={speed === 5}
+                                    aria-pressed={speed === 100000}
                                     tabIndex={0}
                                 >
-                                    <span className={styles.buttonIcon} style={{ color: speed === 5 ? '#00FF00' : '#8A2BE2' }}>
-                                        {speed === 5 ? '◉' : '○'}
+                                    <span className={styles.buttonIcon}>
+                                        {speed === 100000 ? '◉' : '○'}
                                     </span>
                                     Rapide
                                 </button>
+                                <button
+                                    className={`${styles.speedButton} ${styles.speedUltraFast} ${speed === 1000000 ? styles.active : ''}`}
+                                    onClick={() => handleSpeedChange(1000000)}
+                                    role="menuitem"
+                                    aria-pressed={speed === 1000000}
+                                    tabIndex={0}
+                                >
+                                    <span className={styles.buttonIcon}>
+                                        {speed === 1000000 ? '◉' : '○'}
+                                    </span>
+                                    Ultra rapide
+                                </button>
                             </div>
+                            
+                                   {/* Bouton de réinitialisation des positions planétaires */}
+                                   <button
+                                       className={`${styles.resetPositionsButton}`}
+                                       onClick={() => {
+                                           // Remettre la vitesse à Normal et recharger les positions en une seule opération fluide
+                                           handleSpeedChange(1);
+                                           // Utiliser requestAnimationFrame pour un repositionnement fluide
+                                           requestAnimationFrame(() => {
+                                               onResetPlanetPositions();
+                                           });
+                                       }}
+                                       role="menuitem"
+                                       tabIndex={0}
+                                       title="Remettre les planètes à leur position exacte sur leur orbite (selon l'API) et réinitialiser la vitesse à normale"
+                                   >
+                                       Positions réelles
+                                   </button>
                         </div>
 
                         {/* Presets de caméra */}

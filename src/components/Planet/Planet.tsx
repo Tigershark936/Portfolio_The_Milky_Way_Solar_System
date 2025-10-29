@@ -10,13 +10,19 @@ type Props = {
     animationSpeed?: number;
     onClick?: () => void;
     onMoonClick?: (moonName: string) => void; // Added moon click handler
+    onPointerOver?: () => void; // Callback pour notifier le survol
+    onPointerOut?: () => void; // Callback pour notifier la fin du survol
 };
 
-const Planet = ({ planet, animationSpeed = 1, onClick, onMoonClick }: Props) => {
+const Planet = ({ planet, animationSpeed = 1, onClick, onMoonClick, onPointerOver, onPointerOut }: Props) => {
     const groupRef = useRef<THREE.Group>(null);
     const meshRef = useRef<THREE.Mesh>(null);
     const ringsRef = useRef<THREE.Mesh>(null);
     const [hovered, setHovered] = useState(false);
+    // Initialiser baseAngleRef avec la valeur actuelle de planet.angle
+    // Ce ref sera mis à jour dans useLayoutEffect quand planet.angle change
+    const baseAngleRef = useRef<number>(planet.angle); // Référence pour l'angle de base
+    const cumulativeRotationRef = useRef<number>(0); // Rotation cumulative depuis le dernier reset
     const [planetTexture, setPlanetTexture] = useState<THREE.Texture | null>(null);
     const [ringsTexture, setRingsTexture] = useState<THREE.Texture | null>(null);
 
@@ -101,28 +107,83 @@ const Planet = ({ planet, animationSpeed = 1, onClick, onMoonClick }: Props) => 
         }
     }, [ringsTexture, planet.name]);
 
-    // Initialiser les rotations synchronisées avant le premier rendu pour éviter le délai
+    // Initialiser les rotations avec l'angle réel de la planète (position actuelle dans le système solaire)
+    // Utiliser useLayoutEffect pour une mise à jour synchrone et fluide avant le rendu
     useLayoutEffect(() => {
         if (groupRef.current && meshRef.current) {
-            // Définir des angles initiaux aléatoires pour plus de variété visuelle
-            const initialAngle = Math.random() * Math.PI * 2;
-            groupRef.current.rotation.y = initialAngle;
+            const initialAngle = planet.angle; // Angle réel de la planète
+
+            // Vérifier si l'angle a changé de manière significative
+            const angleChanged = Math.abs(baseAngleRef.current - initialAngle) > 1e-6;
+
+            if (angleChanged) {
+                // Mettre à jour l'angle de base et réinitialiser la rotation cumulative
+                baseAngleRef.current = initialAngle;
+                cumulativeRotationRef.current = 0;
+            }
+
+            // Application directe et fluide de la position (sans requestAnimationFrame dans useLayoutEffect)
+            groupRef.current.rotation.y = baseAngleRef.current + cumulativeRotationRef.current;
+
+            // Rotation sur elle-même indépendante de la position orbitale
             meshRef.current.rotation.y = initialAngle * 0.5;
 
             if (ringsRef.current && planet.name === 'Saturn') {
                 ringsRef.current.rotation.z = initialAngle * 0.2;
             }
         }
-    }, [planet.name]);
+    }, [planet.angle, planet.name]);
 
     useFrame((_, delta) => {
-        // Animation immédiate sans conditions pour éviter tout délai
+        // Animation avec vitesses orbitales RÉELLES proportionnelles
+        // delta est en secondes réelles entre les frames
+
+        // Calcul de la vitesse angulaire réelle pour chaque planète
+        // Vitesse angulaire = 2π / (période_en_secondes) radians/seconde
+        // Pour que la Terre fasse un tour complet en 365.25 jours RÉELS :
+        const EARTH_ORBITAL_PERIOD_SECONDS = 365.25 * 24 * 60 * 60; // 31557600 secondes
+        const EARTH_ANGULAR_VELOCITY = (2 * Math.PI) / EARTH_ORBITAL_PERIOD_SECONDS; // ≈ 1.99e-7 rad/s
+
+        // La vitesse relative (planet.speed) ajuste la vitesse selon la période de chaque planète
+        // Ex: Mercure avec speed=4.15 tourne 4.15x plus vite que la Terre
+        const realAngularVelocity = EARTH_ANGULAR_VELOCITY * planet.speed;
+
+        // En mode normal (animationSpeed = 1) : vitesse RÉELLE (365 jours pour la Terre)
+        // Les boutons de vitesse permettent d'accélérer (2x, 5x, 10x, etc.)
+        // Calculer la rotation à partir de l'angle de base + rotation cumulative
         if (groupRef.current) {
-            groupRef.current.rotation.y += delta * planet.speed * 0.1 * animationSpeed;
+            // Accumuler la rotation depuis le dernier reset
+            cumulativeRotationRef.current += delta * realAngularVelocity * animationSpeed;
+            // Appliquer l'angle de base + la rotation cumulative
+            groupRef.current.rotation.y = baseAngleRef.current + cumulativeRotationRef.current;
         }
+
+        // Rotation sur elle-même avec période RÉELLE (rotation axiale)
+        // Périodes de rotation des planètes (en heures ou jours)
+        const PLANET_ROTATION_PERIODS: Record<string, number> = {
+            'Mercury': 58.6 * 24,    // 58.6 jours en heures
+            'Venus': 243 * 24,       // 243 jours en heures (rotation rétrograde)
+            'Earth': 23.93,          // 23.93 heures
+            'Mars': 24.6,            // 24.6 heures
+            'Jupiter': 9.9,           // 9.9 heures
+            'Saturn': 10.7,           // 10.7 heures
+            'Uranus': 17.2,           // 17.2 heures
+            'Neptune': 16.1,          // 16.1 heures
+            'Pluto': 6.39 * 24,       // 6.39 jours en heures
+        };
+
         if (meshRef.current) {
-            meshRef.current.rotation.y += delta * 0.5 * animationSpeed;
+            const rotationPeriodHours = PLANET_ROTATION_PERIODS[planet.name] || 24; // Par défaut 24h si non trouvé
+            const rotationPeriodSeconds = rotationPeriodHours * 60 * 60; // Convertir en secondes
+            const angularVelocity = (2 * Math.PI) / rotationPeriodSeconds; // rad/s réelle
+
+            // Pour Vénus, la rotation est rétrograde (sens inverse)
+            const rotationDirection = planet.name === 'Venus' ? -1 : 1;
+
+            // En mode normal (animationSpeed = 1) : vitesse RÉELLE
+            meshRef.current.rotation.y += delta * angularVelocity * rotationDirection * animationSpeed;
         }
+
         // Rotation des anneaux de Saturne
         if (ringsRef.current && planet.name === 'Saturn') {
             ringsRef.current.rotation.z += delta * 0.1 * animationSpeed;
@@ -134,8 +195,14 @@ const Planet = ({ planet, animationSpeed = 1, onClick, onMoonClick }: Props) => 
             <mesh
                 ref={meshRef}
                 position={[planet.distance, 0, 0]}
-                onPointerOver={() => setHovered(true)}
-                onPointerOut={() => setHovered(false)}
+                onPointerOver={() => {
+                    setHovered(true);
+                    onPointerOver?.(); // Notifier le parent du survol
+                }}
+                onPointerOut={() => {
+                    setHovered(false);
+                    onPointerOut?.(); // Notifier le parent de la fin du survol
+                }}
                 onClick={onClick}
                 name={`planet-${planet.name}`}
             >

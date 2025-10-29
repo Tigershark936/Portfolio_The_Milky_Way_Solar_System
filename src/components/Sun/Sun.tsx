@@ -59,10 +59,17 @@ const Sun = ({ onClick, animationSpeed = 1, onPointerOver, onPointerOut }: SunPr
 
     useFrame((_, delta) => {
         if (meshRef.current) {
-            // Rotation légèrement accélérée pour être visible en vitesse normale
-            // Assez lent pour rester naturel mais perceptible
-            meshRef.current.rotation.y += delta * 0.005 * animationSpeed; // Rotation légère sur l'axe Y
-            meshRef.current.rotation.x += delta * 0.003 * animationSpeed; // Rotation légère sur l'axe X
+            // Rotation du Soleil avec période réelle : ~25.4 jours à l'équateur
+            // Vitesse angulaire = 2π / (période_en_secondes) radians/seconde
+            const SUN_ROTATION_PERIOD_DAYS = 25.4; // jours à l'équateur
+            const SUN_ROTATION_PERIOD_SECONDS = SUN_ROTATION_PERIOD_DAYS * 24 * 60 * 60; // secondes
+            const SUN_ANGULAR_VELOCITY = (2 * Math.PI) / SUN_ROTATION_PERIOD_SECONDS; // rad/s réelle
+            
+            // En mode normal (animationSpeed = 1) : vitesse RÉELLE (25.4 jours pour une rotation)
+            // Les boutons de vitesse permettent d'accélérer proportionnellement
+            meshRef.current.rotation.y += delta * SUN_ANGULAR_VELOCITY * animationSpeed;
+            // Rotation légère sur l'axe X pour un effet plus naturel (proportionnelle)
+            meshRef.current.rotation.x += delta * SUN_ANGULAR_VELOCITY * 0.1 * animationSpeed;
         }
     });
 

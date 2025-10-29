@@ -14,9 +14,11 @@
     "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.4.0",
     "@react-three/postprocessing": "^3.0.4",
+    "@reduxjs/toolkit": "^2.9.2",
     "@types/three": "^0.180.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-redux": "^9.2.0",
     "sass": "^1.93.2",
     "three": "^0.180.0"
   },

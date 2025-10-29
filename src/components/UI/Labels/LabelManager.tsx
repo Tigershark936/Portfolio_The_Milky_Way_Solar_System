@@ -6,9 +6,10 @@ type LabelManagerProps = {
     showPlanetNames: boolean;
     showMoonNames: boolean;
     isSunHovered: boolean;
+    hoveredPlanets?: Set<string>; // Planètes actuellement survolées
 };
 
-const LabelManager = ({ showPlanetNames, showMoonNames, isSunHovered }: LabelManagerProps) => {
+const LabelManager = ({ showPlanetNames, showMoonNames, isSunHovered, hoveredPlanets = new Set() }: LabelManagerProps) => {
     const { camera, scene } = useThree();
     const planetLabelsRef = useRef<Map<string, HTMLDivElement>>(new Map());
     const moonLabelsRef = useRef<Map<string, HTMLDivElement>>(new Map());
@@ -136,7 +137,11 @@ const LabelManager = ({ showPlanetNames, showMoonNames, isSunHovered }: LabelMan
                     }
 
                     // Mettre à jour la position
-                    const shouldShow = (isMoon ? showMoonNames : showPlanetNames) || hoveredPlanetsRef.current.has(name);
+                    // Afficher si : showPlanetNames/showMoonNames est activé OU la planète est survolée (React Three Fiber ou raycaster)
+                    const planetName = name.replace('planet-', '');
+                    const isHoveredFromReact = !isMoon && hoveredPlanets.has(planetName);
+                    const isHoveredFromRaycaster = hoveredPlanetsRef.current.has(name);
+                    const shouldShow = (isMoon ? showMoonNames : showPlanetNames) || isHoveredFromReact || isHoveredFromRaycaster;
                     const labelMap = isMoon ? moonLabelsRef.current : planetLabelsRef.current;
                     const label = labelMap.get(name);
 
