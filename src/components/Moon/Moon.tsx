@@ -95,7 +95,7 @@ const Moon = ({ distance, size, color, speed, animationSpeed = 1, name = 'Moon',
                 texturePath = '/textures/moons/hydra.jpg';
                 break;
             default:
-                texturePath = '/textures/moons/moon.jpg'; // Texture par défaut
+                texturePath = '/textures/moons/moon.jpg';
         }
 
         loader.load(

@@ -148,7 +148,7 @@ const SolarSystem = () => {
             type: 'planet',
             planetType: 'tellurique',
             size: 0.23,
-            dist: 16, // Distance visuelle pour la scène 3D (équivalent à ~0.53 UA pour le calcul)
+            dist: 16,
             speed: 4.15,
             info: 'Mercure est la planète la plus proche du Soleil et aussi la plus petite du Système solaire.\n\nSa surface grêlée de cratères rappelle celle de la Lune, témoin d\'un passé de bombardements intenses.\n\nPrivée d\'atmosphère réelle, elle ne retient ni chaleur ni protection contre les rayonnements solaires : les températures varient brutalement, passant d\'environ -180°C la nuit à +430°C le jour.\n\nSa rotation lente (un jour mercurien dure près de 59 jours terrestres) et son orbite rapide (elle tourne autour du Soleil en seulement 88 jours) en font un monde de contrastes extrêmes.\n\nMercure ne possède ni lunes ni anneaux.',
             discoveryYear: 'Antiquité',
@@ -318,9 +318,6 @@ const SolarSystem = () => {
         // Fermer la modal de la planète
         handleClosePlanetInfoModal();
     };
-
-
-    // Labels de test supprimés - on garde seulement le menu
 
     return (
         <div className={styles.solarSystem}>
