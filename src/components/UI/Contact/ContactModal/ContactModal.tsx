@@ -116,8 +116,11 @@ const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
                 <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                     <div className={styles.modalHeader}>
                         <h2>Contact</h2>
-                        <button className={styles.closeButton} onClick={onClose} aria-label="Fermer">
-                            ✕
+                        <button className={styles.closeButton} onClick={onClose} aria-label="Fermer la modale info">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.closeIcon} aria-hidden="true">
+                                <line x1="4.5" y1="4.5" x2="15.5" y2="15.5" stroke="#ff4444" strokeWidth="2.2" strokeLinecap="round"/>
+                                <line x1="15.5" y1="4.5" x2="4.5" y2="15.5" stroke="#ff4444" strokeWidth="2.2" strokeLinecap="round"/>
+                            </svg>
                         </button>
                     </div>
 

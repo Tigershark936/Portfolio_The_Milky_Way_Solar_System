@@ -81,40 +81,52 @@
 }
 
 .closeButton {
-    background: none;
-    border: none;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255, 68, 68, 0.5);
+    border-radius: 6px;
+    padding: 8px 20px;
+    box-sizing: border-box;
     color: #ff4444;
-    font-size: 32px;
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="16" cy="16" r="10" fill="none" stroke="%238A2BE2" stroke-width="2" filter="url(%23glow)"/><circle cx="16" cy="16" r="4" fill="%238A2BE2" filter="url(%23glow)"/><circle cx="16" cy="16" r="1" fill="%23FFFFFF"/></svg>'), auto;
-    width: 35px;
-    height: 35px;
+    font-family: 'NASA', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="16" cy="16" r="10" fill="none" stroke="%23FF4444" stroke-width="2" filter="url(%23glow)"/><circle cx="16" cy="16" r="4" fill="%23FF4444" filter="url(%23glow)"/><circle cx="16" cy="16" r="1" fill="%23FFFFFF"/></svg>') 16 16, pointer;
+    transition: all 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
-    font-weight: 400;
-    font-family: 'NASA', monospace;
-    letter-spacing: 1px;
+    min-width: 60px;
+    text-align: center;
+}
+.closeIcon {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    color: #ff4444 !important;
     position: relative;
-    text-shadow: 0 0 10px rgba(255, 68, 68, 0.8);
-    z-index: 11;
-
-    &:hover {
-        transform: rotate(90deg) scale(1.2);
-        text-shadow:
-            0 0 15px rgba(255, 68, 68, 1),
-            0 0 25px rgba(255, 68, 68, 0.8);
-    }
-
-    &:active {
-        transform: rotate(90deg) scale(1.1);
-    }
+    z-index: auto;
+    filter: drop-shadow(0 0 6px rgba(255, 68, 68, 0.3));
+    margin: 0;
+}
+.closeButton:hover,
+.closeButton:focus {
+    background: rgba(255,68,68,0.4);
+    border-color: #ff4444;
+    color: #fff;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(255,68,68,0.5);
+}
+.closeButton:active {
+    transform: scale(0.95);
 }
 
 .modalBody {
     padding: 30px;
     flex: 1;
     overflow-y: auto;
+    font-family: 'Orbitron', 'NASA', monospace, sans-serif;
 }
 
 .section {
@@ -147,6 +159,11 @@
             margin-bottom: 0;
         }
     }
+}
+
+.section p,
+.modalBody p {
+    font-family: 'Orbitron', 'NASA', monospace, sans-serif !important;
 }
 
 .techGrid {
@@ -407,6 +424,10 @@
             font-family: 'NASA', monospace;
         }
     }
+}
+
+.expertiseList, .expertiseList li {
+    font-family: 'Orbitron', 'NASA', monospace, sans-serif !important;
 }
 
 // Scrollbar personnalisée
