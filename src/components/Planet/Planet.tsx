@@ -113,6 +113,10 @@ const Planet = ({ planet, animationSpeed = 1, onClick, onMoonClick, onPointerOve
         if (groupRef.current && meshRef.current) {
             const initialAngle = planet.angle; // Angle réel de la planète
 
+            // Appliquer l'inclinaison orbitale (en degrés → radians) autour de l'axe X
+            const inclinationDeg = planet.inclinationDeg || 0;
+            groupRef.current.rotation.x = (inclinationDeg * Math.PI) / 180;
+
             // Vérifier si l'angle a changé de manière significative
             const angleChanged = Math.abs(baseAngleRef.current - initialAngle) > 1e-6;
 

@@ -8,6 +8,7 @@ export interface Planet {
     moons?: number; // Nombre de lunes (optionnel, pour d'autres usages)
     description?: string; // Description (optionnelle)
     type?: 'planet' | 'moon' | 'asteroid' | 'comet' | 'star';
+    inclinationDeg?: number; // Inclinaison orbitale en degrés par rapport à l'écliptique
 }
 
 export interface MoonDetail {

@@ -46,15 +46,15 @@ const ORBITAL_PERIODS_DAYS: Record<string, number> = {
 // Pour qu'une planète fasse un tour complet en sa période réelle
 
 const basePlanets: PlanetType[] = [
-    { name: 'Mercury', distance: 16, size: 0.23, color: '#B8860B', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Mercury, angle: 0 },
-    { name: 'Venus', distance: 22, size: 0.57, color: '#ffc649', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Venus, angle: 0 },
-    { name: 'Earth', distance: 31, size: 0.3, color: '#6b93d6', speed: 1, angle: 0 }, // Référence : 365.25 jours réels pour un tour
-    { name: 'Mars', distance: 40, size: 0.32, color: '#cd5c5c', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Mars, angle: 0 },
-    { name: 'Jupiter', distance: 60, size: 8.97, color: '#d8ca9d', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Jupiter, angle: 0 },
-    { name: 'Saturn', distance: 85, size: 6.62, color: '#fad5a5', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Saturn, angle: 0 },
-    { name: 'Uranus', distance: 110, size: 2.01, color: '#4fd0e7', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Uranus, angle: 0 },
-    { name: 'Neptune', distance: 135, size: 1.94, color: '#4b70dd', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Neptune, angle: 0 },
-    { name: 'Pluto', distance: 160, size: 0.14, color: '#8c7853', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Pluto, angle: 0 },
+    { name: 'Mercury', distance: 16, size: 0.23, color: '#B8860B', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Mercury, angle: 0, inclinationDeg: 7.005 },
+    { name: 'Venus', distance: 22, size: 0.57, color: '#ffc649', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Venus, angle: 0, inclinationDeg: 3.394 },
+    { name: 'Earth', distance: 31, size: 0.3, color: '#6b93d6', speed: 1, angle: 0, inclinationDeg: 0 }, // Référence : 365.25 jours réels pour un tour
+    { name: 'Mars', distance: 40, size: 0.32, color: '#cd5c5c', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Mars, angle: 0, inclinationDeg: 1.850 },
+    { name: 'Jupiter', distance: 60, size: 8.97, color: '#d8ca9d', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Jupiter, angle: 0, inclinationDeg: 1.305 },
+    { name: 'Saturn', distance: 85, size: 6.62, color: '#fad5a5', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Saturn, angle: 0, inclinationDeg: 2.485 },
+    { name: 'Uranus', distance: 110, size: 2.01, color: '#4fd0e7', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Uranus, angle: 0, inclinationDeg: 0.773 },
+    { name: 'Neptune', distance: 135, size: 1.94, color: '#4b70dd', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Neptune, angle: 0, inclinationDeg: 1.770 },
+    { name: 'Pluto', distance: 160, size: 0.14, color: '#8c7853', speed: ORBITAL_PERIODS_DAYS.Earth / ORBITAL_PERIODS_DAYS.Pluto, angle: 0, inclinationDeg: 17.16 },
 ];
 
 const SolarSystem = () => {
@@ -351,9 +351,9 @@ const SolarSystem = () => {
             moons: [
                 { name: 'Charon', size: 0.12, dist: 1.8, speed: 0.16, info: 'Plus grande lune relative à sa planète parent. Verrouillée par les marées avec Pluton.' },
                 { name: 'Styx', size: 0.04, dist: 4.0, speed: 0.12, info: 'La plus petite lune de Pluton, découverte en 2012 par Hubble.' },
-                { name: 'Nix', size: 0.06, dist: 5.5, speed: 0.08, info: 'Lune de forme irrégulière, découverte en 2005.' },
-                { name: 'Kerberos', size: 0.05, dist: 7.0, speed: 0.06, info: 'Lune sombre et irrégulière, découverte en 2011.' },
-                { name: 'Hydra', size: 0.08, dist: 8.5, speed: 0.04, info: 'Plus grande lune après Charon, découverte en 2005.' }
+                { name: 'Nix', dist: 5.5, size: 0.06, speed: 0.08, info: 'Lune de forme irrégulière, découverte en 2005.' },
+                { name: 'Kerberos', dist: 7.0, size: 0.05, speed: 0.06, info: 'Lune de forme irrégulière, découverte en 2005.' },
+                { name: 'Hydra', dist: 8.5, size: 0.08, speed: 0.04, info: 'Lune de forme irrégulière, découverte en 2005.' }
             ]
         }
     };
@@ -449,7 +449,7 @@ const SolarSystem = () => {
                     controlsRef={controlsRef}
                 />
                 {(() => {
-                    const moonsData = useMemo(() => ([
+                    const moonsData = useMemo<Array<{ name: string; distance: number; speed: number; angle: number; size: number; parentPlanet: string }>>(() => ([
                         { name: 'Lune', distance: 3, size: 0.27 * 0.3, speed: 0.3, angle: 0, parentPlanet: 'Earth' },
                         { name: 'Phobos', distance: 1.5, size: 0.03, speed: 0.32, angle: 0, parentPlanet: 'Mars' },
                         { name: 'Deimos', distance: 2.2, size: 0.02, speed: 0.08, angle: 0, parentPlanet: 'Mars' },
@@ -499,7 +499,7 @@ const SolarSystem = () => {
                     onPointerOut={() => setIsSunHovered(false)}
                 />
                 {showOrbits && planets.map((planet) => (
-                    <Orbit key={`orbit-${planet.name}`} radius={planet.distance} color="#ffffff" />
+                    <Orbit key={`orbit-${planet.name}`} radius={planet.distance} color="#ffffff" inclinationDeg={planet.inclinationDeg || 0} />
                 ))}
                 {planets.map((planet) => (
                     <Planet
