@@ -7,6 +7,7 @@ import Planet from '../Planet/Planet';
 import Nebula from '../Nebula/Nebula';
 import TwinklingStars from '../TwinklingStars/Stars';
 import Orbit from '../Orbit/Orbit';
+import AsteroidBelt from '../AsteroidBelt/AsteroidBelt';
 import Menu from '../UI/Menu/Menu';
 import CameraControls from '../UI/Camera/CameraControls';
 import PlanetSelector from '../UI/Selectors/PlanetSelector';
@@ -501,6 +502,8 @@ const SolarSystem = () => {
                 {showOrbits && planets.map((planet) => (
                     <Orbit key={`orbit-${planet.name}`} radius={planet.distance} color="#ffffff" inclinationDeg={planet.inclinationDeg || 0} />
                 ))}
+                {/* Ceinture d'astéroïdes entre Mars (~40) et Jupiter (~60), sans empiéter sur Jupiter */}
+                <AsteroidBelt innerRadius={41} outerRadius={52} count={6000} inclinationDeg={2} thickness={1.6} />
                 {planets.map((planet) => (
                     <Planet
                         key={planet.name}

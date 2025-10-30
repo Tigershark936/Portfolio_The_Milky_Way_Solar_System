@@ -44,28 +44,23 @@ const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
                     <div className={styles.section}>
                         <h3>À propos de moi</h3>
                         <p>
-                            Né en mai 1994, passionné par ce qui se trouve au-dessus de nos têtes - l'espace infini - depuis mon enfance.<br />
-                            J'ai commencé ma carrière professionnelle dans le domaine de l'automobile en 2013.<br />
-                            Cette fascination pour l'univers et les technologies avancées, alliée à mon intérêt pour l'intelligence artificielle, m'a conduit vers le développement web.
+                            Né en mai 1994, je suis passionné depuis mon enfance par ce qui se trouve au-delà de notre atmosphère : l’espace infini et ces mystères.
                         </p>
                         <p>
-                            Pour moi, l'IA est vraiment là pour nous aider à continuer d'avancer et à repousser les limites de ce qui
-                            est possible. Nous sommes partenaires dans cette quête de l'innovation et de l'excellence technologique.
+                            J’ai débuté ma carrière en 2013 dans le domaine de l’automobile, avant de me réorienter en 2024 vers le développement web, guidé par mon intérêt pour les technologies et le potentiel de l’intelligence artificielle.<br />
                         </p>
                         <p>
-                            En dehors de l'univers du code, j'aime la F1 et suivre les actualités sur les sciences et les nouvelles technologies.<br />
+                            Pour moi, l’intelligence artificielle est avant tout un formidable moteur d’innovation. Elle nous accompagne dans notre progression, stimule notre créativité et nous invite à repousser les frontières du possible.<br />
                         </p>
                         <p>
-                            Voyager dans l'espace et le temps reste un rêve d'enfance. Malgré l'impossibilité
-                            actuelle d'explorer l'espace cosmique, je profite pleinement de découvrir notre planète bleue, chacune de ses
-                            destinations étant une nouvelle frontière qui enrichit ma vie terrestre.
+                            En dehors de l’univers du code, je me passionne pour la Formule 1, la science et les nouvelles technologies.<br/>
+                            Voyager dans l’espace reste un rêve d’enfant ; en attendant de pouvoir explorer les étoiles, j’aime découvrir notre planète bleue. Chaque destination est une nouvelle frontière qui nourrit ma curiosité et enrichit ma vision du monde.
                         </p>
                     </div>
-
                     <div className={styles.section}>
                         <h3>Développeur Full Stack</h3>
                         <p>
-                            Je développe des applications web, de la création d'interfaces utilisateur élégantes à la mise en place de solutions back-end. Mon approche est de combiner modernité technologique et attention aux détails pour créer des expériences fluides et performantes.
+                            Je développe des applications web, de la création d’interfaces utilisateur élégantes à la mise en place de solutions back-end. Mon approche est de combiner modernité technologique et attention aux détails pour créer des expériences fluides et performantes.
                         </p>
                     </div>
 
