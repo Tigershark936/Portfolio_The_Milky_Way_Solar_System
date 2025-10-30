@@ -17,11 +17,17 @@ const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
         if (isOpen) {
             document.addEventListener('keydown', handleEscape);
             document.body.style.overflow = 'hidden';
+            document.body.classList.add('modal-open');
+        } else {
+            document.removeEventListener('keydown', handleEscape);
+            document.body.style.overflow = 'unset';
+            document.body.classList.remove('modal-open');
         }
 
         return () => {
             document.removeEventListener('keydown', handleEscape);
             document.body.style.overflow = 'unset';
+            document.body.classList.remove('modal-open');
         };
     }, [isOpen, onClose]);
 
@@ -34,8 +40,8 @@ const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
                     <h2>Qui suis-je ?</h2>
                     <button className={styles.closeButton} onClick={onClose} aria-label="Fermer la modale info">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.closeIcon} aria-hidden="true">
-                            <line x1="4.5" y1="4.5" x2="15.5" y2="15.5" stroke="#ff4444" strokeWidth="2.2" strokeLinecap="round"/>
-                            <line x1="15.5" y1="4.5" x2="4.5" y2="15.5" stroke="#ff4444" strokeWidth="2.2" strokeLinecap="round"/>
+                            <line x1="4.5" y1="4.5" x2="15.5" y2="15.5" stroke="#ff4444" strokeWidth="2.2" strokeLinecap="round" />
+                            <line x1="15.5" y1="4.5" x2="4.5" y2="15.5" stroke="#ff4444" strokeWidth="2.2" strokeLinecap="round" />
                         </svg>
                     </button>
                 </div>
@@ -53,7 +59,7 @@ const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
                             Pour moi, l’intelligence artificielle est avant tout un formidable moteur d’innovation. Elle nous accompagne dans notre progression, stimule notre créativité et nous invite à repousser les frontières du possible.<br />
                         </p>
                         <p>
-                            En dehors de l’univers du code, je me passionne pour la Formule 1, la science et les nouvelles technologies.<br/>
+                            En dehors de l’univers du code, je me passionne pour la Formule 1, la science et les nouvelles technologies.<br />
                             Voyager dans l’espace reste un rêve d’enfant ; en attendant de pouvoir explorer les étoiles, j’aime découvrir notre planète bleue. Chaque destination est une nouvelle frontière qui nourrit ma curiosité et enrichit ma vision du monde.
                         </p>
                     </div>

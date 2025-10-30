@@ -62,6 +62,7 @@ const SolarSystem = () => {
     const [showPlanetNames, setShowPlanetNames] = useState(false); // Désactivé par défaut
     const [showMoonNames, setShowMoonNames] = useState(false);
     const [showOrbits, setShowOrbits] = useState(false);
+    const [showAsteroids, setShowAsteroids] = useState(true);
     const [animationSpeed, setAnimationSpeed] = useState(1);
     const [cameraPosition, setCameraPosition] = useState({ x: 0, y: 63.16, z: 126.32 });
     const [activeCameraPreset, setActiveCameraPreset] = useState<'overview' | 'close' | 'far' | 'top' | null>('overview');
@@ -408,9 +409,11 @@ const SolarSystem = () => {
                 showPlanetNames={showPlanetNames}
                 showMoonNames={showMoonNames}
                 showOrbits={showOrbits}
+                showAsteroids={showAsteroids}
                 onTogglePlanetNames={handleTogglePlanetNames}
                 onToggleMoonNames={handleToggleMoonNames}
                 onToggleOrbits={handleToggleOrbits}
+                onToggleAsteroids={() => setShowAsteroids(prev => !prev)}
             />
             <AboutButton />
             <ContactButton />
@@ -502,8 +505,16 @@ const SolarSystem = () => {
                 {showOrbits && planets.map((planet) => (
                     <Orbit key={`orbit-${planet.name}`} radius={planet.distance} color="#ffffff" inclinationDeg={planet.inclinationDeg || 0} />
                 ))}
-                {/* Ceinture d'astéroïdes entre Mars (~40) et Jupiter (~60), sans empiéter sur Jupiter */}
-                <AsteroidBelt innerRadius={41} outerRadius={52} count={6000} inclinationDeg={2} thickness={1.6} />
+                {showAsteroids && (
+                    <>
+                        {/* Ceinture d'astéroïdes entre Mars (~40) et Jupiter (~60), sans empiéter sur Jupiter */}
+                        <AsteroidBelt innerRadius={41} outerRadius={52} count={6000} inclinationDeg={2} thickness={1.6} />
+                        {/* Petite ceinture co-orbitale à l'orbite de Jupiter (~60) */}
+                        <AsteroidBelt innerRadius={59} outerRadius={61} count={1200} inclinationDeg={1.3} thickness={0.6} />
+                        {/* Ceinture de Kuiper au-delà de Neptune/Pluton */}
+                        <AsteroidBelt innerRadius={170} outerRadius={230} count={8000} inclinationDeg={2} thickness={3} />
+                    </>
+                )}
                 {planets.map((planet) => (
                     <Planet
                         key={planet.name}

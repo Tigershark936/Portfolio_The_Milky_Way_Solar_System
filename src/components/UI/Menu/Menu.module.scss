@@ -427,6 +427,45 @@
             }
         }
     }
+
+    // Style spécifique pour le bouton des ceintures d'astéroïdes (brun)
+    &.asteroidButton {
+        &.active {
+            border-color: #8B3A3A;
+            color: #8B3A3A;
+            text-shadow:
+                0 0 5px rgba(139, 58, 58, 0.8),
+                0 0 10px rgba(139, 58, 58, 0.6);
+            box-shadow:
+                0 4px 15px rgba(139, 58, 58, 0.3),
+                inset 0 0 10px rgba(139, 58, 58, 0.1);
+
+            // Balayage brun pour les ceintures actives
+            &::before {
+                background: linear-gradient(90deg,
+                        transparent,
+                        rgba(139, 58, 58, 0.1),
+                        rgba(139, 58, 58, 0.4),
+                        rgba(139, 58, 58, 0.1),
+                        transparent);
+            }
+
+            &::after {
+                background: linear-gradient(90deg,
+                        transparent,
+                        rgba(139, 58, 58, 0.3),
+                        rgba(139, 58, 58, 0.6),
+                        rgba(139, 58, 58, 0.3),
+                        transparent);
+            }
+
+            &:hover {
+                text-shadow:
+                    0 0 8px rgba(139, 58, 58, 1),
+                    0 0 16px rgba(139, 58, 58, 0.8);
+            }
+        }
+    }
 }
 
 .resetButton {

@@ -5,12 +5,14 @@ type MenuProps = {
     showPlanetNames: boolean;
     showMoonNames: boolean;
     showOrbits: boolean;
+    showAsteroids: boolean;
     onTogglePlanetNames: () => void;
     onToggleMoonNames: () => void;
     onToggleOrbits: () => void;
+    onToggleAsteroids: () => void;
 };
 
-const Menu = ({ showPlanetNames, showMoonNames, showOrbits, onTogglePlanetNames, onToggleMoonNames, onToggleOrbits }: MenuProps) => {
+const Menu = ({ showPlanetNames, showMoonNames, showOrbits, showAsteroids, onTogglePlanetNames, onToggleMoonNames, onToggleOrbits, onToggleAsteroids }: MenuProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const planetButtonRef = useRef<HTMLButtonElement>(null);
@@ -113,6 +115,21 @@ const Menu = ({ showPlanetNames, showMoonNames, showOrbits, onTogglePlanetNames,
                                     {showOrbits ? '◉' : '○'}
                                 </span>
                                 Orbites
+                            </button>
+                        </div>
+
+                        <div className={styles.option}>
+                            <button
+                                className={`${styles.toggleButton} ${styles.asteroidButton} ${showAsteroids ? styles.active : ''}`}
+                                onClick={onToggleAsteroids}
+                                role="menuitem"
+                                aria-pressed={showAsteroids}
+                                tabIndex={0}
+                            >
+                                <span className={styles.buttonIcon} style={{ color: showAsteroids ? '#8B3A3A' : '#8A2BE2' }}>
+                                    {showAsteroids ? '◉' : '○'}
+                                </span>
+                                Ceintures d'astéroïdes
                             </button>
                         </div>
                     </div>

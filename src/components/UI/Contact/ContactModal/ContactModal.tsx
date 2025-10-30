@@ -42,6 +42,17 @@ const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
         emailjs.init('lab4bhdwWZeI6AkGC');
     }, []);
 
+    useEffect(() => {
+        if (isOpen) {
+            document.body.classList.add('modal-open');
+        } else {
+            document.body.classList.remove('modal-open');
+        }
+        return () => {
+            document.body.classList.remove('modal-open');
+        };
+    }, [isOpen]);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
