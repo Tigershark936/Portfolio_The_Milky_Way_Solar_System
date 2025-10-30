@@ -102,7 +102,7 @@ const Moon = ({ distance, size, color, speed, animationSpeed = 1, name = 'Moon',
         if (texturePath) {
             // Vérifier d'abord le cache
             const cachedTexture = getTexture(texturePath);
-            
+
             if (cachedTexture) {
                 setMoonTexture(cachedTexture);
             } else {
@@ -156,9 +156,9 @@ const Moon = ({ distance, size, color, speed, animationSpeed = 1, name = 'Moon',
                 ref={meshRef}
                 position={[distance, 0, 0]}
                 name={`moon-${name}`}
-                onPointerOver={() => setHovered(true)}
-                onPointerOut={() => setHovered(false)}
-                onClick={onClick}
+                onPointerOver={e => { setHovered(true); e.stopPropagation(); }}
+                onPointerOut={e => { setHovered(false); e.stopPropagation(); }}
+                onClick={e => { e.stopPropagation(); onClick?.(); }}
             >
                 <sphereGeometry args={[size, 16, 16]} />
                 <meshStandardMaterial

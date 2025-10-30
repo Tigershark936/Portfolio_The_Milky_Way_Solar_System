@@ -1,29 +1,12 @@
 import { useEffect, useRef } from 'react';
 import styles from './PlanetInfoModal.module.scss';
+import type { PlanetDetails } from '../../../types/SolarSystemDetails';
 
 interface PlanetInfoModalProps {
     isOpen: boolean;
     onClose: () => void;
     onMoonFollow?: (moonName: string) => void; // Added moon follow handler
-    planetData: {
-        name: string;
-        type: string;
-        planetType?: string;
-        size: number;
-        dist: number;
-        speed: number;
-        info: string;
-        discoveryYear: string;
-        composition?: string;
-        temperature?: string;
-        moons?: Array<{
-            name: string;
-            size: number;
-            dist: number;
-            speed: number;
-            info: string;
-        }>;
-    } | null;
+    planetData: PlanetDetails | null;
 }
 
 const PlanetInfoModal = ({ isOpen, onClose, onMoonFollow, planetData }: PlanetInfoModalProps) => {

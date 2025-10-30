@@ -85,10 +85,10 @@ async function fetchPositionsFromAPI(): Promise<PlanetPosition[]> {
         url.searchParams.append('datetime', datetime); // Format ISO 8601 : yyyy-MM-ddThh:mm:ss
         url.searchParams.append('zone', timezoneOffset.toString()); // Entier de -12 à +14
 
-        console.log(`🔄 Tentative de récupération depuis l'API: ${url.toString()}`);
-        console.log(`📋 Paramètres: lat=48.8566, lon=2.3522, elev=0, datetime=${datetime}, zone=${timezoneOffset}`);
-        console.log(`🔍 URL complète décodée:`, decodeURIComponent(url.toString()));
-        console.log(`🔍 Tous les params:`, Array.from(url.searchParams.entries()));
+        // console.log(`Tentative de récupération depuis l'API: ${url.toString()}`);
+        // console.log(`Paramètres: lat=48.8566, lon=2.3522, elev=0, datetime=${datetime}, zone=${timezoneOffset}`);
+        // console.log(`URL complète décodée:`, decodeURIComponent(url.toString()));
+        // console.log(`Tous les params:`, Array.from(url.searchParams.entries()));
 
         const response = await fetch(url.toString(), {
             method: 'GET',
@@ -103,7 +103,7 @@ async function fetchPositionsFromAPI(): Promise<PlanetPosition[]> {
             let errorMessage = `Erreur API: ${response.status} - ${response.statusText}`;
             try {
                 const errorData = await response.text();
-                console.error('📄 Réponse d\'erreur de l\'API:', errorData);
+                // console.error('Réponse d\'erreur de l\'API:', errorData);
                 if (errorData) {
                     errorMessage += ` - ${errorData}`;
                 }
@@ -114,7 +114,7 @@ async function fetchPositionsFromAPI(): Promise<PlanetPosition[]> {
         }
 
         const data = await response.json();
-        console.log('📦 Données reçues de l\'API:', data);
+        // console.log('Données reçues de l\'API:', data);
 
         const positions: PlanetPosition[] = [];
 
@@ -123,7 +123,7 @@ async function fetchPositionsFromAPI(): Promise<PlanetPosition[]> {
         // Chaque élément a : name, ra (right ascension), dec (declination), az (azimuth), alt (altitude)
         const positionsArray = data.positions || [];
 
-        console.log(`🔍 ${positionsArray.length} objets reçus de l'API. Noms:`, positionsArray.map((p: any) => p?.name).filter(Boolean));
+        // console.log(`${positionsArray.length} objets reçus de l'API. Noms:`, positionsArray.map((p: any) => p?.name).filter(Boolean));
 
         positionsArray.forEach((planetData: any) => {
             if (planetData && planetData.name) {
@@ -142,7 +142,7 @@ async function fetchPositionsFromAPI(): Promise<PlanetPosition[]> {
                 )?.[0];
 
                 if (ourName) {
-                    console.log(`✅ ${ourName} trouvé dans les données API`);
+                    // console.log(`${ourName} trouvé dans les données API`);
                     // L'API retourne des coordonnées horizontales (az, alt)
                     // Pour obtenir l'angle orbital, on pourrait utiliser ra (right ascension)
                     // mais pour simplifier, on va utiliser une conversion approximative
@@ -173,7 +173,7 @@ async function fetchPositionsFromAPI(): Promise<PlanetPosition[]> {
                 } else {
                     // Ignorer silencieusement le Soleil et la Lune (gérés séparément)
                     if (planetData.name.toLowerCase() !== 'soleil' && planetData.name.toLowerCase() !== 'lune') {
-                        console.log(`⚠️ Planète "${planetData.name}" non mappée (ignorée)`);
+                        // console.warn(`Planète "${planetData.name}" non mappée (ignorée)`);
                     }
                 }
             }
@@ -183,24 +183,24 @@ async function fetchPositionsFromAPI(): Promise<PlanetPosition[]> {
         // (l'API ne retourne généralement pas la Terre car elle est le point d'observation)
         const hasEarth = positions.some(p => p.name === 'Earth');
         if (!hasEarth) {
-            console.log('🌍 Terre non trouvée dans l\'API, calcul local...');
+            // console.log('Terre non trouvée dans l\'API, calcul local...');
             const earthPosition = calculateEarthPositionLocally();
             if (earthPosition) {
                 positions.push(earthPosition);
-                console.log(`✅ Position de la Terre calculée: ${(earthPosition.angle * 180 / Math.PI).toFixed(2)}°`);
+                // console.log(`Position de la Terre calculée: ${(earthPosition.angle * 180 / Math.PI).toFixed(2)}°`);
             }
         }
 
         if (positions.length > 0) {
-            console.log(`✅ ${positions.length} positions récupérées depuis l'API (incluant ${hasEarth ? 'la Terre depuis l\'API' : 'la Terre calculée localement'})`);
+            // console.log(`${positions.length} positions récupérées depuis l'API (incluant ${hasEarth ? 'la Terre depuis l\'API' : 'la Terre calculée localement'})`);
             return positions;
         }
 
         // Si aucune position trouvée mais la réponse est valide, essayer de parser différemment
-        console.warn('⚠️ Aucune position trouvée dans le format attendu. Données complètes:', data);
+        // console.warn('Aucune position trouvée dans le format attendu. Données complètes:', data);
         throw new Error('Aucune position trouvée dans la réponse API');
     } catch (error) {
-        console.error('❌ Erreur détaillée avec l\'API:', error);
+        // console.error('Erreur détaillée avec l\'API:', error);
         throw error;
     }
 }
@@ -245,7 +245,7 @@ function calculateEarthPositionLocally(): PlanetPosition | null {
 
         return null;
     } catch (error) {
-        console.warn('⚠️ Erreur lors du calcul local de la Terre:', error);
+        // console.warn('Erreur lors du calcul local de la Terre:', error);
         return null;
     }
 }
@@ -306,13 +306,13 @@ function calculatePositionsLocally(): PlanetPosition[] {
         });
 
         if (positions.length > 0) {
-            console.log(`✅ ${positions.length} positions calculées localement pour la date du ${now.toLocaleDateString()}`);
+            // console.log(`${positions.length} positions calculées localement pour la date du ${now.toLocaleDateString()}`);
             return positions;
         }
 
         return getDefaultPositions();
     } catch (error) {
-        console.warn('⚠️ Erreur lors du calcul local:', error);
+        // console.warn('Erreur lors du calcul local:', error);
         return getDefaultPositions();
     }
 }
@@ -330,7 +330,7 @@ export const fetchRealPlanetPositions = async (): Promise<PlanetPosition[]> => {
             return apiPositions;
         }
     } catch (error) {
-        console.warn('⚠️ L\'API a échoué, utilisation du calcul local comme fallback...');
+        // console.warn('L\'API a échoué, utilisation du calcul local comme fallback...');
     }
 
     // Fallback sur le calcul local (plus fiable et rapide)

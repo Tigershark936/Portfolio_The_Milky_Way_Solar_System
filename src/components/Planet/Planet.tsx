@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useLayoutEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import type { Planet as PlanetType } from '../../types/Planet';
+import type { Planet as PlanetType } from '../../types/SolarSystemDetails';
 import Moon from '../Moon/Moon.tsx';
 import { getTexture } from '../../utils/texturePreloader';
 

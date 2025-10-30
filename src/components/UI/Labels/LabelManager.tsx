@@ -43,14 +43,24 @@ const LabelManager = ({ showPlanetNames, showMoonNames, isSunHovered, hoveredPla
 
                 // Réinitialiser les planètes survolées
                 hoveredPlanetsRef.current.clear();
-
-                // Ajouter les planètes intersectées (le soleil est géré par les événements React Three Fiber)
-                intersects.forEach(intersect => {
-                    const obj = intersect.object as THREE.Mesh;
-                    if (obj.name && obj.name !== 'sun') {
+                let found = false;
+                for (let i = 0; i < intersects.length; i++) {
+                    const obj = intersects[i].object as THREE.Mesh;
+                    if (obj.name && obj.name.startsWith('moon-')) {
                         hoveredPlanetsRef.current.add(obj.name);
+                        found = true;
+                        break;
                     }
-                });
+                }
+                if (!found) {
+                    for (let i = 0; i < intersects.length; i++) {
+                        const obj = intersects[i].object as THREE.Mesh;
+                        if (obj.name && obj.name.startsWith('planet-')) {
+                            hoveredPlanetsRef.current.add(obj.name);
+                            break;
+                        }
+                    }
+                }
             };
 
             canvas.addEventListener('mousemove', onMouseMove);
@@ -100,7 +110,11 @@ const LabelManager = ({ showPlanetNames, showMoonNames, isSunHovered, hoveredPla
                     // Créer le label s'il n'existe pas encore
                     if (!planetLabelsRef.current.has(name) && !moonLabelsRef.current.has(name)) {
                         const labelDiv = document.createElement('div');
-                        labelDiv.className = isMoon ? 'moon-label' : 'planet-label';
+                        if (isMoon) {
+                            labelDiv.className = 'moon-label';
+                        } else {
+                            labelDiv.className = 'planet-label';
+                        }
 
                         // Extraire le nom correct et traduire
                         let displayName = name.replace('planet-', '');
@@ -141,7 +155,11 @@ const LabelManager = ({ showPlanetNames, showMoonNames, isSunHovered, hoveredPla
                     const planetName = name.replace('planet-', '');
                     const isHoveredFromReact = !isMoon && hoveredPlanets.has(planetName);
                     const isHoveredFromRaycaster = hoveredPlanetsRef.current.has(name);
-                    const shouldShow = (isMoon ? showMoonNames : showPlanetNames) || isHoveredFromReact || isHoveredFromRaycaster;
+                    // Ajout du guard pour labels planètes
+                    const isAnyMoonHovered = Array.from(hoveredPlanetsRef.current).some(n => n.startsWith('moon-'));
+                    const shouldShow = isMoon
+                        ? (showMoonNames || isHoveredFromReact || isHoveredFromRaycaster)
+                        : (!isAnyMoonHovered && (showPlanetNames || isHoveredFromReact || isHoveredFromRaycaster));
                     const labelMap = isMoon ? moonLabelsRef.current : planetLabelsRef.current;
                     const label = labelMap.get(name);
 

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import styles from './SolarSystem.module.scss';
@@ -17,7 +17,7 @@ import AboutButton from '../UI/About/AboutButton/AboutButton';
 import ContactButton from '../UI/Contact/ContactButton/ContactButton';
 import PlanetInfoModal from '../UI/PlanetInfo/PlanetInfoModal';
 import MoonFollower from '../UI/Camera/MoonFollower';
-import type { Planet as PlanetType } from '../../types/Planet';
+import type { Planet as PlanetType, PlanetDetails } from '../../types/SolarSystemDetails';
 import { useFetchPlanetPositions } from '../../hooks/useFetchPlanetPositions';
 
 // Planètes avec couleurs NASA officielles, distances bien espacées et tailles ajustées
@@ -66,7 +66,7 @@ const SolarSystem = () => {
     const [activeCameraPreset, setActiveCameraPreset] = useState<'overview' | 'close' | 'far' | 'top' | null>('overview');
     const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
     const [isPlanetInfoModalOpen, setIsPlanetInfoModalOpen] = useState(false);
-    const [selectedPlanetData, setSelectedPlanetData] = useState<any>(null);
+    const [selectedPlanetData, setSelectedPlanetData] = useState<PlanetDetails | null>(null);
     const [selectedMoon, setSelectedMoon] = useState<string | null>(null);
     const [isSunHovered, setIsSunHovered] = useState(false);
     const [hoveredPlanets, setHoveredPlanets] = useState<Set<string>>(new Set()); // État pour les planètes survolées
@@ -137,7 +137,7 @@ const SolarSystem = () => {
     };
 
     // Données du Soleil
-    const sunDetails = {
+    const sunDetails: PlanetDetails = {
         name: 'Sun',
         type: 'star',
         size: 15,
@@ -208,7 +208,7 @@ const SolarSystem = () => {
     };
 
     // Données détaillées des planètes (inspirées du code de référence)
-    const planetDetails = {
+    const planetDetails: Record<string, PlanetDetails> = {
         'Mercury': {
             name: 'Mercury',
             type: 'planet',
@@ -363,9 +363,25 @@ const SolarSystem = () => {
         if (planetData) {
             setSelectedPlanetData(planetData);
             setIsPlanetInfoModalOpen(true);
-            // Sélectionner la planète pour activer le suivi de caméra
+            // Toujours arrêter le suivi de LUNE quand on suit la planète !
+            setSelectedMoon(null);
             setSelectedPlanet(planetName);
             // Réinitialiser le preset car la caméra suit maintenant la planète
+            setActiveCameraPreset(null);
+        }
+    };
+
+    // Handler spécial pour clic direct sur la planète 3D (pas le sélecteur !)
+    const handlePlanetObjectClick = (planetName: string) => {
+        // On ne désélectionne la lune QUE SI user clique sur une planète
+        if (selectedMoon) {
+            setSelectedMoon(null);
+        }
+        setSelectedPlanet(planetName);
+        const planetData = planetDetails[planetName as keyof typeof planetDetails];
+        if (planetData) {
+            setSelectedPlanetData(planetData);
+            setIsPlanetInfoModalOpen(true);
             setActiveCameraPreset(null);
         }
     };
@@ -428,12 +444,12 @@ const SolarSystem = () => {
                 />
                 <PlanetFollower
                     selectedPlanet={selectedPlanet}
+                    selectedMoon={selectedMoon}
                     planets={planets}
                     controlsRef={controlsRef}
                 />
-                <MoonFollower
-                    selectedMoon={selectedMoon}
-                    moons={[
+                {(() => {
+                    const moonsData = useMemo(() => ([
                         { name: 'Lune', distance: 3, size: 0.27 * 0.3, speed: 0.3, angle: 0, parentPlanet: 'Earth' },
                         { name: 'Phobos', distance: 1.5, size: 0.03, speed: 0.32, angle: 0, parentPlanet: 'Mars' },
                         { name: 'Deimos', distance: 2.2, size: 0.02, speed: 0.08, angle: 0, parentPlanet: 'Mars' },
@@ -457,9 +473,15 @@ const SolarSystem = () => {
                         { name: 'Nix', distance: 5.5, size: 0.06, speed: 0.08, angle: 0, parentPlanet: 'Pluto' },
                         { name: 'Kerberos', distance: 7.0, size: 0.05, speed: 0.06, angle: 0, parentPlanet: 'Pluto' },
                         { name: 'Hydra', distance: 8.5, size: 0.08, speed: 0.04, angle: 0, parentPlanet: 'Pluto' }
-                    ]}
-                    controlsRef={controlsRef}
-                />
+                    ]), []);
+                    return (
+                        <MoonFollower
+                            selectedMoon={selectedMoon}
+                            moons={moonsData}
+                            controlsRef={controlsRef}
+                        />
+                    );
+                })()}
                 <LabelManager
                     showPlanetNames={showPlanetNames}
                     showMoonNames={showMoonNames}
@@ -484,7 +506,7 @@ const SolarSystem = () => {
                         key={planet.name}
                         planet={planet}
                         animationSpeed={animationSpeed}
-                        onClick={() => handlePlanetClick(planet.name)}
+                        onClick={() => handlePlanetObjectClick(planet.name)}
                         onMoonClick={handleMoonClick}
                         onPointerOver={() => setHoveredPlanets(prev => new Set(prev).add(planet.name))}
                         onPointerOut={() => setHoveredPlanets(prev => {

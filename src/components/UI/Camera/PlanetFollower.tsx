@@ -4,34 +4,31 @@ import * as THREE from 'three';
 
 type PlanetFollowerProps = {
     selectedPlanet: string | null;
+    selectedMoon?: string | null;
     planets: Array<{ name: string; distance: number; speed: number; angle: number; size: number }>;
     controlsRef: React.RefObject<any>;
 };
 
-const PlanetFollower = ({ selectedPlanet, planets, controlsRef }: PlanetFollowerProps) => {
+const PlanetFollower = ({ selectedPlanet, selectedMoon = null, planets, controlsRef }: PlanetFollowerProps) => {
     const isFollowing = useRef(false);
     const lastPlanetPosition = useRef(new THREE.Vector3());
-    const followOffset = useRef(new THREE.Vector3());
-    const userCameraOffset = useRef(new THREE.Vector3());
     const { scene } = useThree();
 
     useEffect(() => {
+        // Désactive TOUT si une lune est suivie
+        if (selectedMoon) return;
         isFollowing.current = !!selectedPlanet;
 
         if (!controlsRef.current) return;
 
-        // Si aucune planète n'est sélectionnée, restaurer les limites de zoom par défaut
+        // Si aucune planète n'est sélectionnée, ne rien changer aux contrôles
         if (!selectedPlanet) {
-            controlsRef.current.minDistance = 30;
-            controlsRef.current.maxDistance = 330;
             return;
         }
 
         // Positionner immédiatement la caméra sur la planète au moment de la sélection
         const planet = planets.find(p => p.name === selectedPlanet);
         if (planet) {
-            console.log(`🎯 Following planet: ${selectedPlanet}`);
-
             // Trouver le mesh de la planète dans la scène
             const planetMesh = scene.getObjectByName(`planet-${planet.name}`);
             if (!planetMesh) {
@@ -44,7 +41,7 @@ const PlanetFollower = ({ selectedPlanet, planets, controlsRef }: PlanetFollower
             planetMesh.getWorldPosition(planetPosition);
 
             // Distance adaptée à la taille de la planète
-            const distanceFromPlanet = Math.max(planet.size * 8, 15);
+            const distanceFromPlanet = Math.max(planet.size * 8, 6);
             const height = distanceFromPlanet * 0.5;
 
             // Calculer la direction de la planète par rapport au soleil
@@ -62,17 +59,15 @@ const PlanetFollower = ({ selectedPlanet, planets, controlsRef }: PlanetFollower
             target.copy(planetPosition);
 
             // Configurer les limites de zoom pour cette planète
-            controlsRef.current.minDistance = distanceFromPlanet * 0.5;
+            controlsRef.current.minDistance = distanceFromPlanet * 0.25;
             controlsRef.current.maxDistance = distanceFromPlanet * 3;
 
             // Réinitialiser les positions de suivi
             lastPlanetPosition.current.set(0, 0, 0);
-            followOffset.current.copy(cameraOffset);
-            userCameraOffset.current.set(0, 0, 0);
 
             controlsRef.current.update();
         }
-    }, [selectedPlanet, planets, scene, controlsRef]);
+    }, [selectedPlanet, planets, scene, controlsRef, selectedMoon]);
 
     useFrame(() => {
         if (!isFollowing.current || !selectedPlanet || !controlsRef.current) return;
@@ -113,14 +108,13 @@ const PlanetFollower = ({ selectedPlanet, planets, controlsRef }: PlanetFollower
 
             camera.position.copy(cameraPosition);
             target.copy(planetPosition);
-            followOffset.current.copy(cameraOffset);
         }
 
         lastPlanetPosition.current.copy(planetPosition);
         controlsRef.current.update();
     });
 
-    return null; // Ce composant ne rend rien, il ne fait que suivre
+    return null;
 };
 
 export default PlanetFollower;
