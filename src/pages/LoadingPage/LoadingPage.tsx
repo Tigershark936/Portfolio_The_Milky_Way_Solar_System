@@ -9,7 +9,7 @@ type LoadingPageProps = {
     onComplete?: () => void;
 };
 
-const FULL_TEXT = "Bienvenue sur le portfolio d'Alain";
+const FULL_TEXT = "Bienvenue sur le portfolio de Alain";
 const AUTHOR_TEXT = "par alain daly";
 const TYPING_SPEED = 120; // Vitesse de frappe en millisecondes
 

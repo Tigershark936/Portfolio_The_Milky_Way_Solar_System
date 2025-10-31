@@ -79,7 +79,7 @@ const PlanetSelector = ({ planets, onPlanetSelect, selectedPlanet }: PlanetSelec
             >
                 <span className={styles.selectorTitle}>
                     {selectedPlanet 
-                        ? `Suivre : ${translatePlanetName(selectedPlanet)}` 
+                        ? `Observer : ${translatePlanetName(selectedPlanet)}` 
                         : 'Choisir une planete'}
                 </span>
             </button>
