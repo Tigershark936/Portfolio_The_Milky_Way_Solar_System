@@ -24,7 +24,7 @@
     letter-spacing: 3px;
     color: #fff;
     margin: 0 0 1rem 0;
-    
+
     /* Animation typing CSS pure avec curseur qui disparaît à 3.5s */
     /* "Bienvenue sur mon portfolio" = 28 caractères */
     overflow: hidden;
@@ -33,7 +33,7 @@
     max-width: fit-content;
     border-right: 4px solid rgba(100, 150, 255, 0.9);
     filter: drop-shadow(2px 0 6px rgba(100, 150, 255, 0.8));
-    animation: 
+    animation:
         typing-welcome 3s steps(28) forwards,
         blink-caret 0.75s step-end 0s 4 normal forwards,
         hide-caret 0s 3.5s forwards;
@@ -66,12 +66,13 @@
     font-size: 1rem;
     font-weight: 300;
     letter-spacing: 2px;
-    color: #fff;
+    color: rgba(255, 255, 255, 0.9);
     margin: 0;
     text-align: center;
-    text-shadow: 0 0 10px rgba(100, 150, 255, 0.5),
-        0 0 20px rgba(100, 150, 255, 0.3),
-        0 0 30px rgba(100, 150, 255, 0.2);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
 
     /* Animation typing CSS pure - démarre après welcomeText */
     /* Curseur transparent jusqu'à 3.5s puis apparaît et clignote */

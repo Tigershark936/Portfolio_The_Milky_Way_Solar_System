@@ -88,7 +88,7 @@ Il permet aux utilisateurs d'explorer le système solaire, de suivre les planèt
 <br>
 
 <div align="center">
-<a href="https://portfolio-the-milky-way-solar-system.netlify.app/">
+<a href="https://the-milk-way-portfolio-by-alain-daly.netlify.app/">
   🌐 Portfolio Solaire Démo 🌐
 </a>
 </div>
