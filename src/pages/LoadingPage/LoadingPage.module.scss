@@ -27,6 +27,12 @@
     text-shadow: 0 0 10px rgba(100, 150, 255, 0.5),
         0 0 20px rgba(100, 150, 255, 0.3),
         0 0 30px rgba(100, 150, 255, 0.2);
+    
+    /* Animation typing CSS pure */
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
+    animation: typing 3s steps(28) forwards;
 }
 
 .cursor {
@@ -58,16 +64,19 @@
     letter-spacing: 2px;
     color: rgba(255, 255, 255, 0.7);
     margin: 0;
-    opacity: 0;
-    animation: smoothFadeIn 1s ease-out forwards;
+    
+    /* Animation typing CSS pure - démarre après welcomeText */
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
+    animation: typing 2s steps(15) 3.5s forwards;
 }
 
-@keyframes smoothFadeIn {
-    0% {
-        opacity: 0;
+@keyframes typing {
+    from {
+        width: 0;
     }
-
-    100% {
-        opacity: 1;
+    to {
+        width: 100%;
     }
 }
