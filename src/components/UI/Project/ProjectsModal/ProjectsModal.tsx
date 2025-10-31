@@ -22,6 +22,7 @@ type ProjectsModalProps = {
 // Fonction pour personnaliser les titres des projets
 const getDisplayName = (repoName: string): string => {
     const customTitles: { [key: string]: string } = {
+        'Portfolio_The_Milky_Way_Solar_System': 'Portfolio Solaire',
         'modal-library': 'Modal Library',
         'SportSee_Developpez_un_tableau_de_bord_d-analytics_avec_React': 'SportSee',
         'WealthHealth_Faites_passer_une_librairie_jQuery_vers_React': 'Wealth Health',
@@ -38,6 +39,7 @@ const getDisplayName = (repoName: string): string => {
 // Fonction pour personnaliser les descriptions des projets
 const getDisplayDescription = (repoName: string, defaultDescription: string | null): string => {
     const customDescriptions: { [key: string]: string } = {
+        'Portfolio_The_Milky_Way_Solar_System': 'Système solaire 3D interactif avec React, Three.js et TypeScript. Explorez 9 planètes, 24 lunes et 3 ceintures d\'astéroïdes dans un environnement spatial immersif.',
         'modal-library': 'Une bibliothèque React de modals réutilisables et personnalisables pour vos applications web.',
         'SportSee_Developpez_un_tableau_de_bord_d-analytics_avec_React': 'Tableau de bord d\'analytics pour suivre les performances sportives en temps réel.',
         'WealthHealth_Faites_passer_une_librairie_jQuery_vers_React': 'Migration d\'une application jQuery vers React avec une architecture moderne.',
@@ -82,13 +84,15 @@ const ProjectsModal = ({ isOpen, onClose }: ProjectsModalProps) => {
 
             const data = await response.json();
             const formattedRepos = data.map((repo: any) => {
-                // Check if this is an npm package
+                // Vérifier s'il s'agit d'un package npm
                 const isNpmPackage = repo.name === 'modal-library';
                 const npm_url = isNpmPackage ? 'https://www.npmjs.com/package/@adhrnet/modal' : null;
 
-                // Add demo URL for SportSee if not set in GitHub
+                // Ajouter les URLs de démo si non définies dans GitHub
                 let homepage = repo.homepage;
-                if (!homepage && repo.name.toLowerCase().includes('sportsee')) {
+                if (!homepage && repo.name === 'Portfolio_The_Milky_Way_Solar_System') {
+                    homepage = 'https://portfolio-the-milky-way-solar-system.netlify.app/';
+                } else if (!homepage && repo.name.toLowerCase().includes('sportsee')) {
                     homepage = 'https://sportsee-tsk.netlify.app/';
                 }
 
@@ -109,7 +113,6 @@ const ProjectsModal = ({ isOpen, onClose }: ProjectsModalProps) => {
             // Filtrer les projets à exclure (ajoutez les noms ici)
             const filteredRepos = formattedRepos.filter((repo: GitHubRepo) => {
                 const excludedProjects = [
-                    'Portfolio_The_Milky_Way_Solar_System',
                     'Testez_vos_competences_-_les_algorithmes_en_JavaScript',
                     'Billed-app-FR-Back-End_Debuggez_et_testez_un_SaaS_RH'
                 ]; // Ajoutez les projets à exclure
@@ -135,8 +138,8 @@ const ProjectsModal = ({ isOpen, onClose }: ProjectsModalProps) => {
                     <h2>Mes Projets</h2>
                     <button className={styles.closeButton} onClick={onClose} aria-label="Fermer la modale info">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className={styles.closeIcon} aria-hidden="true">
-                            <line x1="4.5" y1="4.5" x2="15.5" y2="15.5" stroke="#ff4444" strokeWidth="2.2" strokeLinecap="round"/>
-                            <line x1="15.5" y1="4.5" x2="4.5" y2="15.5" stroke="#ff4444" strokeWidth="2.2" strokeLinecap="round"/>
+                            <line x1="4.5" y1="4.5" x2="15.5" y2="15.5" stroke="#ff4444" strokeWidth="2.2" strokeLinecap="round" />
+                            <line x1="15.5" y1="4.5" x2="4.5" y2="15.5" stroke="#ff4444" strokeWidth="2.2" strokeLinecap="round" />
                         </svg>
                     </button>
                 </div>
@@ -166,9 +169,11 @@ const ProjectsModal = ({ isOpen, onClose }: ProjectsModalProps) => {
                     {!loading && !error && (
                         <div className={styles.projectsGrid}>
                             {repos.map((repo) => {
-                                // Simplify image name for known projects
+                                // Simplifier le nom d'image pour les projets connus
                                 let imageName;
-                                if (repo.name === 'modal-library') {
+                                if (repo.name === 'Portfolio_The_Milky_Way_Solar_System') {
+                                    imageName = 'Portfolio-The_Milky_Way_Solar_System';
+                                } else if (repo.name === 'modal-library') {
                                     imageName = 'adhrnet-modal';
                                 } else if (repo.name.toLowerCase().includes('sportsee')) {
                                     imageName = 'sportsee';
@@ -194,7 +199,7 @@ const ProjectsModal = ({ isOpen, onClose }: ProjectsModalProps) => {
                                                 src={imagePath}
                                                 alt={repo.name}
                                                 onError={(e) => {
-                                                    // Fallback to placeholder if image doesn't exist
+                                                    // Fallback vers le placeholder si l'image n'existe pas
                                                     const target = e.currentTarget as HTMLImageElement;
                                                     target.src = '';
                                                     target.style.display = 'none';
