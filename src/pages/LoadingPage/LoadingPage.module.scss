@@ -34,7 +34,8 @@
     white-space: nowrap;
     width: 0;
     max-width: fit-content;
-    border-right: 3px solid rgba(100, 150, 255, 0.8);
+    border-right: 4px solid rgba(100, 150, 255, 0.9);
+    filter: drop-shadow(2px 0 6px rgba(100, 150, 255, 0.8));
     animation: 
         typing-welcome 3s steps(28) forwards,
         blink-caret 0.75s step-end 0s 4 normal forwards,
@@ -68,9 +69,12 @@
     font-size: 1rem;
     font-weight: 300;
     letter-spacing: 2px;
-    color: rgba(255, 255, 255, 0.7);
+    color: #fff;
     margin: 0;
     text-align: center;
+    text-shadow: 0 0 10px rgba(100, 150, 255, 0.5),
+        0 0 20px rgba(100, 150, 255, 0.3),
+        0 0 30px rgba(100, 150, 255, 0.2);
 
     /* Animation typing CSS pure - démarre après welcomeText */
     /* Curseur transparent jusqu'à 3.5s puis apparaît et clignote */
@@ -81,7 +85,8 @@
     max-width: fit-content;
     margin-left: auto;
     margin-right: auto;
-    border-right: 2px solid transparent;
+    border-right: 3px solid transparent;
+    filter: drop-shadow(2px 0 5px rgba(100, 150, 255, 0.7));
     animation:
         typing-author 2.1s steps(14) 3.5s forwards,
         show-caret 0s 3.5s forwards,
@@ -94,7 +99,8 @@
     }
 
     to {
-        width: 30ch; /* 28 caractères + marge pour letter-spacing (3px) */
+        width: 30ch;
+        /* 28 caractères + marge pour letter-spacing (3px) */
     }
 }
 
@@ -104,7 +110,8 @@
     }
 
     to {
-        width: 15ch; /* 14 caractères + marge pour letter-spacing */
+        width: 15ch;
+        /* 14 caractères + marge pour letter-spacing */
     }
 }
 
