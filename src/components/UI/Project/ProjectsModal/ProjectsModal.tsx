@@ -89,10 +89,10 @@ const ProjectsModal = ({ isOpen, onClose }: ProjectsModalProps) => {
                 const npm_url = isNpmPackage ? 'https://www.npmjs.com/package/@adhrnet/modal' : null;
 
                 // Ajouter les URLs de démo si non définies dans GitHub
-        let homepage = repo.homepage;
-        if (!homepage && repo.name === 'Portfolio_The_Milky_Way_Solar_System') {
-            homepage = 'https://the-milk-way-portfolio-by-alain-daly.netlify.app/';
-        } else if (!homepage && repo.name.toLowerCase().includes('sportsee')) {
+                let homepage = repo.homepage;
+                if (!homepage && repo.name === 'Portfolio_The_Milky_Way_Solar_System') {
+                    homepage = 'https://the-milk-way-portfolio-by-alain-daly.netlify.app/';
+                } else if (!homepage && repo.name.toLowerCase().includes('sportsee')) {
                     homepage = 'https://sportsee-tsk.netlify.app/';
                 }
 
