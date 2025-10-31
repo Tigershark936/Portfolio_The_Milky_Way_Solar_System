@@ -432,66 +432,106 @@
 // Responsive
 @media (max-width: 768px) {
     .modalOverlay {
-        bottom: 10px;
+        bottom: 20px; // Position basse, au même niveau que les boutons
         left: 10px;
         right: 10px;
         width: auto;
+        max-height: 50vh; // Garde la taille d'origine
+        z-index: 1001; // Au-dessus des boutons Menu et PlanetSelector (qui sont à 999-1000)
     }
 
     .modalContent {
         width: 100%;
     }
-
-    .modalHeader {
-        padding: 12px 15px;
-
-        h2 {
-            font-size: 16px;
+    
+    .modalBody {
+        max-height: 35vh; // Hauteur du contenu comme avant
+        overflow-y: auto; // Scroll si nécessaire
+        
+        // Scrollbar personnalisée
+        scrollbar-width: thin;
+        scrollbar-color: rgba(138, 43, 226, 0.5) rgba(138, 43, 226, 0.1);
+        
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        &::-webkit-scrollbar-track {
+            background: rgba(138, 43, 226, 0.1);
+            border-radius: 3px;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+            background: rgba(138, 43, 226, 0.5);
+            border-radius: 3px;
+            
+            &:hover {
+                background: rgba(138, 43, 226, 0.7);
+            }
         }
     }
 
+    .modalHeader {
+        padding: 10px 12px;
+
+        h2 {
+            font-size: 13px; // Réduit de 16px à 13px
+            letter-spacing: 1px;
+        }
+    }
+    
+    // Réduire tous les titres de sections (Description, Historique, Lunes)
+    h3 {
+        font-size: 11px !important; // Réduit de 16px à 11px
+        letter-spacing: 1px;
+        margin-bottom: 6px !important;
+    }
+
     .closeButton {
-        font-size: 20px;
-        width: 25px;
-        height: 25px;
+        font-size: 10px; // Réduit le texte du bouton
+        padding: 6px 12px;
+        min-width: 50px;
     }
 
     .modalBody {
-        padding: 15px;
+        padding: 12px;
     }
 
     .infoRow {
-        padding: 6px 0;
+        padding: 4px 0;
     }
 
     .label,
     .value {
-        font-size: 11px;
+        font-size: 9px; // Réduit de 11px à 9px
     }
     .value,
     .compositionValue,
     .moonInfo {
-        margin-left: 6px !important;
+        margin-left: 4px !important;
     }
     .description p {
-        font-size: 11px;
+        font-size: 9px; // Réduit de 11px à 9px
+        line-height: 1.4;
     }
     .discoverySection p {
-        font-size: 11px;
+        font-size: 9px; // Réduit de 11px à 9px
+        line-height: 1.4;
     }
     .compositionValue {
-        font-size: 11px;
+        font-size: 9px; // Réduit de 11px à 9px
     }
     .compositionValue .compositionItem {
-        font-size: 11px;
+        font-size: 9px; // Réduit de 11px à 9px
     }
     .distanceExplanation p {
-        font-size: 9px;
+        font-size: 8px; // Réduit de 9px à 8px
+        line-height: 1.3;
     }
     .moonsExplanation {
-        font-size: 9px;
+        font-size: 8px; // Réduit de 9px à 8px
     }
     .moonInfo {
-        font-size: 9px;
+        font-size: 8px; // Réduit de 9px à 8px
     }
 }

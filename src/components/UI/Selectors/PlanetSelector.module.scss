@@ -413,7 +413,7 @@
         gap: 6px;
         flex-direction: row;
         overflow: visible; // Laisse le parent gérer le scroll
-        padding: 4px;
+        padding: 4px 12px 4px 4px; // Ajoute du padding à droite
         flex-wrap: nowrap; // Empêche le retour à la ligne
         justify-content: flex-start; // Alignement à gauche pour le scroll
     }
