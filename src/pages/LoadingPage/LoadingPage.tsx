@@ -10,7 +10,7 @@ type LoadingPageProps = {
 };
 
 const FULL_TEXT = "Bienvenue sur mon portfolio";
-const AUTHOR_TEXT = "Alain Daly";
+const AUTHOR_TEXT = "par Alain Daly";
 
 function LoadingPage({ onComplete }: LoadingPageProps) {
     const [criticalTexturesLoaded, setCriticalTexturesLoaded] = useState(false);
@@ -45,11 +45,11 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
         let timeoutId: ReturnType<typeof setTimeout>;
         let currentWelcomeIndex = 0;
         let currentAuthorIndex = 0;
-        const TYPING_SPEED = 120; // Rapide maintenant que tout est chargé
+        const TYPING_SPEED = 300; // Très lent pour compenser toute latence réseau Netlify
 
         const typeWelcome = () => {
             if (!welcomeRef.current) return;
-            
+
             if (currentWelcomeIndex <= FULL_TEXT.length) {
                 const cursor = currentWelcomeIndex < FULL_TEXT.length ? '|' : '';
                 welcomeRef.current.textContent = FULL_TEXT.substring(0, currentWelcomeIndex) + cursor;
@@ -60,10 +60,10 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
                 timeoutId = setTimeout(typeAuthor, 800);
             }
         };
-        
+
         const typeAuthor = () => {
             if (!authorRef.current) return;
-            
+
             if (currentAuthorIndex <= AUTHOR_TEXT.length) {
                 const cursor = currentAuthorIndex < AUTHOR_TEXT.length ? '|' : '';
                 authorRef.current.textContent = AUTHOR_TEXT.substring(0, currentAuthorIndex) + cursor;
