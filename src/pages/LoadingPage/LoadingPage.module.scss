@@ -15,6 +15,10 @@
     transform: translateX(-50%);
     text-align: center;
     z-index: 1;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 2rem 3rem;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
 }
 
 .welcomeText {
@@ -27,13 +31,13 @@
     text-shadow: 0 0 10px rgba(100, 150, 255, 0.5),
         0 0 20px rgba(100, 150, 255, 0.3),
         0 0 30px rgba(100, 150, 255, 0.2);
-    
+
     /* Animation typing CSS pure avec curseur */
     overflow: hidden;
     white-space: nowrap;
     width: 0;
     border-right: 3px solid rgba(100, 150, 255, 0.8);
-    animation: 
+    animation:
         typing 3s steps(28) forwards,
         blink-caret 0.75s step-end infinite;
 }
@@ -68,12 +72,15 @@
     color: rgba(255, 255, 255, 0.7);
     margin: 0;
 
-    /* Animation typing CSS pure - démarre après welcomeText avec curseur */
+    /* Animation typing CSS pure - démarre après welcomeText */
+    /* MASQUÉ complètement (opacity 0 + border transparent) jusqu'à 3.5s */
     overflow: hidden;
     white-space: nowrap;
     width: 0;
-    border-right: 2px solid rgba(100, 150, 255, 0.8);
+    opacity: 0;
+    border-right: 2px solid transparent;
     animation: 
+        show-text 0s 3.5s forwards,
         typing 2s steps(15) 3.5s forwards,
         blink-caret 0.75s step-end 3.5s infinite;
 }
@@ -89,10 +96,20 @@
 }
 
 @keyframes blink-caret {
-    from, to {
+
+    from,
+    to {
         border-color: transparent;
     }
+
     50% {
+        border-color: rgba(100, 150, 255, 0.8);
+    }
+}
+
+@keyframes show-text {
+    to {
+        opacity: 1;
         border-color: rgba(100, 150, 255, 0.8);
     }
 }
