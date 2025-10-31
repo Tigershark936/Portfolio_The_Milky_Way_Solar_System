@@ -45,33 +45,25 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
     useEffect(() => {
         let isMounted = true;
         let currentIndex = 0;
-        let lastTime = Date.now();
-        let cursorLastToggle = Date.now();
-        let cursorVisible = true;
+        let cursorInterval: ReturnType<typeof setInterval>;
 
-        const animate = () => {
+        // Animation du curseur clignotant
+        cursorInterval = setInterval(() => {
+            if (isMounted) {
+                setShowCursor(prev => !prev);
+            }
+        }, 600);
+
+        // Animation de typing avec setTimeout récursif
+        const typeNextChar = () => {
             if (!isMounted) return;
-
-            const now = Date.now();
-
-            // Toggle cursor every 600ms
-            if (now - cursorLastToggle >= 600) {
-                cursorVisible = !cursorVisible;
-                setShowCursor(cursorVisible);
-                cursorLastToggle = now;
-            }
-
-            // Type next character every TYPING_SPEED ms
-            if (now - lastTime >= TYPING_SPEED && currentIndex <= FULL_TEXT.length) {
-                setDisplayedText(FULL_TEXT.substring(0, currentIndex));
+            
+            if (currentIndex < FULL_TEXT.length) {
                 currentIndex++;
-                lastTime = now;
-            }
-
-            // Continue animation or finish
-            if (currentIndex <= FULL_TEXT.length) {
-                requestAnimationFrame(animate);
+                setDisplayedText(FULL_TEXT.substring(0, currentIndex));
+                setTimeout(typeNextChar, TYPING_SPEED);
             } else {
+                clearInterval(cursorInterval);
                 setShowCursor(false);
                 setTimeout(() => {
                     if (isMounted) {
@@ -81,10 +73,12 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
             }
         };
 
-        requestAnimationFrame(animate);
+        // Démarrer l'animation
+        setTimeout(typeNextChar, TYPING_SPEED);
 
         return () => {
             isMounted = false;
+            clearInterval(cursorInterval);
         };
     }, []);
 
@@ -94,44 +88,37 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
 
         let isMounted = true;
         let currentIndex = 0;
-        let lastTime = Date.now();
-        let cursorLastToggle = Date.now();
-        let cursorVisible = true;
+        let cursorInterval: ReturnType<typeof setInterval>;
 
+        // Animation du curseur clignotant
         setShowAuthorCursor(true);
+        cursorInterval = setInterval(() => {
+            if (isMounted) {
+                setShowAuthorCursor(prev => !prev);
+            }
+        }, 600);
 
-        const animate = () => {
+        // Animation de typing avec setTimeout récursif
+        const typeNextChar = () => {
             if (!isMounted) return;
-
-            const now = Date.now();
-
-            // Toggle cursor every 600ms
-            if (now - cursorLastToggle >= 600) {
-                cursorVisible = !cursorVisible;
-                setShowAuthorCursor(cursorVisible);
-                cursorLastToggle = now;
-            }
-
-            // Type next character every TYPING_SPEED ms
-            if (now - lastTime >= TYPING_SPEED && currentIndex <= AUTHOR_TEXT.length) {
-                setDisplayedAuthor(AUTHOR_TEXT.substring(0, currentIndex));
+            
+            if (currentIndex < AUTHOR_TEXT.length) {
                 currentIndex++;
-                lastTime = now;
-            }
-
-            // Continue animation or finish
-            if (currentIndex <= AUTHOR_TEXT.length) {
-                requestAnimationFrame(animate);
+                setDisplayedAuthor(AUTHOR_TEXT.substring(0, currentIndex));
+                setTimeout(typeNextChar, TYPING_SPEED);
             } else {
+                clearInterval(cursorInterval);
                 setShowAuthorCursor(false);
                 setIsTypingComplete(true);
             }
         };
 
-        requestAnimationFrame(animate);
+        // Démarrer l'animation
+        setTimeout(typeNextChar, TYPING_SPEED);
 
         return () => {
             isMounted = false;
+            clearInterval(cursorInterval);
         };
     }, [startAuthorTyping]);
 
@@ -145,7 +132,7 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
                     onComplete();
                 }
             }, 2000);
-            
+
             return () => clearTimeout(timer);
         }
     }, [isTypingComplete, criticalTexturesLoaded, onComplete]);
