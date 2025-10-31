@@ -28,11 +28,14 @@
         0 0 20px rgba(100, 150, 255, 0.3),
         0 0 30px rgba(100, 150, 255, 0.2);
     
-    /* Animation typing CSS pure */
+    /* Animation typing CSS pure avec curseur */
     overflow: hidden;
     white-space: nowrap;
     width: 0;
-    animation: typing 3s steps(28) forwards;
+    border-right: 3px solid rgba(100, 150, 255, 0.8);
+    animation: 
+        typing 3s steps(28) forwards,
+        blink-caret 0.75s step-end infinite;
 }
 
 .cursor {
@@ -64,19 +67,32 @@
     letter-spacing: 2px;
     color: rgba(255, 255, 255, 0.7);
     margin: 0;
-    
-    /* Animation typing CSS pure - démarre après welcomeText */
+
+    /* Animation typing CSS pure - démarre après welcomeText avec curseur */
     overflow: hidden;
     white-space: nowrap;
     width: 0;
-    animation: typing 2s steps(15) 3.5s forwards;
+    border-right: 2px solid rgba(100, 150, 255, 0.8);
+    animation: 
+        typing 2s steps(15) 3.5s forwards,
+        blink-caret 0.75s step-end 3.5s infinite;
 }
 
 @keyframes typing {
     from {
         width: 0;
     }
+
     to {
         width: 100%;
+    }
+}
+
+@keyframes blink-caret {
+    from, to {
+        border-color: transparent;
+    }
+    50% {
+        border-color: rgba(100, 150, 255, 0.8);
     }
 }
