@@ -27,15 +27,16 @@
     text-shadow: 0 0 10px rgba(100, 150, 255, 0.5),
         0 0 20px rgba(100, 150, 255, 0.3),
         0 0 30px rgba(100, 150, 255, 0.2);
-
-    /* Animation typing CSS pure avec curseur */
+    
+    /* Animation typing CSS pure avec curseur qui disparaît à 3.5s */
     overflow: hidden;
     white-space: nowrap;
     width: 0;
     border-right: 3px solid rgba(100, 150, 255, 0.8);
-    animation:
+    animation: 
         typing 3s steps(28) forwards,
-        blink-caret 0.75s step-end infinite;
+        blink-caret 0.75s step-end 0s 4 normal forwards,
+        hide-caret 0s 3.5s forwards;
 }
 
 .cursor {
@@ -70,14 +71,16 @@
     text-align: center;
 
     /* Animation typing CSS pure - démarre après welcomeText */
+    /* Curseur transparent jusqu'à 3.5s puis apparaît et clignote */
     overflow: hidden;
     white-space: nowrap;
     width: 0;
     margin-left: auto;
     margin-right: auto;
-    border-right: 2px solid rgba(100, 150, 255, 0.8);
+    border-right: 2px solid transparent;
     animation: 
         typing 2s steps(15) 3.5s forwards,
+        show-caret 0s 3.5s forwards,
         blink-caret 0.75s step-end 3.5s infinite;
 }
 
@@ -100,5 +103,17 @@
 
     50% {
         border-color: rgba(100, 150, 255, 0.8);
+    }
+}
+
+@keyframes hide-caret {
+    to {
+        border-right-color: transparent;
+    }
+}
+
+@keyframes show-caret {
+    to {
+        border-right-color: rgba(100, 150, 255, 0.8);
     }
 }
