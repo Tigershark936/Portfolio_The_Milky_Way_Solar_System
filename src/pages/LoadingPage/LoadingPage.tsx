@@ -9,7 +9,7 @@ type LoadingPageProps = {
     onComplete?: () => void;
 };
 
-const FULL_TEXT = "Bienvenue sur mon site web";
+const FULL_TEXT = "Bienvenue sur mon portfolio";
 const AUTHOR_TEXT = "Alain Daly";
 
 function LoadingPage({ onComplete }: LoadingPageProps) {
@@ -37,46 +37,51 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
         });
     }, []);
 
-    // Animation de typing avec manipulation DOM directe (plus fiable)
+    // Animation de typing avec manipulation DOM directe
+    // NE DÉMARRE QUE quand les textures sont chargées pour éviter les problèmes de latence
     useEffect(() => {
-        if (!welcomeRef.current || !authorRef.current) return;
+        if (!welcomeRef.current || !authorRef.current || !criticalTexturesLoaded) return;
 
         let timeoutId: ReturnType<typeof setTimeout>;
         let currentWelcomeIndex = 0;
         let currentAuthorIndex = 0;
-        const TYPING_SPEED = 250; // Très lent pour éliminer tous les glitches
+        const TYPING_SPEED = 120; // Rapide maintenant que tout est chargé
 
         const typeWelcome = () => {
             if (!welcomeRef.current) return;
-
+            
             if (currentWelcomeIndex <= FULL_TEXT.length) {
-                welcomeRef.current.textContent = FULL_TEXT.substring(0, currentWelcomeIndex);
+                const cursor = currentWelcomeIndex < FULL_TEXT.length ? '|' : '';
+                welcomeRef.current.textContent = FULL_TEXT.substring(0, currentWelcomeIndex) + cursor;
                 currentWelcomeIndex++;
                 timeoutId = setTimeout(typeWelcome, TYPING_SPEED);
             } else {
+                welcomeRef.current.textContent = FULL_TEXT;
                 timeoutId = setTimeout(typeAuthor, 800);
             }
         };
-
+        
         const typeAuthor = () => {
             if (!authorRef.current) return;
-
+            
             if (currentAuthorIndex <= AUTHOR_TEXT.length) {
-                authorRef.current.textContent = AUTHOR_TEXT.substring(0, currentAuthorIndex);
+                const cursor = currentAuthorIndex < AUTHOR_TEXT.length ? '|' : '';
+                authorRef.current.textContent = AUTHOR_TEXT.substring(0, currentAuthorIndex) + cursor;
                 currentAuthorIndex++;
                 timeoutId = setTimeout(typeAuthor, TYPING_SPEED);
             } else {
+                authorRef.current.textContent = AUTHOR_TEXT;
                 setIsTypingComplete(true);
             }
         };
 
-        // Démarrer l'animation
+        // Démarrer l'animation seulement quand tout est chargé
         timeoutId = setTimeout(typeWelcome, TYPING_SPEED);
 
         return () => {
             if (timeoutId) clearTimeout(timeoutId);
         };
-    }, []);
+    }, [criticalTexturesLoaded]); // Dépend du chargement des textures
 
     // Appeler onComplete après l'animation ET le chargement des textures
     useEffect(() => {
