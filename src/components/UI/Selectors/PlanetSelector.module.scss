@@ -95,6 +95,8 @@
     text-shadow: 0 0 8px rgba(138, 43, 226, 0.8);
     transition: all 0.3s ease;
     white-space: nowrap;
+    position: relative;
+    z-index: 2; // S'assurer que le texte est au-dessus des effets ::before et ::after
 }
 
 .planetBar {

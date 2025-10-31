@@ -1,10 +1,71 @@
 import { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
 
 /**
- * Netlify Function servant de proxy pour l'API NASA Horizons
- * Permet d'appeler l'API depuis le frontend sans exposer la clé API
- * et de contourner les problèmes CORS
+ * Netlify Function pour calculer les positions des planètes
+ * Utilise les calculs astronomiques côté serveur pour démontrer
+ * l'intégration d'une API serverless en production
  */
+
+// Périodes orbitales réelles (en jours)
+const ORBITAL_PERIODS_DAYS: Record<string, number> = {
+    'Mercury': 87.97,
+    'Venus': 224.70,
+    'Earth': 365.25,
+    'Mars': 686.98,
+    'Jupiter': 4332.59,
+    'Saturn': 10759.22,
+    'Uranus': 30688.5,
+    'Neptune': 60182,
+    'Pluto': 90560,
+};
+
+// Distances moyennes du soleil en UA
+const MEAN_DISTANCES_AU: Record<string, number> = {
+    'Mercury': 0.387,
+    'Venus': 0.723,
+    'Earth': 1.0,
+    'Mars': 1.524,
+    'Jupiter': 5.203,
+    'Saturn': 9.537,
+    'Uranus': 19.191,
+    'Neptune': 30.069,
+    'Pluto': 39.482,
+};
+
+// Date de référence : 1er janvier 2000, 12:00 UTC (J2000.0)
+const REFERENCE_DATE = new Date('2000-01-01T12:00:00Z');
+
+/**
+ * Calcule les positions des planètes basées sur le temps actuel
+ */
+const calculatePlanetPositions = () => {
+    const now = new Date();
+    const daysSinceReference = (now.getTime() - REFERENCE_DATE.getTime()) / (1000 * 60 * 60 * 24);
+    
+    const positions = Object.keys(ORBITAL_PERIODS_DAYS).map((planetName) => {
+        const orbitalPeriod = ORBITAL_PERIODS_DAYS[planetName];
+        const meanDistance = MEAN_DISTANCES_AU[planetName];
+        
+        // Calculer l'angle basé sur la période orbitale
+        const orbitsCompleted = daysSinceReference / orbitalPeriod;
+        const angle = (orbitsCompleted % 1) * 2 * Math.PI;
+        
+        // Convertir en degrés pour l'azimuth
+        const azimuth = (angle * 180 / Math.PI) % 360;
+        
+        return {
+            name: planetName,
+            ra: angle,
+            dec: 0,
+            az: azimuth,
+            alt: 45,
+            distance: meanDistance
+        };
+    });
+    
+    return positions;
+};
+
 const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
     // Permettre uniquement les requêtes GET
     if (event.httpMethod !== "GET") {
@@ -15,63 +76,8 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
     }
 
     try {
-        // Récupérer les paramètres de la requête
-        const { lat, lon, elev, datetime, zone } = event.queryStringParameters || {};
-
-        // Valider les paramètres requis
-        if (!lat || !lon || !elev || !datetime || !zone) {
-            return {
-                statusCode: 400,
-                body: JSON.stringify({ 
-                    error: "Missing required parameters",
-                    required: ["lat", "lon", "elev", "datetime", "zone"]
-                }),
-            };
-        }
-
-        // Construire l'URL de l'API NASA Horizons
-        // Note: Remplace cette URL par la vraie URL de l'API NASA si disponible
-        const apiUrl = new URL("https://api.le-systeme-solaire.net/rest/bodies/");
-        
-        // Pour l'instant, on utilise une API alternative publique
-        // L'API NASA Horizons nécessite une clé API et une authentification complexe
-        // On va utiliser une API simplifiée qui retourne les positions des planètes
-        
-        const response = await fetch(apiUrl.toString(), {
-            method: "GET",
-            headers: {
-                "Accept": "application/json",
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error(`API responded with status ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        // Parser et formater les données pour notre application
-        const planets = data.bodies?.filter((body: any) => 
-            body.isPlanet && body.englishName !== "Earth"
-        ) || [];
-
-        // Ajouter la Terre manuellement
-        const positions = planets.map((planet: any) => ({
-            name: planet.englishName,
-            ra: 0, // Right ascension (à calculer)
-            dec: 0, // Declination (à calculer)
-            az: Math.random() * 360, // Azimuth (pour démonstration)
-            alt: Math.random() * 90, // Altitude (pour démonstration)
-        }));
-
-        // Ajouter la Terre
-        positions.push({
-            name: "Earth",
-            ra: 0,
-            dec: 0,
-            az: 0,
-            alt: 0,
-        });
+        // Calculer les positions des planètes
+        const positions = calculatePlanetPositions();
 
         return {
             statusCode: 200,
@@ -84,7 +90,8 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
             body: JSON.stringify({
                 positions,
                 timestamp: new Date().toISOString(),
-                source: "netlify-function-proxy"
+                source: "netlify-serverless-function",
+                calculatedAt: new Date().toISOString()
             }),
         };
     } catch (error) {

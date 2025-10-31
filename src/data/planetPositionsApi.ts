@@ -330,15 +330,16 @@ export const fetchRealPlanetPositions = async (): Promise<PlanetPosition[]> => {
     try {
         const apiPositions = await fetchPositionsFromAPI();
         if (apiPositions.length > 0) {
-            console.log(`✅ ${apiPositions.length} positions récupérées depuis l'API`);
+            // console.log(`✅ ${apiPositions.length} positions récupérées depuis l'API`);
             return apiPositions;
         }
     } catch (error) {
-        console.warn('⚠️ L\'API a échoué, utilisation du calcul local comme fallback...', error);
+        // Fallback silencieux sur le calcul local
+        // console.warn('⚠️ L\'API a échoué, utilisation du calcul local comme fallback...', error);
     }
 
     // Fallback sur le calcul local (plus fiable et rapide)
-    console.log('📊 Utilisation du calcul local des positions planétaires');
+    // console.log('📊 Utilisation du calcul local des positions planétaires');
     return calculatePositionsLocally();
 };
 

@@ -48,7 +48,7 @@ export const preloadCriticalTextures = (): Promise<void> => {
 
     const checkCriticalComplete = () => {
       if (loadedCount + errorCount >= CRITICAL_TEXTURES.length) {
-        console.log(`✅ Textures critiques préchargées: ${loadedCount}/${CRITICAL_TEXTURES.length}`);
+        // console.log(`✅ Textures critiques préchargées: ${loadedCount}/${CRITICAL_TEXTURES.length}`);
         resolve();
       }
     };
@@ -67,7 +67,7 @@ export const preloadCriticalTextures = (): Promise<void> => {
         },
         undefined,
         () => {
-          console.warn(`⚠️ Texture critique non chargée: ${path}`);
+          // console.warn(`⚠️ Texture critique non chargée: ${path}`);
           errorCount++;
           checkCriticalComplete();
         }
@@ -88,15 +88,15 @@ export const preloadTextures = (): Promise<void> => {
     const totalTextures = TEXTURE_PATHS.length;
 
     // Gérer les erreurs silencieusement pour ne pas bloquer le chargement
-    const onError = (path: string) => {
-      console.warn(`⚠️ Texture non chargée: ${path}`);
+    const onError = (_path: string) => {
+      // console.warn(`⚠️ Texture non chargée: ${_path}`);
       errorCount++;
       checkComplete();
     };
 
     const checkComplete = () => {
       if (loadedCount + errorCount >= totalTextures) {
-        console.log(`✅ Textures préchargées: ${loadedCount}/${totalTextures}`);
+        // console.log(`✅ Textures préchargées: ${loadedCount}/${totalTextures}`);
         resolve();
       }
     };
