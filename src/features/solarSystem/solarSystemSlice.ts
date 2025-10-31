@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { Planet } from '../../types/Planet';
+import type { Planet } from '../../types/SolarSystemDetails';
 import type { PlanetPosition } from '../../data/planetPositionsApi';
 
 // Données de base des planètes (sera initialisé avec les positions réelles)
@@ -48,13 +48,13 @@ const solarSystemSlice = createSlice({
             state.planets = action.payload;
         },
         updatePlanetAngle: (state, action: PayloadAction<{ name: string; angle: number }>) => {
-            const planet = state.planets.find(p => p.name === action.payload.name);
+            const planet = state.planets.find((p: Planet) => p.name === action.payload.name);
             if (planet) {
                 planet.angle = action.payload.angle;
             }
         },
         updatePlanetsFromPositions: (state, action: PayloadAction<PlanetPosition[]>) => {
-            state.planets = state.planets.map(planet => {
+            state.planets = state.planets.map((planet: Planet) => {
                 const realPosition = action.payload.find(p => p.name === planet.name);
                 if (realPosition) {
                     return {

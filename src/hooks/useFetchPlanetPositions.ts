@@ -1,13 +1,13 @@
 import { useState, useCallback } from 'react';
 import { fetchRealPlanetPositions, type PlanetPosition } from '../data/planetPositionsApi';
-import type { Planet as PlanetType } from '../types/Planet';
+import type { Planet as PlanetType } from '../types/SolarSystemDetails';
 
 /**
  * Hook React pour récupérer et gérer les positions réelles des planètes via l'API
  * @param planets - Liste des planètes actuelles
  * @returns Fonction pour charger les positions réelles et état de chargement
  */
-export const useFetchPlanetPositions = (planets: PlanetType[]) => {
+export const useFetchPlanetPositions = (_planets: PlanetType[]) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
 

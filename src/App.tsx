@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import HomePage from './pages/HomePage/HomePage';
 import LoadingPage from './pages/LoadingPage/LoadingPage';
 

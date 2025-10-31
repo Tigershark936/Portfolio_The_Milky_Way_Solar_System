@@ -133,7 +133,7 @@ const AsteroidBelt = ({
 
     return (
         <>
-            {layers.map((l, i) => (
+            {layers.map((_, i) => (
                 <instancedMesh
                     key={`belt-layer-${i}`}
                     ref={(el) => {
