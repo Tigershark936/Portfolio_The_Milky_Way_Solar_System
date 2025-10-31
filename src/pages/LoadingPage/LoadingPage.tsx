@@ -9,8 +9,8 @@ type LoadingPageProps = {
     onComplete?: () => void;
 };
 
-const FULL_TEXT = "Bienvenue sur mon portfolio";
-const AUTHOR_TEXT = "Alain Daly";
+const FULL_TEXT = "Bienvenue sur le portfolio de Alain";
+const AUTHOR_TEXT = "par Alain Daly";
 
 function LoadingPage({ onComplete }: LoadingPageProps) {
     const [criticalTexturesLoaded, setCriticalTexturesLoaded] = useState(false);
@@ -44,7 +44,7 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
         let timeoutId: ReturnType<typeof setTimeout>;
         let currentWelcomeIndex = 0;
         let currentAuthorIndex = 0;
-        const TYPING_SPEED = 120;
+        const TYPING_SPEED = 180; // Plus lent pour éviter les glitches visuels
 
         const typeWelcome = () => {
             if (!welcomeRef.current) return;
