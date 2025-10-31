@@ -429,8 +429,66 @@
     }
 }
 
-// Responsive
-@media (max-width: 768px) {
+// Responsive - Tablette (réduction modérée)
+@media (max-width: 768px) and (min-width: 601px) {
+    .modalOverlay {
+        width: 350px; // Réduit de 400px à 350px
+        max-height: 60vh; // Réduit de 70vh à 60vh
+    }
+    
+    .modalHeader {
+        padding: 12px 16px;
+        
+        h2 {
+            font-size: 16px;
+        }
+    }
+    
+    h3 {
+        font-size: 14px; // Légèrement réduit
+    }
+    
+    .modalBody {
+        padding: 14px;
+        max-height: calc(60vh - 80px); // Hauteur max moins le header
+        overflow-y: auto; // Scroll si nécessaire
+        
+        // Scrollbar personnalisée
+        scrollbar-width: thin;
+        scrollbar-color: rgba(138, 43, 226, 0.5) rgba(138, 43, 226, 0.1);
+        
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        &::-webkit-scrollbar-track {
+            background: rgba(138, 43, 226, 0.1);
+            border-radius: 3px;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+            background: rgba(138, 43, 226, 0.5);
+            border-radius: 3px;
+            
+            &:hover {
+                background: rgba(138, 43, 226, 0.7);
+            }
+        }
+    }
+    
+    .label,
+    .value {
+        font-size: 12px; // Légèrement réduit
+    }
+    
+    .description p,
+    .discoverySection p {
+        font-size: 12px;
+    }
+}
+
+// Responsive - Mobile uniquement
+@media (max-width: 600px) {
     .modalOverlay {
         bottom: 20px; // Position basse, au même niveau que les boutons
         left: 10px;
