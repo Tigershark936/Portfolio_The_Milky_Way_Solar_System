@@ -78,7 +78,7 @@ const PlanetSelector = ({ planets, onPlanetSelect, selectedPlanet }: PlanetSelec
                 aria-label="Sélectionner une planète"
             >
                 <span className={styles.selectorTitle}>
-                    {selectedPlanet ? `Suivre: ${translatePlanetName(selectedPlanet)}` : 'Sélectionner planète'}
+                    {selectedPlanet ? `Suivre : ${translatePlanetName(selectedPlanet)}` : 'Sélectionner une planète'}
                 </span>
             </button>
 
