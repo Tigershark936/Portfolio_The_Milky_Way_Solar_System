@@ -383,6 +383,7 @@
         padding: 6px 8px;
         overflow-x: auto; // Scroll horizontal obligatoire
         overflow-y: visible;
+        -webkit-overflow-scrolling: touch; // Smooth scroll sur mobile iOS/Android
         
         // Scrollbar horizontale personnalisée toujours visible
         scrollbar-width: thin;
@@ -390,6 +391,7 @@
         
         &::-webkit-scrollbar {
             height: 8px; // Un peu plus haute pour être visible
+            display: block; // Force l'affichage de la scrollbar
         }
         
         &::-webkit-scrollbar-track {
@@ -410,9 +412,10 @@
     .planetList {
         gap: 6px;
         flex-direction: row;
-        overflow-x: visible;
+        overflow: visible; // Laisse le parent gérer le scroll
         padding: 4px;
         flex-wrap: nowrap; // Empêche le retour à la ligne
+        justify-content: flex-start; // Alignement à gauche pour le scroll
     }
 
     .planetButton {
