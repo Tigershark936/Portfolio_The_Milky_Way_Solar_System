@@ -44,76 +44,80 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
     // Animation de frappe au clavier pour le titre (démarre immédiatement)
     useEffect(() => {
         let currentIndex = 0;
-        let cursorInterval: number | undefined;
+        let typingInterval: ReturnType<typeof setInterval>;
+        let cursorInterval: ReturnType<typeof setInterval>;
+        let isMounted = true;
 
         // Animation du curseur clignotant pour le titre
-        cursorInterval = window.setInterval(() => {
-            setShowCursor(prev => !prev);
+        cursorInterval = setInterval(() => {
+            if (isMounted) {
+                setShowCursor(prev => !prev);
+            }
         }, 600);
 
-        // Démarrer l'animation immédiatement sans attendre les textures
-        const typingInterval = setInterval(() => {
-            if (currentIndex < FULL_TEXT.length) {
-                setDisplayedText(FULL_TEXT.substring(0, currentIndex + 1));
-                currentIndex++;
+        // Démarrer l'animation immédiatement
+        typingInterval = setInterval(() => {
+            if (!isMounted) return;
+            
+            currentIndex++;
+            if (currentIndex <= FULL_TEXT.length) {
+                setDisplayedText(FULL_TEXT.substring(0, currentIndex));
             } else {
                 clearInterval(typingInterval);
-                // Arrêter l'animation du curseur AVANT de le cacher
-                if (cursorInterval) {
-                    clearInterval(cursorInterval);
-                    cursorInterval = undefined;
-                }
-                // Forcer le curseur à disparaître immédiatement
+                clearInterval(cursorInterval);
                 setShowCursor(false);
                 // Démarrer le typing de l'auteur après un court délai
                 setTimeout(() => {
-                    setStartAuthorTyping(true);
-                }, 800); // Délai plus long entre le titre et l'auteur
+                    if (isMounted) {
+                        setStartAuthorTyping(true);
+                    }
+                }, 800);
             }
         }, TYPING_SPEED);
 
         return () => {
+            isMounted = false;
             clearInterval(typingInterval);
-            if (cursorInterval !== undefined) {
-                clearInterval(cursorInterval);
-            }
-            setShowCursor(false); // S'assurer que le curseur est caché au nettoyage
+            clearInterval(cursorInterval);
         };
-    }, []); // Pas de dépendance - démarre immédiatement
+    }, []);
 
     // Animation de frappe au clavier pour l'auteur
     useEffect(() => {
         if (!startAuthorTyping) return;
 
         let currentIndex = 0;
-        let cursorInterval: number | undefined;
+        let typingInterval: ReturnType<typeof setInterval>;
+        let cursorInterval: ReturnType<typeof setInterval>;
+        let isMounted = true;
 
-        const typingInterval = setInterval(() => {
-            if (currentIndex < AUTHOR_TEXT.length) {
-                setDisplayedAuthor(AUTHOR_TEXT.substring(0, currentIndex + 1));
-                currentIndex++;
+        // Animation du curseur clignotant pour l'auteur
+        setShowAuthorCursor(true);
+        cursorInterval = setInterval(() => {
+            if (isMounted) {
+                setShowAuthorCursor(prev => !prev);
+            }
+        }, 600);
+
+        // Animation de typing pour l'auteur
+        typingInterval = setInterval(() => {
+            if (!isMounted) return;
+            
+            currentIndex++;
+            if (currentIndex <= AUTHOR_TEXT.length) {
+                setDisplayedAuthor(AUTHOR_TEXT.substring(0, currentIndex));
             } else {
                 clearInterval(typingInterval);
-                // Arrêter l'animation du curseur et le cacher immédiatement
-                if (cursorInterval) {
-                    clearInterval(cursorInterval);
-                }
+                clearInterval(cursorInterval);
                 setShowAuthorCursor(false);
                 setIsTypingComplete(true);
             }
         }, TYPING_SPEED);
 
-        // Animation du curseur clignotant pour l'auteur
-        setShowAuthorCursor(true);
-        cursorInterval = window.setInterval(() => {
-            setShowAuthorCursor(prev => !prev);
-        }, 600);
-
         return () => {
+            isMounted = false;
             clearInterval(typingInterval);
-            if (cursorInterval) {
-                clearInterval(cursorInterval);
-            }
+            clearInterval(cursorInterval);
         };
     }, [startAuthorTyping]);
 
