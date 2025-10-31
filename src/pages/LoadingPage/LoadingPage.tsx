@@ -11,15 +11,15 @@ type LoadingPageProps = {
 
 const FULL_TEXT = "Bienvenue sur le portfolio de Alain";
 const AUTHOR_TEXT = "par alain daly";
-const TYPING_SPEED = 120; // Vitesse de frappe en millisecondes
+const TYPING_SPEED = 80; // Vitesse de frappe en millisecondes (plus rapide pour debug)
 
 function LoadingPage({ onComplete }: LoadingPageProps) {
-    const [displayedText, setDisplayedText] = useState('');
-    const [displayedAuthor, setDisplayedAuthor] = useState('');
-    const [showCursor, setShowCursor] = useState(true);
+    const [displayedText, setDisplayedText] = useState(FULL_TEXT); // TEMPORAIRE: afficher tout de suite
+    const [displayedAuthor, setDisplayedAuthor] = useState(AUTHOR_TEXT); // TEMPORAIRE: afficher tout de suite
+    const [showCursor, setShowCursor] = useState(false);
     const [showAuthorCursor, setShowAuthorCursor] = useState(false);
-    const [isTypingComplete, setIsTypingComplete] = useState(false);
-    const [startAuthorTyping, setStartAuthorTyping] = useState(false);
+    const [isTypingComplete, setIsTypingComplete] = useState(true); // TEMPORAIRE: déjà terminé
+    const [startAuthorTyping, setStartAuthorTyping] = useState(true);
 
     const [criticalTexturesLoaded, setCriticalTexturesLoaded] = useState(false);
 
