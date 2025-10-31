@@ -15,7 +15,7 @@ const AUTHOR_TEXT = "par alain daly";
 function LoadingPage({ onComplete }: LoadingPageProps) {
     const [criticalTexturesLoaded, setCriticalTexturesLoaded] = useState(false);
     const [isTypingComplete, setIsTypingComplete] = useState(false);
-    
+
     const welcomeRef = useRef<HTMLHeadingElement>(null);
     const authorRef = useRef<HTMLParagraphElement>(null);
 
@@ -44,13 +44,15 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
         let timeoutId: ReturnType<typeof setTimeout>;
         let currentWelcomeIndex = 0;
         let currentAuthorIndex = 0;
-        const TYPING_SPEED = 150;
+        const TYPING_SPEED = 120;
         
         const typeWelcome = () => {
             if (!welcomeRef.current) return;
             
-            if (currentWelcomeIndex < FULL_TEXT.length) {
-                welcomeRef.current.textContent = FULL_TEXT.substring(0, currentWelcomeIndex + 1) + '|';
+            if (currentWelcomeIndex <= FULL_TEXT.length) {
+                const currentText = FULL_TEXT.substring(0, currentWelcomeIndex);
+                const cursor = currentWelcomeIndex < FULL_TEXT.length ? '|' : '';
+                welcomeRef.current.textContent = currentText + cursor;
                 currentWelcomeIndex++;
                 timeoutId = setTimeout(typeWelcome, TYPING_SPEED);
             } else {
@@ -62,8 +64,10 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
         const typeAuthor = () => {
             if (!authorRef.current) return;
             
-            if (currentAuthorIndex < AUTHOR_TEXT.length) {
-                authorRef.current.textContent = AUTHOR_TEXT.substring(0, currentAuthorIndex + 1) + '|';
+            if (currentAuthorIndex <= AUTHOR_TEXT.length) {
+                const currentText = AUTHOR_TEXT.substring(0, currentAuthorIndex);
+                const cursor = currentAuthorIndex < AUTHOR_TEXT.length ? '|' : '';
+                authorRef.current.textContent = currentText + cursor;
                 currentAuthorIndex++;
                 timeoutId = setTimeout(typeAuthor, TYPING_SPEED);
             } else {
@@ -89,7 +93,7 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
                     onComplete();
                 }
             }, 2000);
-            
+
             return () => clearTimeout(timer);
         }
     }, [isTypingComplete, criticalTexturesLoaded, onComplete]);
