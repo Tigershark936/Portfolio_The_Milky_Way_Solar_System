@@ -129,23 +129,28 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
 
     return (
         <div className={styles.loadingContainer}>
-            {/* Fond nébuleuse avec Three.js */}
-            <Canvas
-                camera={{ position: [0, 0, 5], fov: 75 }}
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    zIndex: 0
-                }}
-            >
-                <Nebula />
-                <TwinklingStars />
-            </Canvas>
+            {/* Fond nébuleuse avec Three.js - Rendu conditionnel pour éviter les blocages */}
+            {criticalTexturesLoaded && (
+                <Canvas
+                    camera={{ position: [0, 0, 5], fov: 75 }}
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        zIndex: 0
+                    }}
+                    onCreated={(state) => {
+                        state.gl.setClearColor('#0f0f23');
+                    }}
+                >
+                    <Nebula />
+                    <TwinklingStars />
+                </Canvas>
+            )}
 
-            {/* Texte par-dessus */}
+            {/* Texte par-dessus - S'affiche TOUJOURS indépendamment du Canvas */}
             <div className={styles.textContainer}>
                 <h1 className={styles.welcomeText}>
                     {displayedText}
