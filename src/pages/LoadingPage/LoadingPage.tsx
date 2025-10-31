@@ -43,42 +43,48 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
 
     // Animation de frappe au clavier pour le titre (démarre immédiatement)
     useEffect(() => {
-        let currentIndex = 0;
-        let typingInterval: ReturnType<typeof setInterval>;
-        let cursorInterval: ReturnType<typeof setInterval>;
         let isMounted = true;
+        let currentIndex = 0;
+        let lastTime = Date.now();
+        let cursorLastToggle = Date.now();
+        let cursorVisible = true;
 
-        // Animation du curseur clignotant pour le titre
-        cursorInterval = setInterval(() => {
-            if (isMounted) {
-                setShowCursor(prev => !prev);
-            }
-        }, 600);
-
-        // Démarrer l'animation immédiatement
-        typingInterval = setInterval(() => {
+        const animate = () => {
             if (!isMounted) return;
-            
-            currentIndex++;
-            if (currentIndex <= FULL_TEXT.length) {
+
+            const now = Date.now();
+
+            // Toggle cursor every 600ms
+            if (now - cursorLastToggle >= 600) {
+                cursorVisible = !cursorVisible;
+                setShowCursor(cursorVisible);
+                cursorLastToggle = now;
+            }
+
+            // Type next character every TYPING_SPEED ms
+            if (now - lastTime >= TYPING_SPEED && currentIndex <= FULL_TEXT.length) {
                 setDisplayedText(FULL_TEXT.substring(0, currentIndex));
+                currentIndex++;
+                lastTime = now;
+            }
+
+            // Continue animation or finish
+            if (currentIndex <= FULL_TEXT.length) {
+                requestAnimationFrame(animate);
             } else {
-                clearInterval(typingInterval);
-                clearInterval(cursorInterval);
                 setShowCursor(false);
-                // Démarrer le typing de l'auteur après un court délai
                 setTimeout(() => {
                     if (isMounted) {
                         setStartAuthorTyping(true);
                     }
                 }, 800);
             }
-        }, TYPING_SPEED);
+        };
+
+        requestAnimationFrame(animate);
 
         return () => {
             isMounted = false;
-            clearInterval(typingInterval);
-            clearInterval(cursorInterval);
         };
     }, []);
 
@@ -86,38 +92,46 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
     useEffect(() => {
         if (!startAuthorTyping) return;
 
-        let currentIndex = 0;
-        let typingInterval: ReturnType<typeof setInterval>;
-        let cursorInterval: ReturnType<typeof setInterval>;
         let isMounted = true;
+        let currentIndex = 0;
+        let lastTime = Date.now();
+        let cursorLastToggle = Date.now();
+        let cursorVisible = true;
 
-        // Animation du curseur clignotant pour l'auteur
         setShowAuthorCursor(true);
-        cursorInterval = setInterval(() => {
-            if (isMounted) {
-                setShowAuthorCursor(prev => !prev);
-            }
-        }, 600);
 
-        // Animation de typing pour l'auteur
-        typingInterval = setInterval(() => {
+        const animate = () => {
             if (!isMounted) return;
-            
-            currentIndex++;
-            if (currentIndex <= AUTHOR_TEXT.length) {
+
+            const now = Date.now();
+
+            // Toggle cursor every 600ms
+            if (now - cursorLastToggle >= 600) {
+                cursorVisible = !cursorVisible;
+                setShowAuthorCursor(cursorVisible);
+                cursorLastToggle = now;
+            }
+
+            // Type next character every TYPING_SPEED ms
+            if (now - lastTime >= TYPING_SPEED && currentIndex <= AUTHOR_TEXT.length) {
                 setDisplayedAuthor(AUTHOR_TEXT.substring(0, currentIndex));
+                currentIndex++;
+                lastTime = now;
+            }
+
+            // Continue animation or finish
+            if (currentIndex <= AUTHOR_TEXT.length) {
+                requestAnimationFrame(animate);
             } else {
-                clearInterval(typingInterval);
-                clearInterval(cursorInterval);
                 setShowAuthorCursor(false);
                 setIsTypingComplete(true);
             }
-        }, TYPING_SPEED);
+        };
+
+        requestAnimationFrame(animate);
 
         return () => {
             isMounted = false;
-            clearInterval(typingInterval);
-            clearInterval(cursorInterval);
         };
     }, [startAuthorTyping]);
 
