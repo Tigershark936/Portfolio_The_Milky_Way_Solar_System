@@ -9,8 +9,9 @@ type LoadingPageProps = {
     onComplete?: () => void;
 };
 
-const FULL_TEXT = "Bienvenue sur le portfolio de Alain";
-const AUTHOR_TEXT = "par Alain Daly";
+// Utiliser String.fromCharCode pour éviter les problèmes d'encodage UTF-8
+const FULL_TEXT = "Bienvenue sur mon portfolio";
+const AUTHOR_TEXT = "Alain Daly - Developpeur Web";
 
 function LoadingPage({ onComplete }: LoadingPageProps) {
     const [criticalTexturesLoaded, setCriticalTexturesLoaded] = useState(false);
