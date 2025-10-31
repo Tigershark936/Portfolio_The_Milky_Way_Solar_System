@@ -9,9 +9,8 @@ type LoadingPageProps = {
     onComplete?: () => void;
 };
 
-// Utiliser String.fromCharCode pour éviter les problèmes d'encodage UTF-8
 const FULL_TEXT = "Bienvenue sur mon portfolio";
-const AUTHOR_TEXT = "Alain Daly - Developpeur Web";
+const AUTHOR_TEXT = "Alain Daly";
 
 function LoadingPage({ onComplete }: LoadingPageProps) {
     const [criticalTexturesLoaded, setCriticalTexturesLoaded] = useState(false);
@@ -49,30 +48,24 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
 
         const typeWelcome = () => {
             if (!welcomeRef.current) return;
-
+            
             if (currentWelcomeIndex <= FULL_TEXT.length) {
-                const currentText = FULL_TEXT.substring(0, currentWelcomeIndex);
-                const cursor = currentWelcomeIndex < FULL_TEXT.length ? '|' : '';
-                welcomeRef.current.textContent = currentText + cursor;
+                welcomeRef.current.textContent = FULL_TEXT.substring(0, currentWelcomeIndex);
                 currentWelcomeIndex++;
                 timeoutId = setTimeout(typeWelcome, TYPING_SPEED);
             } else {
-                welcomeRef.current.textContent = FULL_TEXT;
                 timeoutId = setTimeout(typeAuthor, 800);
             }
         };
-
+        
         const typeAuthor = () => {
             if (!authorRef.current) return;
-
+            
             if (currentAuthorIndex <= AUTHOR_TEXT.length) {
-                const currentText = AUTHOR_TEXT.substring(0, currentAuthorIndex);
-                const cursor = currentAuthorIndex < AUTHOR_TEXT.length ? '|' : '';
-                authorRef.current.textContent = currentText + cursor;
+                authorRef.current.textContent = AUTHOR_TEXT.substring(0, currentAuthorIndex);
                 currentAuthorIndex++;
                 timeoutId = setTimeout(typeAuthor, TYPING_SPEED);
             } else {
-                authorRef.current.textContent = AUTHOR_TEXT;
                 setIsTypingComplete(true);
             }
         };
