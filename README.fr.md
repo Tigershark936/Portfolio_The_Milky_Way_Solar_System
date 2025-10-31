@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./public/icone-site.png" alt="Portfolio Solaire Logo" width="150"/>
+  <img src="public/icone-site.png" alt="Portfolio Solaire Logo" width="150"/>
 </p>
 
 # Portfolio Solaire 🌌 🪐
@@ -80,7 +80,7 @@ Il permet aux utilisateurs d'explorer le système solaire, de suivre les planèt
 
 <div align="center">
     <!-- Maquette -->
-    <img src="./public/projects/Portfolio-The_Milky_Way_Solar_System.jpg" alt="Capture d'écran Portfolio Solaire" width="700"/>
+    <img src="public/projects/Portfolio-The_Milky_Way_Solar_System.jpg" alt="Capture d'écran Portfolio Solaire" width="700"/>
 </div>
 
 </div>
