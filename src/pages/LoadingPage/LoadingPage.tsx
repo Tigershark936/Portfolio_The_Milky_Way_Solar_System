@@ -11,15 +11,13 @@ type LoadingPageProps = {
 
 const FULL_TEXT = "Bienvenue sur le portfolio de Alain";
 const AUTHOR_TEXT = "par alain daly";
-const TYPING_SPEED = 150; // Vitesse de frappe ralentie pour être visible
 
 function LoadingPage({ onComplete }: LoadingPageProps) {
-    const [displayedText, setDisplayedText] = useState('');
-    const [displayedAuthor, setDisplayedAuthor] = useState('');
-    const [showCursor, setShowCursor] = useState(true);
-    const [showAuthorCursor, setShowAuthorCursor] = useState(false);
-    const [isTypingComplete, setIsTypingComplete] = useState(false);
-    const [startAuthorTyping, setStartAuthorTyping] = useState(false);
+    // Afficher directement le texte complet (pas d'animation pour l'instant)
+    const [displayedText] = useState(FULL_TEXT);
+    const [displayedAuthor] = useState(AUTHOR_TEXT);
+    const [showCursor] = useState(false);
+    const [showAuthorCursor] = useState(false);
 
     const [criticalTexturesLoaded, setCriticalTexturesLoaded] = useState(false);
 
@@ -41,101 +39,23 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
         });
     }, []);
 
-    // Animation de frappe au clavier pour le titre (démarre immédiatement)
+    // Plus d'animation de typing - texte affiché directement
+    // TODO: Réimplémenter l'animation quand on comprendra pourquoi elle ne fonctionne pas sur Netlify
+
+    // Appeler onComplete après le chargement des textures critiques
+    // Avec un délai de 3 secondes pour laisser le temps de lire le message
     useEffect(() => {
-        let isMounted = true;
-        let currentIndex = 0;
-        let cursorInterval: ReturnType<typeof setInterval>;
-
-        // Animation du curseur clignotant
-        cursorInterval = setInterval(() => {
-            if (isMounted) {
-                setShowCursor(prev => !prev);
-            }
-        }, 600);
-
-        // Animation de typing avec setTimeout récursif
-        const typeNextChar = () => {
-            if (!isMounted) return;
-            
-            if (currentIndex < FULL_TEXT.length) {
-                currentIndex++;
-                setDisplayedText(FULL_TEXT.substring(0, currentIndex));
-                setTimeout(typeNextChar, TYPING_SPEED);
-            } else {
-                clearInterval(cursorInterval);
-                setShowCursor(false);
-                setTimeout(() => {
-                    if (isMounted) {
-                        setStartAuthorTyping(true);
-                    }
-                }, 800);
-            }
-        };
-
-        // Démarrer l'animation
-        setTimeout(typeNextChar, TYPING_SPEED);
-
-        return () => {
-            isMounted = false;
-            clearInterval(cursorInterval);
-        };
-    }, []);
-
-    // Animation de frappe au clavier pour l'auteur
-    useEffect(() => {
-        if (!startAuthorTyping) return;
-
-        let isMounted = true;
-        let currentIndex = 0;
-        let cursorInterval: ReturnType<typeof setInterval>;
-
-        // Animation du curseur clignotant
-        setShowAuthorCursor(true);
-        cursorInterval = setInterval(() => {
-            if (isMounted) {
-                setShowAuthorCursor(prev => !prev);
-            }
-        }, 600);
-
-        // Animation de typing avec setTimeout récursif
-        const typeNextChar = () => {
-            if (!isMounted) return;
-            
-            if (currentIndex < AUTHOR_TEXT.length) {
-                currentIndex++;
-                setDisplayedAuthor(AUTHOR_TEXT.substring(0, currentIndex));
-                setTimeout(typeNextChar, TYPING_SPEED);
-            } else {
-                clearInterval(cursorInterval);
-                setShowAuthorCursor(false);
-                setIsTypingComplete(true);
-            }
-        };
-
-        // Démarrer l'animation
-        setTimeout(typeNextChar, TYPING_SPEED);
-
-        return () => {
-            isMounted = false;
-            clearInterval(cursorInterval);
-        };
-    }, [startAuthorTyping]);
-
-    // Appeler onComplete après la fin du typing ET quand les textures critiques sont chargées
-    // Avec un délai minimum pour que l'utilisateur puisse lire le message
-    useEffect(() => {
-        if (isTypingComplete && criticalTexturesLoaded) {
-            // Délai de 2 secondes pour laisser le temps de lire
+        if (criticalTexturesLoaded) {
+            // Délai de 3 secondes pour laisser le temps de lire
             const timer = setTimeout(() => {
                 if (onComplete) {
                     onComplete();
                 }
-            }, 2000);
-
+            }, 3000);
+            
             return () => clearTimeout(timer);
         }
-    }, [isTypingComplete, criticalTexturesLoaded, onComplete]);
+    }, [criticalTexturesLoaded, onComplete]);
 
     return (
         <div className={styles.loadingContainer}>
@@ -168,14 +88,12 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
                         <span className={styles.cursor}>|</span>
                     )}
                 </h1>
-                {startAuthorTyping && (
-                    <p className={styles.authorText}>
-                        {displayedAuthor}
-                        {showAuthorCursor && displayedAuthor.length < AUTHOR_TEXT.length && (
-                            <span className={styles.cursor}>|</span>
-                        )}
-                    </p>
-                )}
+                <p className={styles.authorText}>
+                    {displayedAuthor}
+                    {showAuthorCursor && displayedAuthor.length < AUTHOR_TEXT.length && (
+                        <span className={styles.cursor}>|</span>
+                    )}
+                </p>
             </div>
         </div>
     );
