@@ -37,51 +37,56 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
         });
     }, []);
 
-    // Animation de typing avec manipulation DOM directe
-    // NE DÉMARRE QUE quand les textures sont chargées pour éviter les problèmes de latence
+    // Animation de typing - approche simplifiée avec requestAnimationFrame
+    // Pour éviter les glitches, on utilise RAF au lieu de setTimeout
     useEffect(() => {
         if (!welcomeRef.current || !authorRef.current || !criticalTexturesLoaded) return;
 
-        let timeoutId: ReturnType<typeof setTimeout>;
+        let animationFrameId: number;
         let currentWelcomeIndex = 0;
         let currentAuthorIndex = 0;
-        const TYPING_SPEED = 300; // Très lent pour compenser toute latence réseau Netlify
+        let lastUpdateTime = performance.now();
+        const TYPING_SPEED = 100; // ms entre chaque caractère
+        let isTypingWelcome = true;
 
-        const typeWelcome = () => {
-            if (!welcomeRef.current) return;
+        const animate = (currentTime: number) => {
+            const elapsed = currentTime - lastUpdateTime;
 
-            if (currentWelcomeIndex <= FULL_TEXT.length) {
-                const cursor = currentWelcomeIndex < FULL_TEXT.length ? '|' : '';
-                welcomeRef.current.textContent = FULL_TEXT.substring(0, currentWelcomeIndex) + cursor;
-                currentWelcomeIndex++;
-                timeoutId = setTimeout(typeWelcome, TYPING_SPEED);
-            } else {
-                welcomeRef.current.textContent = FULL_TEXT;
-                timeoutId = setTimeout(typeAuthor, 800);
+            if (elapsed >= TYPING_SPEED) {
+                if (isTypingWelcome) {
+                    if (currentWelcomeIndex <= FULL_TEXT.length && welcomeRef.current) {
+                        welcomeRef.current.textContent = FULL_TEXT.substring(0, currentWelcomeIndex);
+                        currentWelcomeIndex++;
+                        lastUpdateTime = currentTime;
+                        
+                        if (currentWelcomeIndex > FULL_TEXT.length) {
+                            isTypingWelcome = false;
+                            lastUpdateTime = currentTime + 800; // Pause avant author
+                        }
+                    }
+                } else {
+                    if (currentAuthorIndex <= AUTHOR_TEXT.length && authorRef.current) {
+                        authorRef.current.textContent = AUTHOR_TEXT.substring(0, currentAuthorIndex);
+                        currentAuthorIndex++;
+                        lastUpdateTime = currentTime;
+                        
+                        if (currentAuthorIndex > AUTHOR_TEXT.length) {
+                            setIsTypingComplete(true);
+                            return; // Stop l'animation
+                        }
+                    }
+                }
             }
+
+            animationFrameId = requestAnimationFrame(animate);
         };
 
-        const typeAuthor = () => {
-            if (!authorRef.current) return;
-
-            if (currentAuthorIndex <= AUTHOR_TEXT.length) {
-                const cursor = currentAuthorIndex < AUTHOR_TEXT.length ? '|' : '';
-                authorRef.current.textContent = AUTHOR_TEXT.substring(0, currentAuthorIndex) + cursor;
-                currentAuthorIndex++;
-                timeoutId = setTimeout(typeAuthor, TYPING_SPEED);
-            } else {
-                authorRef.current.textContent = AUTHOR_TEXT;
-                setIsTypingComplete(true);
-            }
-        };
-
-        // Démarrer l'animation seulement quand tout est chargé
-        timeoutId = setTimeout(typeWelcome, TYPING_SPEED);
+        animationFrameId = requestAnimationFrame(animate);
 
         return () => {
-            if (timeoutId) clearTimeout(timeoutId);
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
         };
-    }, [criticalTexturesLoaded]); // Dépend du chargement des textures
+    }, [criticalTexturesLoaded]);
 
     // Appeler onComplete après l'animation ET le chargement des textures
     useEffect(() => {
