@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import styles from './LoadingPage.module.scss';
 import Nebula from '../../components/Nebula/Nebula';
@@ -13,13 +13,11 @@ const FULL_TEXT = "Bienvenue sur le portfolio de Alain";
 const AUTHOR_TEXT = "par alain daly";
 
 function LoadingPage({ onComplete }: LoadingPageProps) {
-    // Afficher directement le texte complet (pas d'animation pour l'instant)
-    const [displayedText] = useState(FULL_TEXT);
-    const [displayedAuthor] = useState(AUTHOR_TEXT);
-    const [showCursor] = useState(false);
-    const [showAuthorCursor] = useState(false);
-
     const [criticalTexturesLoaded, setCriticalTexturesLoaded] = useState(false);
+    const [isTypingComplete, setIsTypingComplete] = useState(false);
+    
+    const welcomeRef = useRef<HTMLHeadingElement>(null);
+    const authorRef = useRef<HTMLParagraphElement>(null);
 
     // Précharger les textures critiques (nébuleuse, soleil) en premier pour affichage immédiat
     useEffect(() => {
@@ -39,23 +37,62 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
         });
     }, []);
 
-    // Plus d'animation de typing - texte affiché directement
-    // TODO: Réimplémenter l'animation quand on comprendra pourquoi elle ne fonctionne pas sur Netlify
-
-    // Appeler onComplete après le chargement des textures critiques
-    // Avec un délai de 3 secondes pour laisser le temps de lire le message
+    // Animation de typing avec manipulation DOM directe (plus fiable)
     useEffect(() => {
-        if (criticalTexturesLoaded) {
-            // Délai de 3 secondes pour laisser le temps de lire
+        if (!welcomeRef.current || !authorRef.current) return;
+        
+        let timeoutId: ReturnType<typeof setTimeout>;
+        let currentWelcomeIndex = 0;
+        let currentAuthorIndex = 0;
+        const TYPING_SPEED = 150;
+        
+        const typeWelcome = () => {
+            if (!welcomeRef.current) return;
+            
+            if (currentWelcomeIndex < FULL_TEXT.length) {
+                welcomeRef.current.textContent = FULL_TEXT.substring(0, currentWelcomeIndex + 1) + '|';
+                currentWelcomeIndex++;
+                timeoutId = setTimeout(typeWelcome, TYPING_SPEED);
+            } else {
+                welcomeRef.current.textContent = FULL_TEXT;
+                timeoutId = setTimeout(typeAuthor, 800);
+            }
+        };
+        
+        const typeAuthor = () => {
+            if (!authorRef.current) return;
+            
+            if (currentAuthorIndex < AUTHOR_TEXT.length) {
+                authorRef.current.textContent = AUTHOR_TEXT.substring(0, currentAuthorIndex + 1) + '|';
+                currentAuthorIndex++;
+                timeoutId = setTimeout(typeAuthor, TYPING_SPEED);
+            } else {
+                authorRef.current.textContent = AUTHOR_TEXT;
+                setIsTypingComplete(true);
+            }
+        };
+        
+        // Démarrer l'animation
+        timeoutId = setTimeout(typeWelcome, TYPING_SPEED);
+        
+        return () => {
+            if (timeoutId) clearTimeout(timeoutId);
+        };
+    }, []);
+
+    // Appeler onComplete après l'animation ET le chargement des textures
+    useEffect(() => {
+        if (isTypingComplete && criticalTexturesLoaded) {
+            // Délai de 2 secondes pour laisser le temps de lire
             const timer = setTimeout(() => {
                 if (onComplete) {
                     onComplete();
                 }
-            }, 3000);
+            }, 2000);
             
             return () => clearTimeout(timer);
         }
-    }, [criticalTexturesLoaded, onComplete]);
+    }, [isTypingComplete, criticalTexturesLoaded, onComplete]);
 
     return (
         <div className={styles.loadingContainer}>
@@ -80,20 +117,10 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
                 </Canvas>
             )}
 
-            {/* Texte par-dessus - S'affiche TOUJOURS indépendamment du Canvas */}
+            {/* Texte par-dessus - Animation DOM directe */}
             <div className={styles.textContainer}>
-                <h1 className={styles.welcomeText}>
-                    {displayedText}
-                    {showCursor && displayedText.length < FULL_TEXT.length && (
-                        <span className={styles.cursor}>|</span>
-                    )}
-                </h1>
-                <p className={styles.authorText}>
-                    {displayedAuthor}
-                    {showAuthorCursor && displayedAuthor.length < AUTHOR_TEXT.length && (
-                        <span className={styles.cursor}>|</span>
-                    )}
-                </p>
+                <h1 ref={welcomeRef} className={styles.welcomeText}></h1>
+                <p ref={authorRef} className={styles.authorText}></p>
             </div>
         </div>
     );
