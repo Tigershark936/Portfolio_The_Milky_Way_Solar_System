@@ -41,7 +41,7 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
         });
     }, []);
 
-    // Animation de frappe au clavier pour le titre
+    // Animation de frappe au clavier pour le titre (démarre immédiatement)
     useEffect(() => {
         let currentIndex = 0;
         let cursorInterval: number | undefined;
@@ -51,6 +51,7 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
             setShowCursor(prev => !prev);
         }, 600);
 
+        // Démarrer l'animation immédiatement sans attendre les textures
         const typingInterval = setInterval(() => {
             if (currentIndex < FULL_TEXT.length) {
                 setDisplayedText(FULL_TEXT.substring(0, currentIndex + 1));
@@ -78,7 +79,7 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
             }
             setShowCursor(false); // S'assurer que le curseur est caché au nettoyage
         };
-    }, []);
+    }, []); // Pas de dépendance - démarre immédiatement
 
     // Animation de frappe au clavier pour l'auteur
     useEffect(() => {
