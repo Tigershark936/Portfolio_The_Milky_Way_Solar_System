@@ -9,7 +9,7 @@ type LoadingPageProps = {
     onComplete?: () => void;
 };
 
-const FULL_TEXT = "Bienvenue sur mon portfolio";
+const FULL_TEXT = "Bienvenue sur mon site web";
 const AUTHOR_TEXT = "Alain Daly";
 
 function LoadingPage({ onComplete }: LoadingPageProps) {
@@ -44,11 +44,11 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
         let timeoutId: ReturnType<typeof setTimeout>;
         let currentWelcomeIndex = 0;
         let currentAuthorIndex = 0;
-        const TYPING_SPEED = 180; // Plus lent pour éviter les glitches visuels
+        const TYPING_SPEED = 250; // Très lent pour éliminer tous les glitches
 
         const typeWelcome = () => {
             if (!welcomeRef.current) return;
-            
+
             if (currentWelcomeIndex <= FULL_TEXT.length) {
                 welcomeRef.current.textContent = FULL_TEXT.substring(0, currentWelcomeIndex);
                 currentWelcomeIndex++;
@@ -57,10 +57,10 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
                 timeoutId = setTimeout(typeAuthor, 800);
             }
         };
-        
+
         const typeAuthor = () => {
             if (!authorRef.current) return;
-            
+
             if (currentAuthorIndex <= AUTHOR_TEXT.length) {
                 authorRef.current.textContent = AUTHOR_TEXT.substring(0, currentAuthorIndex);
                 currentAuthorIndex++;
