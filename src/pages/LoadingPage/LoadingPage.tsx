@@ -11,15 +11,15 @@ type LoadingPageProps = {
 
 const FULL_TEXT = "Bienvenue sur le portfolio de Alain";
 const AUTHOR_TEXT = "par alain daly";
-const TYPING_SPEED = 80; // Vitesse de frappe en millisecondes (plus rapide pour debug)
+const TYPING_SPEED = 150; // Vitesse de frappe ralentie pour être visible
 
 function LoadingPage({ onComplete }: LoadingPageProps) {
-    const [displayedText, setDisplayedText] = useState(FULL_TEXT); // TEMPORAIRE: afficher tout de suite
-    const [displayedAuthor, setDisplayedAuthor] = useState(AUTHOR_TEXT); // TEMPORAIRE: afficher tout de suite
-    const [showCursor, setShowCursor] = useState(false);
+    const [displayedText, setDisplayedText] = useState('');
+    const [displayedAuthor, setDisplayedAuthor] = useState('');
+    const [showCursor, setShowCursor] = useState(true);
     const [showAuthorCursor, setShowAuthorCursor] = useState(false);
-    const [isTypingComplete, setIsTypingComplete] = useState(true); // TEMPORAIRE: déjà terminé
-    const [startAuthorTyping, setStartAuthorTyping] = useState(true);
+    const [isTypingComplete, setIsTypingComplete] = useState(false);
+    const [startAuthorTyping, setStartAuthorTyping] = useState(false);
 
     const [criticalTexturesLoaded, setCriticalTexturesLoaded] = useState(false);
 
@@ -136,12 +136,17 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
     }, [startAuthorTyping]);
 
     // Appeler onComplete après la fin du typing ET quand les textures critiques sont chargées
+    // Avec un délai minimum pour que l'utilisateur puisse lire le message
     useEffect(() => {
         if (isTypingComplete && criticalTexturesLoaded) {
-            // Pas de délai supplémentaire - passer directement à la HomePage
-            if (onComplete) {
-                onComplete();
-            }
+            // Délai de 2 secondes pour laisser le temps de lire
+            const timer = setTimeout(() => {
+                if (onComplete) {
+                    onComplete();
+                }
+            }, 2000);
+            
+            return () => clearTimeout(timer);
         }
     }, [isTypingComplete, criticalTexturesLoaded, onComplete]);
 
