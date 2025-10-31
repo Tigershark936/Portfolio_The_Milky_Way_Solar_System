@@ -86,6 +86,37 @@ const LabelManager = ({ showPlanetNames, showMoonNames, isSunHovered, hoveredPla
     }, [camera, scene]);
 
     useFrame(() => {
+        // Vérifier TOUS les moyens possibles pour détecter si une modal est ouverte
+        const isModalOpen = document.body.classList.contains('modal-open');
+        // Chercher tout élément qui contient "modal" dans son nom de classe (CSS modules)
+        const hasModalOverlay = document.querySelector('[class*="modalOverlay"]') !== null;
+        const hasModalContent = document.querySelector('[class*="modalContent"]') !== null;
+        const shouldHideLabels = isModalOpen || hasModalOverlay || hasModalContent;
+        
+        if (shouldHideLabels) {
+            // SUPPRIMER complètement les labels du DOM quand une modal est ouverte
+            planetLabelsRef.current.forEach(label => {
+                if (label && label.parentNode) {
+                    label.remove();
+                }
+            });
+            moonLabelsRef.current.forEach(label => {
+                if (label && label.parentNode) {
+                    label.remove();
+                }
+            });
+            if (sunLabelRef.current && sunLabelRef.current.parentNode) {
+                sunLabelRef.current.remove();
+            }
+            
+            // Vider les Maps pour forcer la recréation des labels quand la modal se ferme
+            planetLabelsRef.current.clear();
+            moonLabelsRef.current.clear();
+            sunLabelRef.current = null;
+            
+            return; // Sortir de la fonction - pas besoin de mettre à jour les labels
+        }
+
         // Trouver toutes les planètes et lunes dans la scène par leur nom
         scene.children.forEach(child => {
             // Traverser récursivement pour trouver les meshes
@@ -177,12 +208,12 @@ const LabelManager = ({ showPlanetNames, showMoonNames, isSunHovered, hoveredPla
                         label.style.transform = 'translate(-50%, calc(-100% - 10px))';
 
                         if (vector.z > 1) {
-                            label.style.display = 'none';
+                            label.style.setProperty('display', 'none', 'important');
                         } else {
-                            label.style.display = 'block';
+                            label.style.setProperty('display', 'block', 'important');
                         }
                     } else if (label) {
-                        label.style.display = 'none';
+                        label.style.setProperty('display', 'none', 'important');
                     }
                 }
             });
@@ -230,12 +261,12 @@ const LabelManager = ({ showPlanetNames, showMoonNames, isSunHovered, hoveredPla
                 sunLabelRef.current.style.transform = 'translate(-50%, calc(-100% - 10px))';
 
                 if (vector.z > 1) {
-                    sunLabelRef.current.style.display = 'none';
+                    sunLabelRef.current.style.setProperty('display', 'none', 'important');
                 } else {
-                    sunLabelRef.current.style.display = 'block';
+                    sunLabelRef.current.style.setProperty('display', 'block', 'important');
                 }
             } else if (sunLabelRef.current) {
-                sunLabelRef.current.style.display = 'none';
+                sunLabelRef.current.style.setProperty('display', 'none', 'important');
             }
         }
     });

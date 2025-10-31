@@ -118,20 +118,26 @@
     }
 }
 
-// Responsive
-@media (max-width: 768px) {
+// Responsive - Réduction en tablette
+@media (max-width: 1024px) {
     .projectsButton {
-        bottom: 15px;
-        right: 15px;
-        padding: 12px 18px;
+        padding: 6px 10px;
+        font-size: 10px;
+        letter-spacing: 0.5px;
+    }
+
+    .buttonIcon {
         font-size: 12px;
     }
 
-    .icon {
-        font-size: 20px;
+    .buttonText {
+        font-size: 10px;
     }
+}
 
-    .text {
-        font-size: 12px;
+// Responsive - Caché en tablette et mobile
+@media (max-width: 900px) {
+    .projectsButton {
+        display: none !important;
     }
 }

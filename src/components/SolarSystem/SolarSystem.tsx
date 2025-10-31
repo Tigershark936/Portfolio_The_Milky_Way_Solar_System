@@ -16,8 +16,12 @@ import LabelManager from '../UI/Labels/LabelManager';
 import ProjectsButton from '../UI/Project/ProjectsButton/ProjectsButton';
 import AboutButton from '../UI/About/AboutButton/AboutButton';
 import ContactButton from '../UI/Contact/ContactButton/ContactButton';
+import ActionsMenu from '../UI/ActionsMenu/ActionsMenu';
 import PlanetInfoModal from '../UI/PlanetInfo/PlanetInfoModal';
 import MoonFollower from '../UI/Camera/MoonFollower';
+import AboutModal from '../UI/About/AboutModal/AboutModal';
+import ProjectsModal from '../UI/Project/ProjectsModal/ProjectsModal';
+import ContactModal from '../UI/Contact/ContactModal/ContactModal';
 import type { Planet as PlanetType, PlanetDetails } from '../../types/SolarSystemDetails';
 import { useFetchPlanetPositions } from '../../hooks/useFetchPlanetPositions';
 
@@ -74,6 +78,13 @@ const SolarSystem = () => {
     const [hoveredPlanets, setHoveredPlanets] = useState<Set<string>>(new Set()); // État pour les planètes survolées
     const controlsRef = useRef<any>(null);
     const [planets, setPlanets] = useState<PlanetType[]>(basePlanets);
+    
+    // États pour les modals (pour ActionsMenu mobile)
+    const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
+    const [isProjectsModalOpen, setIsProjectsModalOpen] = useState(false);
+    const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+    const [closePlanetSelector, setClosePlanetSelector] = useState(false);
+    const [isActionsMenuOpen, setIsActionsMenuOpen] = useState(false);
 
     // Hook pour charger les positions réelles des planètes depuis l'API
     const { loadRealPositions } = useFetchPlanetPositions(planets);
@@ -415,9 +426,43 @@ const SolarSystem = () => {
                 onToggleOrbits={handleToggleOrbits}
                 onToggleAsteroids={() => setShowAsteroids(prev => !prev)}
             />
-            <AboutButton />
-            <ContactButton />
-            <ProjectsButton />
+            {/* Boutons desktop */}
+            <AboutButton onOpen={() => {
+                setClosePlanetSelector(true);
+                setTimeout(() => setClosePlanetSelector(false), 100);
+            }} />
+            <ContactButton onOpen={() => {
+                setClosePlanetSelector(true);
+                setTimeout(() => setClosePlanetSelector(false), 100);
+            }} />
+            <ProjectsButton onOpen={() => {
+                setClosePlanetSelector(true);
+                setTimeout(() => setClosePlanetSelector(false), 100);
+            }} />
+            
+            {/* Menu mobile/tablette - Dans le coin droit */}
+            <ActionsMenu
+                onMenuButtonClick={() => {
+                    setClosePlanetSelector(true);
+                    setTimeout(() => setClosePlanetSelector(false), 100);
+                }}
+                onMenuOpenChange={(isOpen) => setIsActionsMenuOpen(isOpen)}
+                onAboutClick={() => {
+                    setClosePlanetSelector(true);
+                    setTimeout(() => setClosePlanetSelector(false), 100);
+                    setIsAboutModalOpen(true);
+                }}
+                onProjectsClick={() => {
+                    setClosePlanetSelector(true);
+                    setTimeout(() => setClosePlanetSelector(false), 100);
+                    setIsProjectsModalOpen(true);
+                }}
+                onContactClick={() => {
+                    setClosePlanetSelector(true);
+                    setTimeout(() => setClosePlanetSelector(false), 100);
+                    setIsContactModalOpen(true);
+                }}
+            />
 
             <CameraControls
                 onSpeedChange={handleSpeedChange}
@@ -426,10 +471,14 @@ const SolarSystem = () => {
                 activeCameraPreset={activeCameraPreset}
                 onResetPlanetPositions={handleLoadRealPositions}
             />
+            
+            {/* PlanetSelector - toujours centré */}
             <PlanetSelector
                 planets={planets}
                 onPlanetSelect={handlePlanetSelect}
                 selectedPlanet={selectedPlanet}
+                forceClose={closePlanetSelector}
+                disabled={isActionsMenuOpen}
             />
             <Canvas
                 camera={{ position: [cameraPosition.x, cameraPosition.y, cameraPosition.z], fov: 60 }}
@@ -537,6 +586,20 @@ const SolarSystem = () => {
                 onClose={handleClosePlanetInfoModal}
                 onMoonFollow={handleMoonClick}
                 planetData={selectedPlanetData}
+            />
+            
+            {/* Modals pour ActionsMenu mobile */}
+            <AboutModal 
+                isOpen={isAboutModalOpen} 
+                onClose={() => setIsAboutModalOpen(false)} 
+            />
+            <ProjectsModal 
+                isOpen={isProjectsModalOpen} 
+                onClose={() => setIsProjectsModalOpen(false)} 
+            />
+            <ContactModal 
+                isOpen={isContactModalOpen} 
+                onClose={() => setIsContactModalOpen(false)} 
             />
         </div>
     )

@@ -956,3 +956,174 @@
         text-shadow: 0 0 12px currentColor, 0 0 20px currentColor;
     }
 }
+
+// Responsive - Progression fluide 1024px
+@media (max-width: 1024px) {
+    .controlsContent {
+        max-height: 400px;
+        overflow-y: auto;
+        
+        // Scrollbar personnalisée
+        scrollbar-width: thin;
+        scrollbar-color: rgba(138, 43, 226, 0.5) rgba(138, 43, 226, 0.1);
+        
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        &::-webkit-scrollbar-track {
+            background: rgba(138, 43, 226, 0.1);
+            border-radius: 3px;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+            background: rgba(138, 43, 226, 0.5);
+            border-radius: 3px;
+            
+            &:hover {
+                background: rgba(138, 43, 226, 0.7);
+            }
+        }
+    }
+}
+
+// Responsive - Progression fluide 900px
+@media (max-width: 900px) {
+    .controlsContent {
+        max-height: 380px;
+    }
+}
+
+// Responsive - Progression fluide 768px
+@media (max-width: 768px) {
+    .controls {
+        min-width: 240px;
+        max-width: 85vw;
+    }
+
+    .controlsHeader {
+        padding: 14px 16px;
+
+        h3 {
+            font-size: 14px;
+            letter-spacing: 1.5px;
+        }
+    }
+
+    .controlsContent {
+        padding: 12px 16px;
+        max-height: 350px;
+    }
+
+    .controlGroup {
+        margin-bottom: 12px;
+    }
+
+    .controlLabel {
+        font-size: 11px;
+        margin-bottom: 6px;
+    }
+
+    .speedControl,
+    .presetButtons,
+    .buttonGroup {
+        gap: 6px;
+    }
+
+    .speedButton,
+    .presetButton,
+    .resetButton,
+    .realPositionsButton {
+        padding: 8px 12px;
+        font-size: 11px;
+        letter-spacing: 0.6px;
+    }
+
+    .buttonIcon {
+        font-size: 14px;
+    }
+
+    .speedValue {
+        min-width: 35px;
+        font-size: 12px;
+    }
+}
+
+// Responsive - Progression fluide 600px
+@media (max-width: 600px) {
+    .controlsContent {
+        max-height: 330px;
+    }
+}
+
+// Responsive - Progression fluide 480px
+@media (max-width: 480px) {
+    .controlsContent {
+        max-height: 300px;
+    }
+}
+
+// Responsive - Réduction en mobile très petit
+@media (max-width: 320px) {
+    .cameraButton {
+        padding: 8px;
+        border-width: 1.5px;
+    }
+
+    .cameraTitle {
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    .controls {
+        min-width: 200px;
+        max-width: 90vw;
+    }
+
+    .controlsHeader {
+        padding: 10px 12px;
+
+        h3 {
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+    }
+
+    .controlsContent {
+        padding: 10px 12px;
+        max-height: 280px; // Hauteur fixe pour très petit mobile
+    }
+
+    .controlGroup {
+        margin-bottom: 10px;
+    }
+
+    .controlLabel {
+        font-size: 10px;
+        margin-bottom: 5px;
+    }
+
+    .speedControl,
+    .presetButtons,
+    .buttonGroup {
+        gap: 5px;
+    }
+
+    .speedButton,
+    .presetButton,
+    .resetButton,
+    .realPositionsButton {
+        padding: 6px 10px;
+        font-size: 10px;
+        letter-spacing: 0.5px;
+    }
+
+    .buttonIcon {
+        font-size: 12px;
+    }
+
+    .speedValue {
+        min-width: 30px;
+        font-size: 11px;
+    }
+}

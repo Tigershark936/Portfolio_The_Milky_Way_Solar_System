@@ -68,55 +68,47 @@
     }
 }
 
-.hamburger {
+.settingsIcon {
+    font-size: 20px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    width: 20px;
-    height: 16px;
+    justify-content: center;
+    transition: all 0.3s ease;
+    filter: grayscale(100%) brightness(200%);
     position: relative;
 
-    span {
-        width: 100%;
-        height: 2px;
-        background: white;
-        border-radius: 1px;
-        transition: all 0.3s ease;
-        transform-origin: center;
-        position: absolute;
-    }
-
-    span:nth-child(1) {
-        top: 2px;
-    }
-
-    span:nth-child(2) {
-        top: 7px;
-    }
-
-    span:nth-child(3) {
-        top: 12px;
-    }
-
-    // Animation quand le menu est ouvert
+    // Cache l'engrenage et affiche la croix quand ouvert
     &.open {
-        span:nth-child(1) {
-            transform: rotate(45deg);
-            top: 7px;
-            background: #DC143C; // Crimson
+        filter: none; // Désactive le filtre grayscale pour la croix
+        
+        &::before {
+            content: '✕';
+            position: absolute;
+            font-size: 24px;
+            color: #DC143C; // Rouge comme la croix hamburger
+            animation: showCross 0.3s ease-in-out;
+            filter: none; // Force la couleur sans filtre
         }
-
-        span:nth-child(2) {
-            opacity: 0;
-        }
-
-        span:nth-child(3) {
-            transform: rotate(-45deg);
-            top: 7px;
-            background: #DC143C; // Crimson
-        }
+        
+        // Cache l'emoji engrenage
+        color: transparent;
     }
+}
+
+@keyframes showCross {
+    from {
+        opacity: 0;
+        transform: scale(0) rotate(-90deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+.menuButton:hover .settingsIcon {
+    filter: grayscale(0%) brightness(100%);
+    transform: scale(1.1) rotate(90deg);
 }
 
 .menu {
@@ -579,5 +571,81 @@
     50% {
         transform: scale(1.1);
         text-shadow: 0 0 12px currentColor, 0 0 20px currentColor;
+    }
+}
+
+// Responsive - Réduction en mobile
+@media (max-width: 768px) {
+    .menu {
+        min-width: 240px;
+        max-width: 85vw;
+    }
+
+    .menuHeader {
+        padding: 14px 16px;
+
+        h3 {
+            font-size: 14px;
+            letter-spacing: 1.5px;
+        }
+    }
+
+    .menuContent {
+        padding: 12px 16px;
+    }
+
+    .toggleButton {
+        padding: 10px 12px;
+        font-size: 12px;
+        letter-spacing: 0.6px;
+    }
+
+    .buttonIcon {
+        width: 16px;
+        height: 16px;
+        margin-right: 10px;
+        font-size: 14px;
+    }
+}
+
+// Responsive - Réduction en mobile très petit
+@media (max-width: 320px) {
+    .menuButton {
+        padding: 8px;
+        border-width: 1.5px;
+    }
+
+    .settingsIcon {
+        font-size: 16px;
+    }
+
+    .menu {
+        min-width: 200px;
+        max-width: 90vw;
+    }
+
+    .menuHeader {
+        padding: 10px 12px;
+
+        h3 {
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+    }
+
+    .menuContent {
+        padding: 10px 12px;
+    }
+
+    .toggleButton {
+        padding: 8px 10px;
+        font-size: 11px;
+    }
+
+    .buttonIcon {
+        width: 14px;
+        height: 14px;
+        margin-right: 8px;
+        font-size: 12px;
     }
 }

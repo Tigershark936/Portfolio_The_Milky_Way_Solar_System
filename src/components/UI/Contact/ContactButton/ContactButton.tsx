@@ -2,10 +2,17 @@
 import styles from './ContactButton.module.scss';
 import ContactModal from '../ContactModal/ContactModal';
 
-const ContactButton = () => {
+type ContactButtonProps = {
+    onOpen?: () => void; // Callback appelé lors de l'ouverture de la modal
+};
+
+const ContactButton = ({ onOpen }: ContactButtonProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClick = () => {
+        if (onOpen) {
+            onOpen();
+        }
         setIsModalOpen(true);
     };
 

@@ -45,7 +45,7 @@ body {
         0 4px 20px rgba(65, 105, 225, 0.4),
         0 0 15px rgba(65, 105, 225, 0.3),
         inset 0 0 10px rgba(65, 105, 225, 0.1);
-    z-index: 1000;
+    z-index: 10;
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     white-space: nowrap;
     text-shadow:
@@ -73,7 +73,7 @@ body {
         0 3px 15px rgba(255, 215, 0, 0.4),
         0 0 10px rgba(255, 215, 0, 0.3),
         inset 0 0 8px rgba(255, 215, 0, 0.1);
-    z-index: 999;
+    z-index: 9;
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     white-space: nowrap;
     text-shadow:
@@ -101,7 +101,7 @@ body {
         0 4px 20px rgba(255, 107, 53, 0.4),
         0 0 15px rgba(255, 107, 53, 0.3),
         inset 0 0 10px rgba(255, 107, 53, 0.1);
-    z-index: 1001;
+    z-index: 11;
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     white-space: nowrap;
     text-shadow:
@@ -110,7 +110,16 @@ body {
         0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+/* Cacher tous les labels quand une modal est ouverte */
 body.modal-open .planet-label,
-body.modal-open .moon-label {
+body.modal-open .moon-label,
+body.modal-open .sun-label,
+body.modal-open [class*="label"],
+body.modal-open [id^="label-"] {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: -9999 !important;
+    transform: translateX(-10000px) !important;
 }

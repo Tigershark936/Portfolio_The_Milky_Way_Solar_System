@@ -56,10 +56,8 @@ const Menu = ({ showPlanetNames, showMoonNames, showOrbits, showAsteroids, onTog
                 onClick={() => setIsOpen(!isOpen)}
                 aria-label="Ouvrir le menu"
             >
-                <div className={`${styles.hamburger} ${isOpen ? styles.open : ''}`}>
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                <div className={`${styles.settingsIcon} ${isOpen ? styles.open : ''}`}>
+                    ⚙️
                 </div>
             </button>
 

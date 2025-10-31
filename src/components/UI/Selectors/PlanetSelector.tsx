@@ -5,12 +5,28 @@ type PlanetSelectorProps = {
     planets: Array<{ name: string; distance: number; size: number; color: string }>;
     onPlanetSelect: (planetName: string | null) => void;
     selectedPlanet: string | null;
+    forceClose?: boolean; // Nouvelle prop pour forcer la fermeture
+    disabled?: boolean; // Nouvelle prop pour désactiver l'ouverture
 };
 
-const PlanetSelector = ({ planets, onPlanetSelect, selectedPlanet }: PlanetSelectorProps) => {
+const PlanetSelector = ({ planets, onPlanetSelect, selectedPlanet, forceClose, disabled }: PlanetSelectorProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const selectorRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
+
+    // Fermer si forceClose devient true
+    useEffect(() => {
+        if (forceClose) {
+            setIsOpen(false);
+        }
+    }, [forceClose]);
+
+    // Fermer si disabled devient true
+    useEffect(() => {
+        if (disabled) {
+            setIsOpen(false);
+        }
+    }, [disabled]);
 
     // Fonction de traduction des noms de planètes en français
     const translatePlanetName = (planetName: string): string => {
@@ -74,8 +90,13 @@ const PlanetSelector = ({ planets, onPlanetSelect, selectedPlanet }: PlanetSelec
             <button
                 ref={buttonRef}
                 className={`${styles.selectorButton} ${isOpen ? styles.open : ''}`}
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => {
+                    if (!disabled) {
+                        setIsOpen(!isOpen);
+                    }
+                }}
                 aria-label="Sélectionner une planète"
+                aria-disabled={disabled}
             >
                 <span className={styles.selectorTitle}>
                     {selectedPlanet 

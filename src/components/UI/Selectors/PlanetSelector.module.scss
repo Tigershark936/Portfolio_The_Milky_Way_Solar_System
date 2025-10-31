@@ -365,28 +365,182 @@
     }
 }
 
-// Responsive design
-@media (max-width: 768px) {
+// Tablette et Mobile - Scroll horizontal avec scrollbar personnalisée dès 1024px
+@media (max-width: 1024px) {
+    .selectorButton {
+        padding: 10px 16px;
+        font-size: 12px;
+    }
+
+    .selectorTitle {
+        font-size: 12px;
+    }
+
     .planetBar {
-        min-width: 90vw;
-        padding: 10px;
+        min-width: 250px;
+        max-width: 90vw;
+        width: 55vw; // Réduit à 55vw pour forcer le scroll
+        padding: 6px 8px;
+        overflow-x: auto; // Scroll horizontal obligatoire
+        overflow-y: visible;
+        
+        // Scrollbar horizontale personnalisée toujours visible
+        scrollbar-width: thin;
+        scrollbar-color: rgba(138, 43, 226, 0.5) rgba(138, 43, 226, 0.1);
+        
+        &::-webkit-scrollbar {
+            height: 8px; // Un peu plus haute pour être visible
+        }
+        
+        &::-webkit-scrollbar-track {
+            background: rgba(138, 43, 226, 0.1);
+            border-radius: 3px;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+            background: rgba(138, 43, 226, 0.5);
+            border-radius: 3px;
+            
+            &:hover {
+                background: rgba(138, 43, 226, 0.7);
+            }
+        }
     }
 
     .planetList {
-        gap: 8px;
+        gap: 6px;
+        flex-direction: row;
+        overflow-x: visible;
+        padding: 4px;
+        flex-wrap: nowrap; // Empêche le retour à la ligne
     }
 
     .planetButton {
-        min-width: 50px; // Réduit encore plus sur mobile
-        min-height: 45px; // Réduit encore plus sur mobile
-        padding: 6px 10px; // Réduit le padding sur mobile
+        min-width: 45px;
+        min-height: 42px;
+        padding: 5px 8px;
+        flex-shrink: 0; // Empêche les boutons de rétrécir
     }
 
     .planetIcon {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
 
     .planetName {
-        font-size: 12px;
+        font-size: 10px;
+    }
+}
+
+// Progression fluide 900px
+@media (max-width: 900px) {
+    .planetBar {
+        width: 80vw;
+    }
+}
+
+// Progression fluide 800px
+@media (max-width: 800px) {
+    .planetBar {
+        width: 85vw;
+    }
+}
+
+// Progression fluide 700px
+@media (max-width: 700px) {
+    .planetBar {
+        width: 88vw;
+    }
+}
+
+// Progression fluide 600px
+@media (max-width: 600px) {
+    .planetBar {
+        width: 90vw;
+    }
+
+    .planetButton {
+        min-width: 48px;
+        min-height: 43px;
+    }
+}
+
+// Progression fluide 500px
+@media (max-width: 500px) {
+    .selectorButton {
+        padding: 9px 14px;
+        font-size: 11px;
+    }
+
+    .selectorTitle {
+        font-size: 11px;
+    }
+
+    .planetBar {
+        width: 90vw;
+    }
+
+    .planetButton {
+        min-width: 46px;
+        min-height: 41px;
+        padding: 5px 8px;
+    }
+
+    .planetIcon {
+        font-size: 1.05rem;
+    }
+
+    .planetName {
+        font-size: 10px;
+    }
+}
+
+// Progression fluide 400px
+@media (max-width: 400px) {
+    .selectorButton {
+        padding: 8px 12px;
+        font-size: 10px;
+    }
+
+    .selectorTitle {
+        font-size: 10px;
+    }
+
+    .planetBar {
+        width: 88vw;
+    }
+
+    .planetButton {
+        min-width: 44px;
+        min-height: 40px;
+        padding: 4px 7px;
+    }
+
+    .planetIcon {
+        font-size: 1rem;
+    }
+
+    .planetName {
+        font-size: 9px;
+    }
+}
+
+// Progression fluide 320px (très petit mobile)
+@media (max-width: 320px) {
+    .planetBar {
+        width: 85vw;
+    }
+
+    .planetButton {
+        min-width: 42px;
+        min-height: 38px;
+        padding: 4px 6px;
+    }
+
+    .planetIcon {
+        font-size: 0.95rem;
+    }
+
+    .planetName {
+        font-size: 8px;
     }
 }

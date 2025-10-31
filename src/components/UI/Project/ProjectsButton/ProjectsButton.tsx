@@ -2,14 +2,25 @@ import { useState } from 'react';
 import ProjectsModal from '../ProjectsModal/ProjectsModal';
 import styles from './ProjectsButton.module.scss';
 
-const ProjectsButton = () => {
+type ProjectsButtonProps = {
+    onOpen?: () => void; // Callback appelé lors de l'ouverture de la modal
+};
+
+const ProjectsButton = ({ onOpen }: ProjectsButtonProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleClick = () => {
+        if (onOpen) {
+            onOpen();
+        }
+        setIsModalOpen(true);
+    };
 
     return (
         <>
             <button
                 className={styles.projectsButton}
-                onClick={() => setIsModalOpen(true)}
+                onClick={handleClick}
                 aria-label="Voir mes projets"
             >
                 <span className={styles.icon}>🚀</span>

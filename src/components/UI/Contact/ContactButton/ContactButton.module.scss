@@ -116,20 +116,26 @@
     }
 }
 
-// Responsive
-@media (max-width: 768px) {
+// Responsive - Réduction en tablette
+@media (max-width: 1024px) {
     .contactButton {
-        bottom: 60px;
-        right: 15px;
-        padding: 8px 14px;
-        font-size: 11px;
+        padding: 6px 10px;
+        font-size: 10px;
+        letter-spacing: 0.5px;
     }
 
-    .icon {
-        font-size: 14px;
+    .buttonIcon {
+        font-size: 12px;
     }
 
-    .text {
-        font-size: 11px;
+    .buttonText {
+        font-size: 10px;
+    }
+}
+
+// Responsive - Caché en tablette et mobile
+@media (max-width: 900px) {
+    .contactButton {
+        display: none !important;
     }
 }

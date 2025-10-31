@@ -2,10 +2,17 @@ import { useState } from 'react';
 import styles from './AboutButton.module.scss';
 import AboutModal from '../AboutModal/AboutModal';
 
-const AboutButton = () => {
+type AboutButtonProps = {
+    onOpen?: () => void; // Callback appelé lors de l'ouverture de la modal
+};
+
+const AboutButton = ({ onOpen }: AboutButtonProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClick = () => {
+        if (onOpen) {
+            onOpen();
+        }
         setIsModalOpen(true);
     };
 
