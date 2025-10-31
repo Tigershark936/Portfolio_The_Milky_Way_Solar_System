@@ -15,10 +15,6 @@
     transform: translateX(-50%);
     text-align: center;
     z-index: 1;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 2rem 3rem;
-    border-radius: 15px;
-    backdrop-filter: blur(10px);
 }
 
 .welcomeText {
@@ -71,16 +67,16 @@
     letter-spacing: 2px;
     color: rgba(255, 255, 255, 0.7);
     margin: 0;
+    text-align: center;
 
     /* Animation typing CSS pure - démarre après welcomeText */
-    /* MASQUÉ complètement (opacity 0 + border transparent) jusqu'à 3.5s */
     overflow: hidden;
     white-space: nowrap;
     width: 0;
-    opacity: 0;
-    border-right: 2px solid transparent;
+    margin-left: auto;
+    margin-right: auto;
+    border-right: 2px solid rgba(100, 150, 255, 0.8);
     animation: 
-        show-text 0s 3.5s forwards,
         typing 2s steps(15) 3.5s forwards,
         blink-caret 0.75s step-end 3.5s infinite;
 }
@@ -103,13 +99,6 @@
     }
 
     50% {
-        border-color: rgba(100, 150, 255, 0.8);
-    }
-}
-
-@keyframes show-text {
-    to {
-        opacity: 1;
         border-color: rgba(100, 150, 255, 0.8);
     }
 }
