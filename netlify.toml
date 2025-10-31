@@ -1,0 +1,17 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Configuration pour les fonctions serverless
+[functions."solar-system-proxy"]
+  included_files = ["netlify/functions/solar-system-proxy.ts"]
+

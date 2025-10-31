@@ -74,8 +74,11 @@ async function fetchPositionsFromAPI(): Promise<PlanetPosition[]> {
         // Pour simplifier, on utilise UTC+1 (on pourrait calculer DST, mais UTC+1 fonctionne)
         const timezoneOffset = 1; // Europe/Paris = UTC+1
 
-        // Utiliser le proxy Vite pour contourner CORS
-        const proxyUrl = '/api/solar-system/rest/positions';
+        // Utiliser le proxy Vite en dev, Netlify Function en production
+        const isProduction = import.meta.env.PROD;
+        const proxyUrl = isProduction 
+            ? '/.netlify/functions/solar-system-proxy'
+            : '/api/solar-system/rest/positions';
         const url = new URL(proxyUrl, window.location.origin);
 
         // Paramètres selon la documentation OpenAPI
@@ -323,17 +326,19 @@ function calculatePositionsLocally(): PlanetPosition[] {
  * @returns Promise avec les positions des planètes
  */
 export const fetchRealPlanetPositions = async (): Promise<PlanetPosition[]> => {
-    // Essayer d'abord avec l'API (via proxy pour contourner CORS)
+    // Essayer d'abord avec l'API (via proxy Vite en dev ou Netlify Function en prod)
     try {
         const apiPositions = await fetchPositionsFromAPI();
         if (apiPositions.length > 0) {
+            console.log(`✅ ${apiPositions.length} positions récupérées depuis l'API`);
             return apiPositions;
         }
     } catch (error) {
-        // console.warn('L\'API a échoué, utilisation du calcul local comme fallback...');
+        console.warn('⚠️ L\'API a échoué, utilisation du calcul local comme fallback...', error);
     }
 
     // Fallback sur le calcul local (plus fiable et rapide)
+    console.log('📊 Utilisation du calcul local des positions planétaires');
     return calculatePositionsLocally();
 };
 
