@@ -187,6 +187,14 @@ const SolarSystem = () => {
 
         const camera = controlsRef.current.object;
 
+        // Désélectionner la planète et la lune pour que le PlanetFollower arrête de suivre
+        setSelectedPlanet(null);
+        setSelectedMoon(null);
+
+        // Réinitialiser les limites de zoom aux valeurs par défaut
+        controlsRef.current.minDistance = 30;
+        controlsRef.current.maxDistance = 330;
+
         switch (preset) {
             case 'overview':
                 camera.position.set(0, 63.16, 126.32);
