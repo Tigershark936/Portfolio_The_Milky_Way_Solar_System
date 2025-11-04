@@ -122,6 +122,10 @@
         padding: 6px 10px;
         font-size: 10px;
         letter-spacing: 0.5px;
+        position: fixed !important;
+        bottom: 20px !important;
+        right: 20px !important;
+        z-index: 1000 !important;
     }
 
     .buttonIcon {
@@ -130,6 +134,16 @@
 
     .buttonText {
         font-size: 10px;
+    }
+}
+
+// Responsive - Mobile
+@media (max-width: 768px) {
+    .contactButton {
+        position: fixed !important;
+        bottom: 20px !important;
+        right: 20px !important;
+        z-index: 1000 !important;
     }
 }
 

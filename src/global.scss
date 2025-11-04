@@ -28,7 +28,7 @@ body {
 
 /* Labels de planètes - Identité du site */
 .planet-label {
-    position: absolute;
+    position: fixed;
     background: rgba(0, 0, 0, 0.7);
     color: #4169E1;
     padding: 6px 12px;
@@ -52,11 +52,13 @@ body {
         0 0 5px rgba(65, 105, 225, 0.8),
         0 0 10px rgba(65, 105, 225, 0.6),
         0 2px 4px rgba(0, 0, 0, 0.5);
+    contain: layout style paint;
+    will-change: transform;
 }
 
 /* Labels de lunes - Identité du site */
 .moon-label {
-    position: absolute;
+    position: fixed;
     background: rgba(0, 0, 0, 0.7);
     color: #FFD700;
     padding: 4px 8px;
@@ -80,11 +82,13 @@ body {
         0 0 5px rgba(255, 215, 0, 0.8),
         0 0 10px rgba(255, 215, 0, 0.6),
         0 2px 4px rgba(0, 0, 0, 0.5);
+    contain: layout style paint;
+    will-change: transform;
 }
 
 /* Label du Soleil - Orange */
 .sun-label {
-    position: absolute;
+    position: fixed;
     background: rgba(0, 0, 0, 0.7);
     color: #FF6B35;
     padding: 6px 12px;
@@ -108,6 +112,8 @@ body {
         0 0 5px rgba(255, 107, 53, 0.8),
         0 0 10px rgba(255, 107, 53, 0.6),
         0 2px 4px rgba(0, 0, 0, 0.5);
+    contain: layout style paint;
+    will-change: transform;
 }
 
 /* Cacher tous les labels quand une modal est ouverte */

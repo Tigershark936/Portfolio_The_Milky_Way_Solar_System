@@ -63,10 +63,52 @@ const LabelManager = ({ showPlanetNames, showMoonNames, isSunHovered, hoveredPla
                 }
             };
 
+            // Gestion des événements tactiles pour mobile
+            const onTouchMove = (event: TouchEvent) => {
+                if (event.touches.length > 0) {
+                    const touch = event.touches[0];
+                    mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
+                    mouse.y = -(touch.clientY / window.innerHeight) * 2 + 1;
+
+                    raycaster.setFromCamera(mouse, camera);
+                    const allObjects: THREE.Object3D[] = [];
+                    scene.traverse(child => {
+                        if (child instanceof THREE.Mesh && child.name && child.name !== 'orbitalRing') {
+                            allObjects.push(child);
+                        }
+                    });
+
+                    const intersects = raycaster.intersectObjects(allObjects);
+
+                    // Réinitialiser les planètes survolées
+                    hoveredPlanetsRef.current.clear();
+                    let found = false;
+                    for (let i = 0; i < intersects.length; i++) {
+                        const obj = intersects[i].object as THREE.Mesh;
+                        if (obj.name && obj.name.startsWith('moon-')) {
+                            hoveredPlanetsRef.current.add(obj.name);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        for (let i = 0; i < intersects.length; i++) {
+                            const obj = intersects[i].object as THREE.Mesh;
+                            if (obj.name && obj.name.startsWith('planet-')) {
+                                hoveredPlanetsRef.current.add(obj.name);
+                                break;
+                            }
+                        }
+                    }
+                }
+            };
+
             canvas.addEventListener('mousemove', onMouseMove);
+            canvas.addEventListener('touchmove', onTouchMove, { passive: true });
 
             return () => {
                 canvas.removeEventListener('mousemove', onMouseMove);
+                canvas.removeEventListener('touchmove', onTouchMove);
                 // Cleanup: supprimer tous les labels
                 planetLabelsRef.current.forEach(label => {
                     if (label && label.parentNode) {
@@ -92,7 +134,7 @@ const LabelManager = ({ showPlanetNames, showMoonNames, isSunHovered, hoveredPla
         const hasModalOverlay = document.querySelector('[class*="modalOverlay"]') !== null;
         const hasModalContent = document.querySelector('[class*="modalContent"]') !== null;
         const shouldHideLabels = isModalOpen || hasModalOverlay || hasModalContent;
-        
+
         if (shouldHideLabels) {
             // SUPPRIMER complètement les labels du DOM quand une modal est ouverte
             planetLabelsRef.current.forEach(label => {
@@ -108,12 +150,12 @@ const LabelManager = ({ showPlanetNames, showMoonNames, isSunHovered, hoveredPla
             if (sunLabelRef.current && sunLabelRef.current.parentNode) {
                 sunLabelRef.current.remove();
             }
-            
+
             // Vider les Maps pour forcer la recréation des labels quand la modal se ferme
             planetLabelsRef.current.clear();
             moonLabelsRef.current.clear();
             sunLabelRef.current = null;
-            
+
             return; // Sortir de la fonction - pas besoin de mettre à jour les labels
         }
 

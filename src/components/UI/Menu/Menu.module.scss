@@ -80,7 +80,7 @@
     // Cache l'engrenage et affiche la croix quand ouvert
     &.open {
         filter: none; // Désactive le filtre grayscale pour la croix
-        
+
         &::before {
             content: '✕';
             position: absolute;
@@ -89,7 +89,7 @@
             animation: showCross 0.3s ease-in-out;
             filter: none; // Force la couleur sans filtre
         }
-        
+
         // Cache l'emoji engrenage
         color: transparent;
     }
@@ -100,6 +100,7 @@
         opacity: 0;
         transform: scale(0) rotate(-90deg);
     }
+
     to {
         opacity: 1;
         transform: scale(1) rotate(0deg);
@@ -576,6 +577,25 @@
 
 // Responsive - Réduction en mobile
 @media (max-width: 768px) {
+    .menuContainer {
+        position: fixed !important;
+        top: 20px !important;
+        right: 20px !important;
+        z-index: 1000 !important;
+    }
+
+    .menuButton {
+        position: relative !important;
+    }
+
+    .menuButton:hover {
+        transform: scale(1.05) !important;
+    }
+
+    .menuButton:active {
+        transform: scale(0.95) !important;
+    }
+
     .menu {
         min-width: 240px;
         max-width: 85vw;

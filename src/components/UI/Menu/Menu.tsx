@@ -14,9 +14,24 @@ type MenuProps = {
 
 const Menu = ({ showPlanetNames, showMoonNames, showOrbits, showAsteroids, onTogglePlanetNames, onToggleMoonNames, onToggleOrbits, onToggleAsteroids }: MenuProps) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const planetButtonRef = useRef<HTMLButtonElement>(null);
     const moonButtonRef = useRef<HTMLButtonElement>(null);
+
+    // Détection mobile
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+
+        return () => {
+            window.removeEventListener('resize', checkMobile);
+        };
+    }, []);
 
     // Gestion des événements clavier
     useEffect(() => {
@@ -48,6 +63,21 @@ const Menu = ({ showPlanetNames, showMoonNames, showOrbits, showAsteroids, onTog
         }
     }, [isOpen]);
 
+    // Handlers pour fermer le menu en mobile
+    const handleTogglePlanetNames = () => {
+        onTogglePlanetNames();
+        if (isMobile) {
+            setIsOpen(false);
+        }
+    };
+
+    const handleToggleMoonNames = () => {
+        onToggleMoonNames();
+        if (isMobile) {
+            setIsOpen(false);
+        }
+    };
+
     return (
         <div className={styles.menuContainer}>
             {/* Bouton menu */}
@@ -73,7 +103,7 @@ const Menu = ({ showPlanetNames, showMoonNames, showOrbits, showAsteroids, onTog
                             <button
                                 ref={planetButtonRef}
                                 className={`${styles.toggleButton} ${showPlanetNames ? styles.active : ''}`}
-                                onClick={onTogglePlanetNames}
+                                onClick={handleTogglePlanetNames}
                                 role="menuitem"
                                 aria-pressed={showPlanetNames}
                                 tabIndex={0}
@@ -89,7 +119,7 @@ const Menu = ({ showPlanetNames, showMoonNames, showOrbits, showAsteroids, onTog
                             <button
                                 ref={moonButtonRef}
                                 className={`${styles.toggleButton} ${styles.moonButton} ${showMoonNames ? styles.active : ''}`}
-                                onClick={onToggleMoonNames}
+                                onClick={handleToggleMoonNames}
                                 role="menuitem"
                                 aria-pressed={showMoonNames}
                                 tabIndex={0}

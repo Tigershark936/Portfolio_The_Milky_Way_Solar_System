@@ -57,7 +57,7 @@
 }
 
 .closeButton {
-    background: rgba(255,255,255,0.06);
+    background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 68, 68, 0.5);
     border-radius: 6px;
     padding: 8px 20px;
@@ -69,13 +69,14 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="16" cy="16" r="10" fill="none" stroke="%23FF4444" stroke-width="2" filter="url(%23glow)"/><circle cx="16" cy="16" r="4" fill="%23FF4444" filter="url(%23glow)"/><circle cx="16" cy="16" r="1" fill="%23FFFFFF"/></svg>') 16 16, pointer;
-    transition: all 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     display: flex;
     align-items: center;
     justify-content: center;
     min-width: 60px;
     text-align: center;
 }
+
 .closeIcon {
     font-size: 20px;
     display: flex;
@@ -86,14 +87,16 @@
     filter: drop-shadow(0 0 6px rgba(255, 68, 68, 0.3));
     margin: 0;
 }
+
 .closeButton:hover,
 .closeButton:focus {
-    background: rgba(255,68,68,0.4);
+    background: rgba(255, 68, 68, 0.4);
     border-color: #ff4444;
     color: #fff;
     transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(255,68,68,0.5);
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
 }
+
 .closeButton:active {
     transform: scale(0.95);
 }
@@ -106,6 +109,7 @@
     position: relative;
     z-index: 10;
 }
+
 .closeButton:hover .closeText {
     text-shadow:
         0 0 10px rgba(255, 68, 68, 1),
@@ -433,54 +437,54 @@
 @media (max-width: 768px) and (min-width: 601px) {
     .modalOverlay {
         width: 350px; // Réduit de 400px à 350px
-        max-height: 60vh; // Réduit de 70vh à 60vh
+        max-height: 50vh; // Réduit de 60vh à 50vh
     }
-    
+
     .modalHeader {
         padding: 12px 16px;
-        
+
         h2 {
             font-size: 16px;
         }
     }
-    
+
     h3 {
         font-size: 14px; // Légèrement réduit
     }
-    
+
     .modalBody {
         padding: 14px;
-        max-height: calc(60vh - 80px); // Hauteur max moins le header
+        max-height: 35vh; // Réduit de calc(60vh - 80px) à 35vh
         overflow-y: auto; // Scroll si nécessaire
-        
+
         // Scrollbar personnalisée
         scrollbar-width: thin;
         scrollbar-color: rgba(138, 43, 226, 0.5) rgba(138, 43, 226, 0.1);
-        
+
         &::-webkit-scrollbar {
             width: 6px;
         }
-        
+
         &::-webkit-scrollbar-track {
             background: rgba(138, 43, 226, 0.1);
             border-radius: 3px;
         }
-        
+
         &::-webkit-scrollbar-thumb {
             background: rgba(138, 43, 226, 0.5);
             border-radius: 3px;
-            
+
             &:hover {
                 background: rgba(138, 43, 226, 0.7);
             }
         }
     }
-    
+
     .label,
     .value {
         font-size: 12px; // Légèrement réduit
     }
-    
+
     .description p,
     .discoverySection p {
         font-size: 12px;
@@ -494,35 +498,35 @@
         left: 10px;
         right: 10px;
         width: auto;
-        max-height: 50vh; // Garde la taille d'origine
+        max-height: 40vh; // Réduit de 50vh à 40vh
         z-index: 1001; // Au-dessus des boutons Menu et PlanetSelector (qui sont à 999-1000)
     }
 
     .modalContent {
         width: 100%;
     }
-    
+
     .modalBody {
-        max-height: 35vh; // Hauteur du contenu comme avant
+        max-height: 28vh; // Réduit de 35vh à 28vh
         overflow-y: auto; // Scroll si nécessaire
-        
+
         // Scrollbar personnalisée
         scrollbar-width: thin;
         scrollbar-color: rgba(138, 43, 226, 0.5) rgba(138, 43, 226, 0.1);
-        
+
         &::-webkit-scrollbar {
             width: 6px;
         }
-        
+
         &::-webkit-scrollbar-track {
             background: rgba(138, 43, 226, 0.1);
             border-radius: 3px;
         }
-        
+
         &::-webkit-scrollbar-thumb {
             background: rgba(138, 43, 226, 0.5);
             border-radius: 3px;
-            
+
             &:hover {
                 background: rgba(138, 43, 226, 0.7);
             }
@@ -537,7 +541,7 @@
             letter-spacing: 1px;
         }
     }
-    
+
     // Réduire tous les titres de sections (Description, Historique, Lunes)
     h3 {
         font-size: 11px !important; // Réduit de 16px à 11px
@@ -563,32 +567,40 @@
     .value {
         font-size: 9px; // Réduit de 11px à 9px
     }
+
     .value,
     .compositionValue,
     .moonInfo {
         margin-left: 4px !important;
     }
+
     .description p {
         font-size: 9px; // Réduit de 11px à 9px
         line-height: 1.4;
     }
+
     .discoverySection p {
         font-size: 9px; // Réduit de 11px à 9px
         line-height: 1.4;
     }
+
     .compositionValue {
         font-size: 9px; // Réduit de 11px à 9px
     }
+
     .compositionValue .compositionItem {
         font-size: 9px; // Réduit de 11px à 9px
     }
+
     .distanceExplanation p {
         font-size: 8px; // Réduit de 9px à 8px
         line-height: 1.3;
     }
+
     .moonsExplanation {
         font-size: 8px; // Réduit de 9px à 8px
     }
+
     .moonInfo {
         font-size: 8px; // Réduit de 9px à 8px
     }

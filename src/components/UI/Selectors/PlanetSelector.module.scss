@@ -367,9 +367,18 @@
 
 // Tablette et Mobile - Scroll horizontal avec scrollbar personnalisée dès 1024px
 @media (max-width: 1024px) {
+    .planetSelectorContainer {
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 1000 !important;
+    }
+
     .selectorButton {
         padding: 10px 16px;
         font-size: 12px;
+        position: relative !important;
     }
 
     .selectorTitle {
@@ -384,25 +393,25 @@
         overflow-x: auto; // Scroll horizontal obligatoire
         overflow-y: visible;
         -webkit-overflow-scrolling: touch; // Smooth scroll sur mobile iOS/Android
-        
+
         // Scrollbar horizontale personnalisée toujours visible
         scrollbar-width: thin;
         scrollbar-color: rgba(138, 43, 226, 0.5) rgba(138, 43, 226, 0.1);
-        
+
         &::-webkit-scrollbar {
             height: 8px; // Un peu plus haute pour être visible
             display: block; // Force l'affichage de la scrollbar
         }
-        
+
         &::-webkit-scrollbar-track {
             background: rgba(138, 43, 226, 0.1);
             border-radius: 3px;
         }
-        
+
         &::-webkit-scrollbar-thumb {
             background: rgba(138, 43, 226, 0.5);
             border-radius: 3px;
-            
+
             &:hover {
                 background: rgba(138, 43, 226, 0.7);
             }
@@ -464,6 +473,21 @@
     .planetButton {
         min-width: 48px;
         min-height: 43px;
+    }
+}
+
+// Responsive - Mobile
+@media (max-width: 768px) {
+    .planetSelectorContainer {
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 1000 !important;
+    }
+
+    .selectorButton {
+        position: relative !important;
     }
 }
 
