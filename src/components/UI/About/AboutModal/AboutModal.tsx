@@ -33,6 +33,15 @@ const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
 
     if (!isOpen) return null;
 
+    const handleDownloadCV = () => {
+        const link = document.createElement('a');
+        link.href = '/CV_Alain_Daly.pdf';
+        link.download = 'CV_Alain_Daly.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     return (
         <div className={styles.modalOverlay} onClick={onClose}>
             <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
@@ -150,6 +159,17 @@ const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
                             <li>Collaboration et travail en équipe</li>
                         </ul>
                     </div>
+                </div>
+
+                <div className={styles.modalFooter}>
+                    <button className={styles.cvButton} onClick={handleDownloadCV} aria-label="Télécharger mon CV">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Télécharger mon CV
+                    </button>
                 </div>
             </div>
         </div>
