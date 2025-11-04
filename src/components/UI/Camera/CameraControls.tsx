@@ -7,14 +7,31 @@ type CameraControlsProps = {
     onCameraPreset: (preset: 'overview' | 'close' | 'far' | 'top') => void;
     activeCameraPreset: 'overview' | 'close' | 'far' | 'top' | null;
     onResetPlanetPositions: () => void;
+    onMenuToggle?: (isOpen: boolean) => void; // Callback appelé quand le menu s'ouvre/ferme
+    forceClose?: boolean; // Force la fermeture du menu
 };
 
-const CameraControls = ({ onSpeedChange, onCameraReset: _onCameraReset, onCameraPreset, activeCameraPreset, onResetPlanetPositions }: CameraControlsProps) => {
+const CameraControls = ({ onSpeedChange, onCameraReset: _onCameraReset, onCameraPreset, activeCameraPreset, onResetPlanetPositions, onMenuToggle, forceClose }: CameraControlsProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [speed, setSpeed] = useState(1);
+    const [isMobile, setIsMobile] = useState(false); // Ajout pour la mobile detection
     const controlsRef = useRef<HTMLDivElement>(null);
     const speedRef = useRef<HTMLButtonElement>(null);
     const presetRef = useRef<HTMLButtonElement>(null);
+
+    // Détection mobile
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+
+        return () => {
+            window.removeEventListener('resize', checkMobile);
+        };
+    }, []);
 
     // Gestion des événements clavier
     useEffect(() => {
@@ -51,10 +68,30 @@ const CameraControls = ({ onSpeedChange, onCameraReset: _onCameraReset, onCamera
         onSpeedChange(newSpeed);
     };
 
-    // handleCameraReset géré directement via onCameraReset
-
     const handlePresetChange = (preset: 'overview' | 'close' | 'far' | 'top') => {
         onCameraPreset(preset);
+        // Fermer le menu automatiquement en mobile après sélection d'un bouton caméra
+        if (isMobile) {
+            setIsOpen(false);
+        }
+    };
+
+    // Notifier le parent quand le menu s'ouvre/ferme
+    useEffect(() => {
+        if (onMenuToggle) {
+            onMenuToggle(isOpen);
+        }
+    }, [isOpen, onMenuToggle]);
+
+    // Fermer le menu si forceClose est activé
+    useEffect(() => {
+        if (forceClose) {
+            setIsOpen(false);
+        }
+    }, [forceClose]);
+
+    const handleToggleMenu = () => {
+        setIsOpen(!isOpen);
     };
 
     return (
@@ -62,7 +99,7 @@ const CameraControls = ({ onSpeedChange, onCameraReset: _onCameraReset, onCamera
             {/* Bouton caméra */}
             <button
                 className={`${styles.cameraButton} ${isOpen ? styles.open : ''}`}
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={handleToggleMenu}
                 aria-label="Options"
             >
                 <span className={styles.cameraTitle}>OPTIONS</span>
@@ -118,24 +155,24 @@ const CameraControls = ({ onSpeedChange, onCameraReset: _onCameraReset, onCamera
                                     Ultra rapide
                                 </button>
                             </div>
-                            
-                                   {/* Bouton de réinitialisation des positions planétaires */}
-                                   <button
-                                       className={`${styles.resetPositionsButton}`}
-                                       onClick={() => {
-                                           // Remettre la vitesse à Normal et recharger les positions en une seule opération fluide
-                                           handleSpeedChange(1);
-                                           // Utiliser requestAnimationFrame pour un repositionnement fluide
-                                           requestAnimationFrame(() => {
-                                               onResetPlanetPositions();
-                                           });
-                                       }}
-                                       role="menuitem"
-                                       tabIndex={0}
-                                       title="Remettre les planètes à leur position exacte sur leur orbite (selon l'API) et réinitialiser la vitesse à normale"
-                                   >
-                                       Positions réelles
-                                   </button>
+
+                            {/* Bouton de réinitialisation des positions planétaires */}
+                            <button
+                                className={`${styles.resetPositionsButton}`}
+                                onClick={() => {
+                                    // Remettre la vitesse à Normal et recharger les positions en une seule opération fluide
+                                    handleSpeedChange(1);
+                                    // Utiliser requestAnimationFrame pour un repositionnement fluide
+                                    requestAnimationFrame(() => {
+                                        onResetPlanetPositions();
+                                    });
+                                }}
+                                role="menuitem"
+                                tabIndex={0}
+                                title="Remettre les planètes à leur position exacte sur leur orbite (selon l'API) et réinitialiser la vitesse à normale"
+                            >
+                                Positions réelles
+                            </button>
                         </div>
 
                         {/* Presets de caméra */}

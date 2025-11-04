@@ -913,7 +913,7 @@
     .speedButton.active & {
         animation: iconPulse 1.5s ease-in-out infinite;
     }
-    
+
     // Violet pour les boutons de vitesse non-actifs
     .speedNormal:not(.active) &,
     .speedFast:not(.active) &,
@@ -922,20 +922,20 @@
         text-shadow: 0 0 8px rgba(138, 43, 226, 0.8);
         filter: drop-shadow(0 0 4px rgba(138, 43, 226, 0.8));
     }
-    
+
     // Couleurs spécifiques pour les boutons actifs
     .speedNormal.active & {
         color: #00FF00;
         text-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
         filter: drop-shadow(0 0 4px rgba(0, 255, 0, 0.8));
     }
-    
+
     .speedFast.active & {
         color: #FFA500;
         text-shadow: 0 0 8px rgba(255, 165, 0, 0.8);
         filter: drop-shadow(0 0 4px rgba(255, 165, 0, 0.8));
     }
-    
+
     .speedUltraFast.active & {
         color: #FF4444;
         text-shadow: 0 0 8px rgba(255, 68, 68, 0.8);
@@ -962,24 +962,24 @@
     .controlsContent {
         max-height: 400px;
         overflow-y: auto;
-        
+
         // Scrollbar personnalisée
         scrollbar-width: thin;
         scrollbar-color: rgba(138, 43, 226, 0.5) rgba(138, 43, 226, 0.1);
-        
+
         &::-webkit-scrollbar {
             width: 6px;
         }
-        
+
         &::-webkit-scrollbar-track {
             background: rgba(138, 43, 226, 0.1);
             border-radius: 3px;
         }
-        
+
         &::-webkit-scrollbar-thumb {
             background: rgba(138, 43, 226, 0.5);
             border-radius: 3px;
-            
+
             &:hover {
                 background: rgba(138, 43, 226, 0.7);
             }

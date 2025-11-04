@@ -78,12 +78,13 @@ const SolarSystem = () => {
     const [hoveredPlanets, setHoveredPlanets] = useState<Set<string>>(new Set()); // État pour les planètes survolées
     const controlsRef = useRef<any>(null);
     const [planets, setPlanets] = useState<PlanetType[]>(basePlanets);
-    
+
     // États pour les modals (pour ActionsMenu mobile)
     const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
     const [isProjectsModalOpen, setIsProjectsModalOpen] = useState(false);
     const [isContactModalOpen, setIsContactModalOpen] = useState(false);
     const [closePlanetSelector, setClosePlanetSelector] = useState(false);
+    const [closeCameraMenu, setCloseCameraMenu] = useState(false);
     const [isActionsMenuOpen, setIsActionsMenuOpen] = useState(false);
 
     // Hook pour charger les positions réelles des planètes depuis l'API
@@ -332,7 +333,7 @@ const SolarSystem = () => {
             composition: '83% H₂ (hydrogène), 15% He (hélium), 2% CH₄ (méthane)',
             temperature: '-224°C',
             moons: [
-                { name: 'Miranda', size: 0.04, dist: 1.8, speed: 0.67, info: 'Lune la plus inhabituelle avec des caractéristiques géologiques extrêmes.' }
+                { name: 'Miranda', size: 0.04, dist: 6.0, speed: 0.67, info: 'Lune la plus inhabituelle avec des caractéristiques géologiques extrêmes.' }
             ]
         },
         'Neptune': {
@@ -374,8 +375,14 @@ const SolarSystem = () => {
     const handlePlanetClick = (planetName: string) => {
         const planetData = planetDetails[planetName as keyof typeof planetDetails];
         if (planetData) {
-            setSelectedPlanetData(planetData);
-            setIsPlanetInfoModalOpen(true);
+            // Fermer le menu OPTIONS si une planète est cliquée
+            setCloseCameraMenu(true);
+            setTimeout(() => setCloseCameraMenu(false), 100);
+            // Ouvrir la modal PlanetInfo après la fermeture du menu OPTIONS
+            setTimeout(() => {
+                setSelectedPlanetData(planetData);
+                setIsPlanetInfoModalOpen(true);
+            }, 150);
             // Toujours arrêter le suivi de LUNE quand on suit la planète !
             setSelectedMoon(null);
             setSelectedPlanet(planetName);
@@ -393,8 +400,14 @@ const SolarSystem = () => {
         setSelectedPlanet(planetName);
         const planetData = planetDetails[planetName as keyof typeof planetDetails];
         if (planetData) {
-            setSelectedPlanetData(planetData);
-            setIsPlanetInfoModalOpen(true);
+            // Fermer le menu OPTIONS si une planète est cliquée
+            setCloseCameraMenu(true);
+            setTimeout(() => setCloseCameraMenu(false), 100);
+            // Ouvrir la modal PlanetInfo après la fermeture du menu OPTIONS
+            setTimeout(() => {
+                setSelectedPlanetData(planetData);
+                setIsPlanetInfoModalOpen(true);
+            }, 150);
             setActiveCameraPreset(null);
         }
     };
@@ -403,6 +416,13 @@ const SolarSystem = () => {
         setIsPlanetInfoModalOpen(false);
         setSelectedPlanetData(null);
         // Ne pas désélectionner la planète pour que la caméra continue de la suivre
+    };
+
+    // Fermer la modal PlanetInfoModal si elle est ouverte quand le menu OPTIONS s'ouvre
+    const handleCameraMenuToggle = (isOpen: boolean) => {
+        if (isOpen && isPlanetInfoModalOpen) {
+            handleClosePlanetInfoModal();
+        }
     };
 
     const handleMoonClick = (moonName: string) => {
@@ -439,7 +459,7 @@ const SolarSystem = () => {
                 setClosePlanetSelector(true);
                 setTimeout(() => setClosePlanetSelector(false), 100);
             }} />
-            
+
             {/* Menu mobile/tablette - Dans le coin droit */}
             <ActionsMenu
                 onMenuButtonClick={() => {
@@ -470,8 +490,10 @@ const SolarSystem = () => {
                 onCameraPreset={handleCameraPreset}
                 activeCameraPreset={activeCameraPreset}
                 onResetPlanetPositions={handleLoadRealPositions}
+                onMenuToggle={handleCameraMenuToggle}
+                forceClose={closeCameraMenu}
             />
-            
+
             {/* PlanetSelector - toujours centré */}
             <PlanetSelector
                 planets={planets}
@@ -519,7 +541,7 @@ const SolarSystem = () => {
                         { name: 'Hyperion', distance: 17.0, size: 0.045, speed: 0.95, angle: 0, parentPlanet: 'Saturn' },
                         { name: 'Lapetus', distance: 22.0, size: 0.08, speed: 0.08, angle: 0, parentPlanet: 'Saturn' },
                         { name: 'Phoebe', distance: 30.0, size: 0.055, speed: 0.35, angle: 0, parentPlanet: 'Saturn' },
-                        { name: 'Miranda', distance: 1.8, size: 0.04, speed: 0.67, angle: 0, parentPlanet: 'Uranus' },
+                        { name: 'Miranda', distance: 6.0, size: 0.04, speed: 0.67, angle: 0, parentPlanet: 'Uranus' },
                         { name: 'Triton', distance: 3.0, size: 0.07, speed: 0.17, angle: 0, parentPlanet: 'Neptune' },
                         { name: 'Charon', distance: 1.8, size: 0.12, speed: 0.16, angle: 0, parentPlanet: 'Pluto' },
                         { name: 'Styx', distance: 4.0, size: 0.04, speed: 0.12, angle: 0, parentPlanet: 'Pluto' },
@@ -587,19 +609,19 @@ const SolarSystem = () => {
                 onMoonFollow={handleMoonClick}
                 planetData={selectedPlanetData}
             />
-            
+
             {/* Modals pour ActionsMenu mobile */}
-            <AboutModal 
-                isOpen={isAboutModalOpen} 
-                onClose={() => setIsAboutModalOpen(false)} 
+            <AboutModal
+                isOpen={isAboutModalOpen}
+                onClose={() => setIsAboutModalOpen(false)}
             />
-            <ProjectsModal 
-                isOpen={isProjectsModalOpen} 
-                onClose={() => setIsProjectsModalOpen(false)} 
+            <ProjectsModal
+                isOpen={isProjectsModalOpen}
+                onClose={() => setIsProjectsModalOpen(false)}
             />
-            <ContactModal 
-                isOpen={isContactModalOpen} 
-                onClose={() => setIsContactModalOpen(false)} 
+            <ContactModal
+                isOpen={isContactModalOpen}
+                onClose={() => setIsContactModalOpen(false)}
             />
         </div>
     )

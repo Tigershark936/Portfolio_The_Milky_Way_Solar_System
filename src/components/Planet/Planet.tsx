@@ -382,7 +382,7 @@ const Planet = ({ planet, animationSpeed = 1, onClick, onMoonClick, onPointerOve
                 {/* Uranus Moon */}
                 {planet.name === 'Uranus' && (
                     <Moon
-                        distance={1.5}
+                        distance={6.0}
                         size={0.06}
                         color="#B0E0E6"
                         speed={0.67}
