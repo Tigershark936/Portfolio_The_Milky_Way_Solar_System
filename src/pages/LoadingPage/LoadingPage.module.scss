@@ -281,15 +281,13 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) translateZ(0);
     width: 100vw;
     height: 100vh;
     z-index: 2;
     pointer-events: none;
     overflow: hidden;
     /* Force l'accélération matérielle pour meilleures performances */
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
     will-change: contents;
 }
 
