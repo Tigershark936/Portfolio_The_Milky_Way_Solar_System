@@ -10,39 +10,42 @@ function App() {
   const handleLoadingComplete = () => {
     // Préparer la HomePage
     setShowHomePage(true);
-    
-    // Après un court délai pour que le Canvas s'initialise, faire un fade-in
-    setTimeout(() => {
-      setHomePageOpacity(1);
-      // Masquer la LoadingPage après le fade-in
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 300); // Délai pour la transition
-    }, 100);
+
+    // Commencer le fade-in immédiatement pour une transition fluide
+    // Le Canvas se prépare en arrière-plan pendant le fade
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setHomePageOpacity(1);
+        // Masquer la LoadingPage après le fade-in
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500); // Délai pour laisser le fade-in se terminer
+      });
+    });
   };
 
   return (
     <>
       {isLoading && (
-        <div style={{ 
-          position: 'fixed', 
-          top: 0, 
-          left: 0, 
-          width: '100%', 
-          height: '100%', 
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
           zIndex: 10000,
           opacity: homePageOpacity > 0 ? 1 - homePageOpacity : 1,
-          transition: 'opacity 0.3s ease-out',
+          transition: 'opacity 0.6s ease-out',
           pointerEvents: homePageOpacity > 0 ? 'none' : 'auto'
         }}>
           <LoadingPage onComplete={handleLoadingComplete} />
         </div>
       )}
       {showHomePage && (
-        <div style={{ 
+        <div style={{
           position: homePageOpacity > 0 ? 'relative' : 'fixed',
-          opacity: homePageOpacity, 
-          transition: 'opacity 0.4s ease-in',
+          opacity: homePageOpacity,
+          transition: 'opacity 0.6s ease-in',
           width: '100vw',
           height: '100vh',
           background: 'radial-gradient(ellipse at center, #1a1a2e 0%, #16213e 50%, #0f0f23 100%)',
