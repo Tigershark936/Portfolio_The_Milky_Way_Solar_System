@@ -1,0 +1,9 @@
+# robots.txt for Portfolio Solaire - Alain Daly
+# https://the-milk-way-portfolio-by-alain-daly.netlify.app/
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://the-milk-way-portfolio-by-alain-daly.netlify.app/sitemap.xml
+
