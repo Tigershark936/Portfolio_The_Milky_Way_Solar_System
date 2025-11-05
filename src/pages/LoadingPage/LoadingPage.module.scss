@@ -181,6 +181,101 @@
     }
 }
 
+/* Optimisations pour mobile - Animation Big Bang */
+@media (max-width: 768px) {
+
+    /* Renforcer les box-shadows pour mobile */
+    .bigBangFlash {
+        /* Force le rendu des couleurs sur mobile */
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        will-change: transform, opacity;
+    }
+
+    .lightBar,
+    .lightBarSync {
+        /* Réduire le blur sur mobile pour meilleures performances */
+        filter: blur(1.5px);
+        /* Force le rendu des couleurs */
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+
+    .bigBangCore {
+        /* Renforcer les box-shadows pour mobile */
+        box-shadow:
+            0 0 2px #ffffff,
+            0 0 4px #96b4ff,
+            0 0 6px #8a2be2,
+            0 0 8px rgba(255, 20, 147, 0.6) !important;
+        /* Force le rendu des couleurs */
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        will-change: transform, opacity;
+    }
+
+    .particle {
+        /* Renforcer la visibilité sur mobile */
+        box-shadow: 0 0 12px var(--particle-glow, rgba(150, 180, 255, 1)) !important;
+        /* Force le rendu */
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* Optimisations supplémentaires pour petits écrans */
+    .bigBangFlash {
+        /* Augmenter l'intensité des couleurs sur petits écrans */
+        background: radial-gradient(ellipse at center,
+                rgba(255, 255, 255, 1) 0%,
+                rgba(200, 220, 255, 1) 10%,
+                rgba(150, 180, 255, 0.9) 25%,
+                rgba(138, 43, 226, 0.7) 45%,
+                rgba(255, 20, 147, 0.5) 60%,
+                transparent 80%) !important;
+    }
+
+    .lightBar,
+    .lightBarSync {
+        /* Réduire encore plus le blur sur très petits écrans */
+        filter: blur(1px);
+        /* Intensifier les couleurs */
+        background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(200, 220, 255, 0.6) 10%,
+                rgba(255, 255, 255, 1) 20%,
+                rgba(150, 180, 255, 1) 30%,
+                rgba(138, 43, 226, 1) 40%,
+                rgba(255, 20, 147, 1) 50%,
+                rgba(138, 43, 226, 1) 60%,
+                rgba(150, 180, 255, 1) 70%,
+                rgba(255, 255, 255, 1) 80%,
+                rgba(200, 220, 255, 0.6) 90%,
+                transparent 100%) !important;
+    }
+
+    .bigBangCore {
+        /* Intensifier les couleurs sur petits écrans */
+        background: radial-gradient(ellipse,
+                #ffffff 0%,
+                #c8dcff 15%,
+                #96b4ff 30%,
+                #8a2be2 45%,
+                #ff1493 60%,
+                #ff6347 75%,
+                transparent 100%) !important;
+    }
+
+    .particle {
+        /* Augmenter l'opacité des particules sur petits écrans */
+        opacity: 1 !important;
+        /* Renforcer la visibilité des particules */
+        box-shadow: 0 0 15px var(--particle-glow, rgba(150, 180, 255, 1)) !important;
+    }
+}
+
 /* Animation Big Bang */
 .bigBangContainer {
     position: absolute;
@@ -192,6 +287,10 @@
     z-index: 2;
     pointer-events: none;
     overflow: hidden;
+    /* Force l'accélération matérielle pour meilleures performances */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: contents;
 }
 
 /* Flash initial intense - moment de l'explosion */
@@ -213,6 +312,12 @@
     animation: bigBangFlash 5s ease-out forwards;
     z-index: 3;
     transform-origin: center center;
+    /* Force l'accélération matérielle et le rendu correct sur mobile */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+    will-change: transform, opacity;
 }
 
 /* Barre de lumière horizontale - caractéristique du Big Bang */
@@ -246,6 +351,10 @@
     /* Animation longue pour commencer en douceur et continuer pendant le Big Bang */
     animation: lightBarExpand 6s linear forwards;
     z-index: 4;
+    /* Force l'accélération matérielle sur mobile */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: width, opacity, transform;
 }
 
 /* Barre de lumière synchronisée avec l'explosion (Big Bang) */
@@ -277,6 +386,10 @@
     /* Animation synchronisée avec l'explosion (5s) */
     animation: lightBarSync 5s linear forwards;
     z-index: 4;
+    /* Force l'accélération matérielle sur mobile */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: width, opacity, transform;
 }
 
 .bigBangCore {
@@ -305,6 +418,10 @@
         0 0 4px rgba(255, 20, 147, 0.4);
     animation: bigBangCore 5s ease-out forwards;
     z-index: 2;
+    /* Force l'accélération matérielle sur mobile */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: transform, opacity, width, height;
 }
 
 .particle {
@@ -324,6 +441,10 @@
     transform: translate(-50%, -50%);
     animation: particleExplosion 5s ease-out forwards;
     animation-delay: var(--particle-delay, 0s);
+    /* Force l'accélération matérielle sur mobile */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
 }
 
 /* Alternance des couleurs des galaxies */
