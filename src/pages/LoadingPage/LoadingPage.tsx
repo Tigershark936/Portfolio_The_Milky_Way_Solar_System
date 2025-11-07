@@ -35,26 +35,28 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
         });
     }, []);
 
-    // Déclencher l'apparition de la barre de lumière avant le Big Bang (4.5s)
+    // Déclencher l'apparition de la barre de lumière pendant l'écriture de "par Alain Daly"
+    // Le texte "par Alain Daly" commence à 3.5s et finit à 5.6s
+    // On fait apparaître le trait vers 3.8s pour qu'il soit visible pendant l'écriture
     useEffect(() => {
         if (criticalTexturesLoaded) {
             const lightBarTimer = setTimeout(() => {
                 setShowLightBar(true);
-            }, 4500); // Commence avant la fin du texte pour une transition douce
+            }, 3800); // Commence pendant l'écriture de "par Alain Daly"
 
             return () => clearTimeout(lightBarTimer);
         }
     }, [criticalTexturesLoaded]);
 
-    // Déclencher l'animation Big Bang après que la barre de lumière soit à sa longueur maximale
+    // Déclencher l'animation Big Bang exactement quand le titre commence à s'effacer (5.8s)
     useEffect(() => {
         if (criticalTexturesLoaded) {
-            // La barre commence à 4.5s et atteint 100vw à 50% de son animation (6s * 0.5 = 3s)
-            // Donc 4.5s + 3s = 7.5s pour atteindre la longueur maximale
-            // On commence le Big Bang juste après, à 7.8s
+            // Le texte finit de s'écrire à 5.6s (3.5s + 2.1s pour "par Alain Daly")
+            // On attend 0.2s pour voir le titre complet, puis le fadeOutText commence à 5.8s
+            // On déclenche le Big Bang pile à ce moment
             const bigBangTimer = setTimeout(() => {
                 setShowBigBang(true);
-            }, 7800);
+            }, 5800); // Synchronisé avec le début de l'effacement du titre (5.6s + 0.2s)
 
             return () => clearTimeout(bigBangTimer);
         }
@@ -63,13 +65,13 @@ function LoadingPage({ onComplete }: LoadingPageProps) {
     // Timer simple pour terminer après les textures + animation CSS + Big Bang
     useEffect(() => {
         if (criticalTexturesLoaded) {
-            // Durée totale: 7.8s (début Big Bang) + 5s (Big Bang) = 12.8s
+            // Durée totale: 5.8s (début Big Bang) + 5s (Big Bang) = 10.8s
             // On déclenche la transition 0.5s avant la fin pour un fondu fluide
             const timer = setTimeout(() => {
                 if (onComplete) {
                     onComplete();
                 }
-            }, 12300); // 12.3s pour commencer le fade avant la fin
+            }, 10300); // 10.3s pour commencer le fade avant la fin
 
             return () => clearTimeout(timer);
         }
